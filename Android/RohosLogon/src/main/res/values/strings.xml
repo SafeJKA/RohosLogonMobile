@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Rohos Logon</string>
+    <string name="hello_world">Open Rohos and click Setup Phone Authentication. This will display QR-code...</string>
+    <string name="action_settings">Check updates...</string>
+
+
+    <!-- Title for error message dialog when user attempts to scan a barcode but does not
+         have the barcode scanner application installed. -->
+    <string name="install_dialog_title">Install barcode scanner?</string>
+
+    <!-- Error message displayed when user attempts to scan a barcode without a scanner app. -->
+  <string name="install_dialog_message">
+    To scan barcodes containing keys, you must install the ZXing barcode scanner.
+   </string>
+
+    <!-- Text on button user clicks to start installation of barcode scanning app -->
+    <string name="install_button">Install</string>
+
+    <!-- Button on manual account entry page, cancels adding account, returns to main page -->
+    <string name="cancel">Cancel</string>
+
+    <!-- Title for the error message dialog displayed after scanning invalid QR code -->
+    <string name="error_title">Error</string>
+
+    <!-- Alternative message displayed when scanned QR code is not recognized as valid key -->
+    <string name="error_qr">Cannot interpret QR code.</string>
+
+    <string name="scan_qrcode">Scan Rohos Logon QR code</string>
+
+</resources>
