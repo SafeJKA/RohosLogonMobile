@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>775C1C73-1921-41FB-B51E-86296A0ECDE5</string>
+	<key>IDESourceControlProjectName</key>
+	<string>RohosLogon-iOS</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>C35A0565-8DF0-4B3F-8992-34563CCFF031</key>
+		<string>https://github.com/AlexShilon/RohosLogonMobile.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>iOS/RohosLogon-iOS.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>C35A0565-8DF0-4B3F-8992-34563CCFF031</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/AlexShilon/RohosLogonMobile.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>C35A0565-8DF0-4B3F-8992-34563CCFF031</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>C35A0565-8DF0-4B3F-8992-34563CCFF031</string>
+			<key>IDESourceControlWCCName</key>
+			<string>RohosLogonMobile</string>
+		</dict>
+	</array>
+</dict>
+</plist>
