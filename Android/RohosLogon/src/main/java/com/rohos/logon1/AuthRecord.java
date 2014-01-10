@@ -68,7 +68,12 @@ class AuthRecord {
             plainHexAuthStr = HexEncoding.encode(byteData).substring(0, 30);
 
             // create key - 16 bytes only for AES128
-            SecretKeySpec secretKey = new SecretKeySpec(HexEncoding.decode(qr_secret_key.substring(0, 31)), "AES");
+            String keyStr = qr_secret_key.substring(0, 32);
+
+            if (keyStr.length() > 32) // AES128 encryption key should be 16 bytes only.
+                keyStr = qr_secret_key.substring(0, 32);
+
+            SecretKeySpec secretKey = new SecretKeySpec(HexEncoding.decode(keyStr), "AES");
 
             // AES128 encryption
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");

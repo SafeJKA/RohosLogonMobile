@@ -496,7 +496,7 @@ public class MainActivity extends ActionBarActivity {
 
         AuthRecord ai = new AuthRecord();
         ai.url  = url;
-        ai.qr_host_name = uri.getPath().substring(1);
+        ai.qr_host_name = uri.getPath();
         ai.qr_host_ip = uri.getAuthority();
         ai.qr_host_port = 1205;
 
@@ -669,8 +669,8 @@ public class MainActivity extends ActionBarActivity {
 
                 udp_socket.close();
 
-                strResult = String.format("Authentication signal sent OK. %s %d\nUnlocked:%s",
-                        str_data.substring(0, 20), encryptedAuthString.length(),
+                strResult = String.format("Authentication signal sent OK.\n%s %d %d\nUnlocked:%s",
+                        str_data.substring(0, 29), encryptedAuthString.length(), ai[0].qr_secret_key.length(),
                         /*ai[0].plainHexAuthStr,*/
                         serverReply);
 
