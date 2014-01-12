@@ -38,5 +38,5 @@
 
 - (IBAction)scanPressed:(id)sender;
 - (IBAction)sendSignalPressed:(id)sender;
-
+- (void)sendSignalForRecord: (int) recordIndex;
 @end

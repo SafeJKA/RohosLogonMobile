@@ -62,7 +62,7 @@ public:
         //[key getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSUTF8StringEncoding];
         
         NSUInteger dataLength = [data length]+2;
-       // 0be5a4cc7508b9e9edd99cedd04a7e6d15b87faf
+       
         //See the doc: For block ciphers, the output size will always be less than or
         //equal to the input size plus the size of one block.
         //That's why we need to add the size of one block here
@@ -85,41 +85,8 @@ public:
         return nil;
     }
     
-    /*(NSData *)AES256DecryptWithKey:(NSString *)key {
-        // 'key' should be 32 bytes for AES256, will be null-padded otherwise
-        char keyPtr[kCCKeySizeAES256+1]; // room for terminator (unused)
-        bzero(keyPtr, sizeof(keyPtr)); // fill with zeroes (for padding)
-        
-        // fetch key data
-        [key getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSUTF8StringEncoding];
-        
-        NSUInteger dataLength = [self length];
-        
-        //See the doc: For block ciphers, the output size will always be less than or
-        //equal to the input size plus the size of one block.
-        //That's why we need to add the size of one block here
-        size_t bufferSize = dataLength + kCCBlockSizeAES128;
-        void *buffer = malloc(bufferSize);
-        
-        size_t numBytesDecrypted = 0;
-        CCCryptorStatus cryptStatus = CCCrypt(kCCDecrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
-                                              keyPtr, kCCKeySizeAES256,
-                                              NULL, // initialization vector (optional)
-                                              [self bytes], dataLength,
-                                              buffer, bufferSize, //output
-                                              &numBytesDecrypted);
-        
-        if (cryptStatus == kCCSuccess) {
-            //the returned NSData takes ownership of the buffer and will free it on deallocation
-            return [NSData dataWithBytesNoCopy:buffer length:numBytesDecrypted];
-        }
-        
-        free(buffer); //free the buffer;
-        return nil;
-    }
-     */
 
-    
+    // HexToData
     NSData *dataByIntepretingHexString(NSString *hexString) {
         char const *chars = hexString.UTF8String;
         NSUInteger charCount = strlen(chars);
@@ -136,6 +103,7 @@ public:
         return [NSData dataWithBytesNoCopy:bytes length:byteCount freeWhenDone:YES];
     }
     
+    // DataToHex
     NSString *hexadecimalString(NSData* data) {
         /* Returns hexadecimal string of NSData. Empty string if data is empty.   */
         
@@ -153,13 +121,12 @@ public:
         return [NSString stringWithString:hexString];
     }
 
-    
+    // creates unique Authentication Signal based on TimeStamp, Random and authentication data
     NSString *getEncryptedDataString()
     {
         //// XXXXXXXX TTTTTTTT '0001' '0002'
         ////
-        //NSTimeInterval seconds = ;
-        uint32_t intSeconds = (uint32_t)([[NSDate date] timeIntervalSince1970]);
+               uint32_t intSeconds = (uint32_t)([[NSDate date] timeIntervalSince1970]);
         uint32_t intRand = arc4random();
         uint8_t shortP = 0;
         uint8_t shortP1 = '0';
@@ -191,6 +158,7 @@ public:
         NSData *cipher = AES128Encrypt(payload);
         if (cipher!=nil)
         {
+            // Formatting Authentication signal : HOSTNAME.USERNAME.HEXDATA
             NSString* enc_str = hexadecimalString(cipher);
             authSignalString = [NSString stringWithFormat:@"%@.%@.%@", userName, hostName, enc_str];
             return authSignalString;
@@ -228,6 +196,7 @@ AuthRecord ar;
 @synthesize resultsToDisplay;
 @synthesize qrReader;
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -235,6 +204,19 @@ AuthRecord ar;
     self.qrReader = [[NSMutableSet alloc] init];
     QRCodeReader *qrcodeReader = [[QRCodeReader alloc] init];
     [self.qrReader addObject:qrcodeReader];
+    
+    // adding Single Tap recognozer to Label and BigLogo images to open "rohos.com... "
+    
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(learnMoreSingleTapRecognized:)];
+    singleTap.numberOfTapsRequired = 1;
+    [resultsView addGestureRecognizer:singleTap];
+    [singleTap release];
+    
+    singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(learnMoreSingleTapRecognized:)];
+    singleTap.numberOfTapsRequired = 1;
+    [bigLogoView addGestureRecognizer:singleTap];
+    [singleTap release];
+    
     
     // the mutalbe array of all debts
      NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
@@ -249,13 +231,18 @@ AuthRecord ar;
     {
         recordsView.hidden = YES;
         
-    }
+    } else
+    {
     
-    //[resultsView setText:NSLocalizedString(@"Intro", @"How to start")];
+        [self refreshAuthRecordsList];
+    }
     
     
 }
 
+- (void)learnMoreSingleTapRecognized:(UIGestureRecognizer *)gestureRecognizer {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://rohos.com/mob"]];
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -398,6 +385,38 @@ AuthRecord ar;
     return ret;
 }
 
+//
+// send Authentication Signal of default record
+// called when app is just reopened
+//
+- (void)sendSignalForRecord: (int) recordIndex
+{
+    if (mRecords == nil || [mRecords count] < recordIndex+1 )
+    {
+        return;
+    }
+    
+    NSDictionary * record =[mRecords objectAtIndex:recordIndex];
+    
+    AuthRecord r;
+    
+    r.hostName = [record objectForKey:HOST_NAME_KEY];
+    NSNumber * port = [record objectForKey:PORT_NAME_KEY];
+    r.hostPort = [port intValue];
+    r.secretKey = [record objectForKey:SECRET_NAME_KEY];
+    r.data = [record objectForKey:DATA_NAME_KEY];
+    r.userName = [record objectForKey:USER_NAME_KEY];
+    
+    [self sendSignalUpdateUI:&r];
+    
+    return;
+
+}
+
+//
+// send Authentication Signal by using the record ar
+//
+//
 - (int)sendSignalUpdateUI:( AuthRecord *) ar
 {
     if (ar->isEmpty())
@@ -441,17 +460,17 @@ AuthRecord ar;
     recordsView.hidden = YES;
     bigLogoView.hidden = NO;
     
-    [resultsView setText:@"Install Rohos Logon Key on your desktop to enable authentication by phone. rohos.com/download"]; //NSLocalizedString(@"Intro", @"How to start")];
+    [resultsView setText:@"Install Rohos Logon Key on your desktop to enable authentication by phone. rohos.com/mob"]; //NSLocalizedString(@"Intro", @"How to start")];
     
     
 }
 
 - (IBAction)scanPressed:(id)sender
 {
+    /*
+     // enable to allow quick QR-code recognition
     
-     
-    
-   /* [self parseUriString:@"rohos1://192.168.2.106:1205/insp?USER=Jane(KEY=0be5a4cc7508b9e9edd99cedd04a7e6d15b87faf(DATA=74bf9bfe531a52da3615255185aa2e9268bca0fda5498908e49e02ccbc63aee30de1a9cbc3d0ac739b715a1a4cfb63b4db1832384718c5e3ae3abbe77b6daf18"];
+    [self parseUriString:@"rohos1://192.168.2.106:1205/insp?USER=Jane(KEY=0be5a4cc7508b9e9edd99cedd04a7e6d15b87faf(DATA=74bf9bfe531a52da3615255185aa2e9268bca0fda5498908e49e02ccbc63aee30de1a9cbc3d0ac739b715a1a4cfb63b4db1832384718c5e3ae3abbe77b6daf18"];
      
     return;
     */
@@ -470,7 +489,7 @@ AuthRecord ar;
     [widController release];
     
     /*
-     // testing...
+     // testing by image...
     UIImage *image = [UIImage imageNamed:@"qrcode.png"];
     Decoder *decoder = [[Decoder alloc] init];
     decoder.readers = self.qrReader;
@@ -479,7 +498,12 @@ AuthRecord ar;
      */
 }
 
-
+/*
+ parse Rohos Logon Key generated URL with authentication data
+ 
+ URL example: rohos1://192.168.2.106:1205/insp?USER=Jane(KEY=0be5a4cc7508b9e9edd99cedd04a7e6d15b87faf(DATA=74bf9bfe531a52da3615255185aa2e9268bca0fda5498908e49e02ccbc63aee30de1a9cbc3d0ac739b715a1a4cfb63b4db1832384718c5e3ae3abbe77b6daf18
+ 
+*/
 - (void)parseUriString:(NSString*)strUri
 {
     
@@ -531,7 +555,8 @@ AuthRecord ar;
     
 }
 
-
+// ZXing returns here
+//
 - (void)zxingController:(ZXingWidgetController *)controller didScanResult:(NSString *)result
 {
     self.resultsToDisplay = result;
@@ -567,6 +592,8 @@ AuthRecord ar;
 - (void)decoder:(Decoder *)decoder failedToDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset reason:(NSString *)reason
 {
     NSLog(@"%@", @"Failed to decode image!");
+    [resultsView setText:[NSString stringWithFormat:@"Failed to decode QR-Code: %@", reason]];
+    
 }
 
 - (void)decoder:(Decoder *)decoder foundPossibleResultPoint:(CGPoint)point
@@ -575,7 +602,10 @@ AuthRecord ar;
 }
 
 
-
+/*
+ TableView interface
+ 
+ */
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [mRecords count];
@@ -604,18 +634,9 @@ AuthRecord ar;
     
    // UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
     
-    NSDictionary * record =[mRecords objectAtIndex:indexPath.row];
+    [self sendSignalForRecord:indexPath.row];
     
-    AuthRecord r;
     
-    r.hostName = [record objectForKey:HOST_NAME_KEY];
-    NSNumber * port = [record objectForKey:PORT_NAME_KEY];
-    r.hostPort = [port intValue];
-    r.secretKey = [record objectForKey:SECRET_NAME_KEY];
-    r.data = [record objectForKey:DATA_NAME_KEY];
-    r.userName = [record objectForKey:USER_NAME_KEY];
-    
-    [self sendSignalUpdateUI:&r];
     
 }
 

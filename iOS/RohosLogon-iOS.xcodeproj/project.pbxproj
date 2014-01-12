@@ -176,6 +176,8 @@
 		6023D3BC16F01F55009AFE9E /* beep-beep.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 6023D3BB16F01F55009AFE9E /* beep-beep.aiff */; };
 		FA613E29187D9972005C1F63 /* unlockpc.png in Resources */ = {isa = PBXBuildFile; fileRef = FA613E28187D9972005C1F63 /* unlockpc.png */; };
 		FA613E2C187D9BAF005C1F63 /* icon-57.png in Resources */ = {isa = PBXBuildFile; fileRef = FA613E2B187D9BAF005C1F63 /* icon-57.png */; };
+		FAF0C3BE1882B49500BF7E08 /* icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF0C3BC1882B49500BF7E08 /* icon-120.png */; };
+		FAF0C3BF1882B49500BF7E08 /* icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF0C3BD1882B49500BF7E08 /* icon-72.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -528,6 +530,8 @@
 		6023D3BB16F01F55009AFE9E /* beep-beep.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "beep-beep.aiff"; sourceTree = "<group>"; };
 		FA613E28187D9972005C1F63 /* unlockpc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unlockpc.png; sourceTree = "<group>"; };
 		FA613E2B187D9BAF005C1F63 /* icon-57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-57.png"; sourceTree = "<group>"; };
+		FAF0C3BC1882B49500BF7E08 /* icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-120.png"; sourceTree = "<group>"; };
+		FAF0C3BD1882B49500BF7E08 /* icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-72.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -554,6 +558,7 @@
 		6023CF9516F00CDA009AFE9E = {
 			isa = PBXGroup;
 			children = (
+				FA0A29BB187F49EE00001D2A /* iPad */,
 				6023D1CF16F01C16009AFE9E /* zxing */,
 				6023CFA716F00CDA009AFE9E /* RohosLogon-iOS */,
 				6023CFA016F00CDA009AFE9E /* Frameworks */,
@@ -603,6 +608,8 @@
 		6023CFA816F00CDA009AFE9E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FAF0C3BC1882B49500BF7E08 /* icon-120.png */,
+				FAF0C3BD1882B49500BF7E08 /* icon-72.png */,
 				FA613E2B187D9BAF005C1F63 /* icon-57.png */,
 				FA613E28187D9972005C1F63 /* unlockpc.png */,
 				6023CFA916F00CDA009AFE9E /* RohosLogon-iOS-Info.plist */,
@@ -1147,6 +1154,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		FA0A29BB187F49EE00001D2A /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = iPad;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1177,6 +1191,11 @@
 				CLASSPREFIX = Main;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Tesline-Service";
+				TargetAttributes = {
+					6023CF9D16F00CDA009AFE9E = {
+						DevelopmentTeam = 5BSEC579P8;
+					};
+				};
 			};
 			buildConfigurationList = 6023CF9916F00CDA009AFE9E /* Build configuration list for PBXProject "RohosLogon-iOS" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1228,10 +1247,12 @@
 				6023CFB416F00CDA009AFE9E /* Default.png in Resources */,
 				6023CFB616F00CDA009AFE9E /* Default@2x.png in Resources */,
 				FA613E2C187D9BAF005C1F63 /* icon-57.png in Resources */,
+				FAF0C3BF1882B49500BF7E08 /* icon-72.png in Resources */,
 				6023CFB816F00CDA009AFE9E /* Default-568h@2x.png in Resources */,
 				6023CFBB16F00CDA009AFE9E /* MainStoryboard_iPhone.storyboard in Resources */,
 				6023CFBE16F00CDA009AFE9E /* MainStoryboard_iPad.storyboard in Resources */,
 				6023D31716F01C17009AFE9E /* .gitignore in Resources */,
+				FAF0C3BE1882B49500BF7E08 /* icon-120.png in Resources */,
 				6023D31816F01C17009AFE9E /* .svnignore in Resources */,
 				6023D31916F01C17009AFE9E /* .valgrind.supp in Resources */,
 				6023D31A16F01C17009AFE9E /* .valgrindrc in Resources */,
@@ -1492,7 +1513,7 @@
 		6023CFC516F00CDA009AFE9E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Alexander Shilonosov (65TB5BVP37)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
@@ -1504,8 +1525,10 @@
 					./zxing/cpp/core/src,
 				);
 				INFOPLIST_FILE = "RohosLogon-iOS/RohosLogon-iOS-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "538246CD-5E9C-41E7-910F-DBC07406A46C";
+				PROVISIONING_PROFILE = "A5170ED1-BE34-42A3-8D49-1ACFC97C018A";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1513,7 +1536,7 @@
 		6023CFC616F00CDA009AFE9E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Alexander Shilonosov (65TB5BVP37)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
@@ -1525,8 +1548,10 @@
 					./zxing/cpp/core/src,
 				);
 				INFOPLIST_FILE = "RohosLogon-iOS/RohosLogon-iOS-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "538246CD-5E9C-41E7-910F-DBC07406A46C";
+				PROVISIONING_PROFILE = "A5170ED1-BE34-42A3-8D49-1ACFC97C018A";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
