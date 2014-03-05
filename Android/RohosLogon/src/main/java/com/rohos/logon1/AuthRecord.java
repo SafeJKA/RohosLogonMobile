@@ -1,5 +1,16 @@
 package com.rohos.logon1;
 
+/*
+ * Copyright 2014 Tesline-Service SRL. All Rights Reserved.
+ * www.rohos.com
+ * Rohos Logon Key
+ *
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
+
+
+
 import java.nio.ByteBuffer;
 import java.util.Random;
 
@@ -13,11 +24,11 @@ import javax.crypto.spec.SecretKeySpec;
  * @author AlexShilon
  *
  */
-class AuthRecord {
+public class AuthRecord {
     /*
     Save/restore this fields in DB !
      */
-    String qr_user;         // user name or rohos disk name
+    public String qr_user;         // user name or rohos disk name
     String qr_secret_key;   // encryption key
     String qr_data;
     String qr_host_name;

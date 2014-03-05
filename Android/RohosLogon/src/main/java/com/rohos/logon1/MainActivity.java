@@ -1,5 +1,17 @@
 package com.rohos.logon1;
 
+/*
+ * Copyright 2014 Tesline-Service SRL. All Rights Reserved.
+ * www.rohos.com
+ * Rohos Logon Key
+ *
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
+
+
+
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,25 +19,35 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.DhcpInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.text.ClipboardManager;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -37,7 +59,7 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 /* Main Activity
- * @author AlexShilon alex@rohos.com
+ * @author Alex Silonosov asilonos@gmail.com
  */
 public class MainActivity extends ActionBarActivity {
 
@@ -45,6 +67,10 @@ public class MainActivity extends ActionBarActivity {
      * Intent action to that tells this Activity to initiate the scanning of barcode to add an
      * account.
      */
+	public static Handler mHandler;
+	
+	public static final int SET_RESULT_TEXT = 1001;
+	
     // @VisibleForTesting
     static final String ACTION_SCAN_BARCODE =
             MainActivity.class.getName() + ".ScanBarcode";
@@ -60,6 +86,8 @@ public class MainActivity extends ActionBarActivity {
 
     private static final String OTP_SCHEME = "rohos1";
 
+    public static final int REMOVE_ID = 2;
+
     // Links
     public static final String ZXING_MARKET =
             "market://search?q=pname:com.google.zxing.client.android";
@@ -73,8 +101,7 @@ public class MainActivity extends ActionBarActivity {
     private AuthRecordsDb mRecordsDb;
     private ListView mRecordsList;
     private AuthRecord[] mAuthRecords = {};
-    private RecordsListAdapter mRecordsAdapter;
-
+    private RecordsListAdapter mRecordsAdapter;    
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -91,6 +118,13 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 scanBarcode();
+            }
+        });
+
+        findViewById(R.id.helpButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showHelp();
             }
         });
 
@@ -143,24 +177,33 @@ public class MainActivity extends ActionBarActivity {
 
         }
 
-    }
+    }    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
-
-
-        }
+        }        
+        
+        mHandler = new Handler(){
+        	@Override
+        	public void handleMessage(Message msg){
+        		super.handleMessage(msg);
+        		switch(msg.what){
+        		case SET_RESULT_TEXT:
+        			String result = (String)msg.obj;
+        			if(result != null)
+        				((TextView) findViewById(R.id.textQRcode)).setText(result);
+        			break;
+        		}
+        	}
+        };
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -178,9 +221,16 @@ public class MainActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 checkUpdates();
+                //showHelp();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+    @Override
+    protected void onDestroy(){
+    	super.onDestroy();
+    	mHandler = null;
     }
 
     /**
@@ -234,6 +284,14 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    private void showHelp() {
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setClass(this, HelpActivity.class);
+        //Intent intent = new Intent(this, HelpActivity.class);
+        startActivity(intent);
+    }
+
     private void scanBarcode() {
 
         Intent intentScan = new Intent("com.google.zxing.client.android.SCAN");
@@ -278,6 +336,117 @@ public class MainActivity extends ActionBarActivity {
             String scanResult = (intent != null) ? intent.getStringExtra("SCAN_RESULT") : null;
             Uri uri = (scanResult != null) ? Uri.parse(scanResult) : null;
             interpretScanResult(uri, false);
+        }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId()==R.id.listView  ) {
+            super.onCreateContextMenu(menu, v, menuInfo);
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+            menu.setHeaderTitle( mAuthRecords[info.position].qr_user+ " " + mAuthRecords[info.position].qr_host_name );
+
+            /*String[] menuItems = getResources().getStringArray(R.array.menu);
+            for (int i = 0; i<menuItems.length; i++) {
+                menu.add(Menu.NONE, i, i, menuItems[i]);
+            }*/
+            menu.add(0, REMOVE_ID, 0, R.string.remove);
+        }
+    }
+
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Intent intent;
+        final String recordName = mAuthRecords[info.position].qr_user; // final so listener can see value
+        final String recordHostName = mAuthRecords[info.position].qr_host_name; // final so listener can see value
+        switch (item.getItemId()) {
+          /*  case COPY_TO_CLIPBOARD_ID:
+                ClipboardManager clipboard =
+                        (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                clipboard.setText(mUsers[(int) info.id].pin);
+                return true;
+            case CHECK_KEY_VALUE_ID:
+                intent = new Intent(Intent.ACTION_VIEW);
+                intent.setClass(this, CheckCodeActivity.class);
+                intent.putExtra("user", user);
+                startActivity(intent);
+                return true;
+            case RENAME_ID:
+                final Context context = this; // final so listener can see value
+                final View frame = getLayoutInflater().inflate(R.layout.rename,
+                        (ViewGroup) findViewById(R.id.rename_root));
+                final EditText nameEdit = (EditText) frame.findViewById(R.id.rename_edittext);
+                nameEdit.setText(user);
+                new AlertDialog.Builder(this)
+                        .setTitle(String.format(getString(R.string.rename_message), user))
+                        .setView(frame)
+                        .setPositiveButton(R.string.submit,
+                                this.getRenameClickListener(context, user, nameEdit))
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
+                return true;
+            case REMOVE_ID:
+                // Use a WebView to display the prompt because it contains non-trivial markup, such as list
+                View promptContentView =
+                        getLayoutInflater().inflate(R.layout.remove_account_prompt, null, false);
+                WebView webView = (WebView) promptContentView.findViewById(R.id.web_view);
+                webView.setBackgroundColor(Color.TRANSPARENT);
+                // Make the WebView use the same font size as for the mEnterPinPrompt field
+                double pixelsPerDip =
+                        TypedValue.applyDimension(
+                                TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics()) / 10d;
+                webView.getSettings().setDefaultFontSize(
+                        (int) (mEnterPinPrompt.getTextSize() / pixelsPerDip));
+                Utilities.setWebViewHtml(
+                        webView,
+                        "<html><body style=\"background-color: transparent;\" text=\"white\">"
+                                + getString(
+                                mAccountDb.isGoogleAccount(user)
+                                        ? R.string.remove_google_account_dialog_message
+                                        : R.string.remove_account_dialog_message)
+                                + "</body></html>");
+
+                new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.remove_account_dialog_title, user))
+                        .setView(promptContentView)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(R.string.remove_account_dialog_button_remove,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        mAccountDb.delete(user);
+                                        refreshUserList(true);
+                                    }
+                                }
+                        )
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
+                return true;*/
+            case REMOVE_ID:
+                new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.remove_account_title, recordName))
+                        .setMessage(getString(R.string.remove_account_info, recordHostName))
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(R.string.remove,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        mRecordsDb.delete(recordHostName, recordName);
+                                        refreshRecordsList(true);
+                                    }
+                                }
+                        )
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
+
+
+
+                return true;
+            default:
+                return super.onContextItemSelected(item);
         }
     }
 
@@ -405,11 +574,28 @@ public class MainActivity extends ActionBarActivity {
 
             if (mRecordsList.getVisibility() != View.VISIBLE) {
                 mRecordsList.setVisibility(View.VISIBLE);
-                registerForContextMenu(mRecordsList);
+                ((ScrollView) findViewById(R.id.scrollView)).setVisibility(View.GONE);
             }
+
+            registerForContextMenu(mRecordsList);
+
+            ((TextView) findViewById(R.id.textQRcode)).setText( R.string.click_to_unlock);
+
         } else {
             mAuthRecords = new AuthRecord[0]; // clear any existing user PIN state
             mRecordsList.setVisibility(View.GONE);
+
+            /*
+            // setting "How it Works" view when there is no records...
+
+            ((ScrollView) findViewById(R.id.scrollView)).setVisibility(View.VISIBLE);
+
+            View promptContentView =
+                    getLayoutInflater().inflate(R.layout.activity_help , null, false);
+
+            mRecordsList.vi
+            ((ScrollView) findViewById(R.id.scrollView)).setVi
+            */
         }
 
 
@@ -569,190 +755,14 @@ public class MainActivity extends ActionBarActivity {
             showDialog(INVALID_QR_CODE);
         }
 
-
-    }
-
-
-
-
-    /*
-    *
-    *   Great Broadcast sender module. Send Authentication signal and receive an answer from desktop.
-        *   @author AlexShilon
-         *
-     */
-    private class NetworkSender extends AsyncTask<AuthRecord, Void, Long> {
-        public Socket socket;
-        private Context context;
-        public String strResult;
-        public String strHostIp;
-
-
-        public NetworkSender(Context context) {
-            this.context = context;
-
-            socket = null;
+        catch ( Exception error )
+        {
+            ((TextView) findViewById(R.id.textQRcode)).setText( String.format(" %s",error.toString() ));
+            showDialog(INVALID_QR_CODE);
         }
 
-        InetAddress getBroadcastAddress() throws IOException {
-            WifiManager wifi = (WifiManager)this.context.getSystemService(Context.WIFI_SERVICE);
-            DhcpInfo dhcp = wifi.getDhcpInfo();
-            // handle null somehow
 
-            int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
-            byte[] quads = new byte[4];
-            for (int k = 0; k < 4; k++)
-                quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
-            return InetAddress.getByAddress(quads);
-        }
-
-        /*InetAddress getLocalAddress() throws IOException {
-            WifiManager wifi = (WifiManager)this.context.getSystemService(Context.WIFI_SERVICE);
-            DhcpInfo dhcp = wifi.getDhcpInfo();
-            // handle null somehow
-
-            return InetAddress.getByAddress(dhcp.ipAddress);
-        }*/
-
-        @Override
-        protected Long doInBackground(AuthRecord... ai) {
-
-            long result=0;
-            DatagramSocket udp_socket = null;
-
-            if (ai[0].qr_user == null || ai[0].qr_user.isEmpty())
-            {
-                return result;
-            }
-
-
-            try {
-
-                //InetSocketAddress bindSocketAddress = new InetSocketAddress("localhost", service.getNetworkConfiguration().getBindSocketAddress().getPort());
-
-                udp_socket = new DatagramSocket(ai[0].qr_host_port);
-                udp_socket.setBroadcast(true);
-                udp_socket.setReuseAddress(true);
-
-                String encryptedAuthString = ai[0].getEncryptedDataString();
-                String str_data = String.format("%s.%s.%s", ai[0].qr_user, ai[0].qr_host_name, encryptedAuthString );
-
-                DatagramPacket packet = new DatagramPacket(str_data.getBytes(), str_data.length(),
-                        getBroadcastAddress(), ai[0].qr_host_port);
-                udp_socket.send(packet);
-
-
-                udp_socket.setSoTimeout(1000);
-                DatagramPacket recv_packet = new DatagramPacket(new byte[300], 300);
-                String serverReply = "";
-
-                try {
-                    udp_socket.receive(recv_packet);
-
-                    // if we have received ourself packet...
-                    // receive once again server reply...
-                    if (recv_packet.getData().length > 30)
-                    {
-                        recv_packet.setData(new byte[100], 0, 100);
-                        //Thread.sleep( 300 );//1 sec
-                        udp_socket.receive(recv_packet);
-                    }
-
-                    serverReply = new String(recv_packet.getData());
-
-                }
-
-                catch (SocketTimeoutException err)
-                {
-                    // ... oops no server reply
-                }
-
-                udp_socket.close();
-
-                strResult = String.format("Authentication signal sent OK.\n%s %d %d\nUnlocked:%s",
-                        str_data.substring(0, 29), encryptedAuthString.length(), ai[0].qr_secret_key.length(),
-                        /*ai[0].plainHexAuthStr,*/
-                        serverReply);
-
-                return result;
-
-                /*
-                this is OLD version - Peer-to-Peer connection.
-                doesnt work when HOST name cannot be resolved...
-                socket = new Socket();
-
-                InetAddress address = InetAddress.getByName(ai[0].qr_host_name );
-                strHostIp = address.getHostAddress();
-
-                if (strHostIp.length() == 0)
-                    strHostIp = ai[0].qr_host_ip;
-
-                SocketAddress remoteaddr=new InetSocketAddress(strHostIp, ai[0].qr_host_port);
-                socket.connect(remoteaddr, 900);
-
-                BufferedWriter out = new BufferedWriter(
-                        new OutputStreamWriter(socket.getOutputStream()));
-
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(socket.getInputStream()));
-
-                char [] received_data  = new char[500];
-                int len = in.read(received_data);
-
-                String hostHello = new StringBuffer()
-                        .append(received_data, 0, len)
-                        .toString();
-
-                String encryptedAuthString = ai[0].getEncryptedDataString();
-                String str_data = String.format("%s.%s.%s", ai[0].qr_user, ai[0].qr_host_name, encryptedAuthString );
-                out.write(str_data, 0, str_data.length());
-                out.flush();
-
-                result = str_data.length();
-                strResult = String.format("Send OK. %s %d\n%s \nto: %s (%s)",
-                        str_data.substring(0, 20), encryptedAuthString.length(),
-                        ai[0].plainHexAuthStr,
-                        strHostIp,hostHello );
-
-                //strResult = "";
-                */
-
-            } catch (IOException e) {
-
-                strResult = String.format("IO Exception.. %s", e.toString());
-
-            }
-
-              catch ( Exception e)
-               {
-                   strResult = String.format("Exception.. %s", e.toString());
-                   //if (udp_socket!=null) udp_socket.close();
-               }
-
-            finally {
-                if (udp_socket!=null) udp_socket.close();
-
-            }
-
-
-         return result;
-        }
-
-        protected void onPostExecute(Long result) {
-
-            ((TextView) findViewById(R.id.textQRcode)).setText( strResult);
-
-            if ( strResult.indexOf("Rohos:", 0) >0)
-            {
-                // vibarate if result contains server reply
-
-                ((Vibrator) this.context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(100L);
-            }
-
-
-        }
-
-    }
+    }   
 }
 
 

@@ -187,8 +187,9 @@ public class AuthRecordsDb {
     return USER_NAME_COLUMN + " = " + DatabaseUtils.sqlEscapeString(name);
   }
 
-  public void delete(String email) {
-    mDatabase.delete(TABLE_NAME, whereClause(email), null);
+  public void delete(String computer_name, String  record_name) {
+    mDatabase.delete(TABLE_NAME, USER_NAME_COLUMN + " = " + DatabaseUtils.sqlEscapeString(record_name) + " AND " +
+            HOST_NAME_COLUMN + " = " + DatabaseUtils.sqlEscapeString(computer_name), null);
   }
 
 
