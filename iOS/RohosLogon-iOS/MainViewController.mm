@@ -20,6 +20,8 @@
 #include <arpa/inet.h>
 
 
+
+
 /*
  Authentication Record structure with encryption routine
  */
@@ -188,6 +190,11 @@ AuthRecord ar;
 @end
 
 @implementation MainViewController
+{
+  BluetoothCentral* mBluetooth;
+  NSData* mBluetoothSendData;
+}
+
 @synthesize resultsView;
 @synthesize tableView;
 @synthesize recordsView;
@@ -236,8 +243,15 @@ AuthRecord ar;
     
         [self refreshAuthRecordsList];
     }
-    
-    
+  
+    mBluetooth = [[BluetoothCentral alloc] init];
+    mBluetooth.delegate = self;
+}
+
+- (void)dealloc {
+  [mBluetoothSendData release]; mBluetoothSendData = nil;
+  [mBluetooth release]; mBluetooth = nil;
+  [super dealloc];
 }
 
 - (void)learnMoreSingleTapRecognized:(UIGestureRecognizer *)gestureRecognizer {
@@ -437,9 +451,17 @@ AuthRecord ar;
     } else
     {
         [resultsView setText:@"Signal sent but not unlocked"];
-        
     }
-    
+  
+    if (mBluetooth.isActive)
+        [mBluetooth sendData: [ar->serverReplyStr dataUsingEncoding: NSUTF8StringEncoding]];
+    else
+    {
+      [mBluetoothSendData release];
+      mBluetoothSendData = [[ar->serverReplyStr dataUsingEncoding: NSUTF8StringEncoding] retain];
+      [mBluetooth start];
+      // Logic continues in onCentralManagerInit handler
+    }
     return 0;
 }
 
@@ -635,9 +657,22 @@ AuthRecord ar;
    // UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
     
     [self sendSignalForRecord:indexPath.row];
-    
-    
-    
+}
+
+- (void)onCentralManagerInit:(NSError *)error
+{
+  if (error)
+    NSLog(@"BT init & discovery error: %@", [error localizedDescription]);
+  else
+  if (mBluetoothSendData)
+    [mBluetooth sendData: mBluetoothSendData];
+}
+
+- (void)onDataSent:(NSError *)error
+{
+  // Silence all errors for now. But dump to console.
+  if (error)
+    NSLog(@"BT send error: %@", [error localizedDescription]);
 }
 
 @end

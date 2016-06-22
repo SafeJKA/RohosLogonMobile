@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		17DA66261D1A58490031108F /* BluetoothHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DA66251D1A58490031108F /* BluetoothHelper.m */; };
+		17DA66291D1A58A40031108F /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17DA66281D1A58A40031108F /* CoreBluetooth.framework */; };
 		6023CFA216F00CDA009AFE9E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023CFA116F00CDA009AFE9E /* UIKit.framework */; };
 		6023CFA416F00CDA009AFE9E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023CFA316F00CDA009AFE9E /* Foundation.framework */; };
 		6023CFA616F00CDA009AFE9E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023CFA516F00CDA009AFE9E /* CoreGraphics.framework */; };
@@ -205,6 +207,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		17DA66241D1A58490031108F /* BluetoothHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothHelper.h; sourceTree = "<group>"; };
+		17DA66251D1A58490031108F /* BluetoothHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluetoothHelper.m; sourceTree = "<group>"; };
+		17DA66281D1A58A40031108F /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		6023CF9E16F00CDA009AFE9E /* Rohos Logon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Rohos Logon.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6023CFA116F00CDA009AFE9E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6023CFA316F00CDA009AFE9E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -539,6 +544,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17DA66291D1A58A40031108F /* CoreBluetooth.framework in Frameworks */,
 				6023D1C916F00F01009AFE9E /* libiconv.dylib in Frameworks */,
 				6023D1C616F00ED9009AFE9E /* AddressBook.framework in Frameworks */,
 				6023D1C716F00ED9009AFE9E /* AddressBookUI.framework in Frameworks */,
@@ -577,6 +583,7 @@
 		6023CFA016F00CDA009AFE9E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				17DA66281D1A58A40031108F /* CoreBluetooth.framework */,
 				6023D1C816F00F01009AFE9E /* libiconv.dylib */,
 				6023D1C416F00ED9009AFE9E /* AddressBook.framework */,
 				6023D1C516F00ED9009AFE9E /* AddressBookUI.framework */,
@@ -594,6 +601,8 @@
 		6023CFA716F00CDA009AFE9E /* RohosLogon-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				17DA66241D1A58490031108F /* BluetoothHelper.h */,
+				17DA66251D1A58490031108F /* BluetoothHelper.m */,
 				6023CFB016F00CDA009AFE9E /* MainAppDelegate.h */,
 				6023CFB116F00CDA009AFE9E /* MainAppDelegate.mm */,
 				6023CFB916F00CDA009AFE9E /* MainStoryboard_iPhone.storyboard */,
@@ -1193,7 +1202,7 @@
 				ORGANIZATIONNAME = "Tesline-Service";
 				TargetAttributes = {
 					6023CF9D16F00CDA009AFE9E = {
-						DevelopmentTeam = 5BSEC579P8;
+						DevelopmentTeam = 563QRB9S29;
 					};
 				};
 			};
@@ -1342,6 +1351,7 @@
 				6023D35B16F01C17009AFE9E /* UPCEReader.cpp in Sources */,
 				6023D35C16F01C17009AFE9E /* BitMatrixParser.cpp in Sources */,
 				6023D35D16F01C17009AFE9E /* DataBlock.cpp in Sources */,
+				17DA66261D1A58490031108F /* BluetoothHelper.m in Sources */,
 				6023D35E16F01C17009AFE9E /* DataMask.cpp in Sources */,
 				6023D35F16F01C17009AFE9E /* DecodedBitStreamParser.cpp in Sources */,
 				6023D36016F01C17009AFE9E /* Decoder.cpp in Sources */,
@@ -1514,6 +1524,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
@@ -1527,7 +1538,7 @@
 				INFOPLIST_FILE = "RohosLogon-iOS/RohosLogon-iOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "A5170ED1-BE34-42A3-8D49-1ACFC97C018A";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1537,6 +1548,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
@@ -1550,7 +1562,7 @@
 				INFOPLIST_FILE = "RohosLogon-iOS/RohosLogon-iOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "A5170ED1-BE34-42A3-8D49-1ACFC97C018A";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

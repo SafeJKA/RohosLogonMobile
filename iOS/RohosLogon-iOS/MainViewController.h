@@ -10,9 +10,10 @@
 
 #import <UIKit/UIKit.h>
 #import <ZXingWidgetController.h>
+#import "BluetoothHelper.h"
 
 @interface MainViewController : UIViewController
-                                <ZXingDelegate, UITableViewDelegate, UITableViewDataSource>
+                                <ZXingDelegate, UITableViewDelegate, UITableViewDataSource, BluetoothCentralDelegate>
 {
     UITextView *resultsView;
     UIView *recordsView;

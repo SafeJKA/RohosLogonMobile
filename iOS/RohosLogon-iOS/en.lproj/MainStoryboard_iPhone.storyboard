@@ -1,39 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="4514" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" variant="6xAndEarlier" propertyAccessControl="none" useAutolayout="YES" initialViewController="2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="2">
     <dependencies>
-        <deployment defaultVersion="1552" identifier="iOS"/>
-        <development version="4600" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
     </dependencies>
     <scenes>
         <!--Main View Controller-->
         <scene sceneID="5">
             <objects>
                 <viewController id="2" customClass="MainViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ziq-XZ-yJH"/>
+                        <viewControllerLayoutGuide type="bottom" id="qm6-Hu-LjY"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="3">
-                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o9c-xZ-Uco">
-                                <rect key="frame" x="20" y="27" width="280" height="44"/>
+                                <rect key="frame" x="20" y="27" width="280" height="30"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Scan Rohos Logon QR-code">
-                                    <color key="titleColor" red="0.19607843137254902" green="0.30980392156862746" blue="0.52156862745098043" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="scanPressed:" destination="2" eventType="touchUpInside" id="7yk-LC-4fd"/>
                                 </connections>
                             </button>
                             <textView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" editable="NO" text="Install Rohos Logon Key on your desktop to enable authentication by phone. rohos.com/mob" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="agg-ih-oYm">
-                                <rect key="frame" x="20" y="78" width="280" height="83"/>
+                                <rect key="frame" x="20" y="65" width="280" height="83"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="tintColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 <accessibility key="accessibilityConfiguration">
-                                    <accessibilityTraits key="traits" none="YES" button="YES"/>
+                                    <accessibilityTraits key="traits" button="YES"/>
                                 </accessibility>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="83" id="ry0-yt-3bA"/>
@@ -42,12 +41,10 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zvq-wA-IZa">
-                                <rect key="frame" x="14" y="195" width="286" height="277"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <rect key="frame" x="14" y="195" width="286" height="297"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Click to authenticate:" translatesAutoresizingMaskIntoConstraints="NO" id="uI6-eT-TUc">
-                                        <rect key="frame" x="8" y="6" width="240" height="24"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <rect key="frame" x="8" y="26" width="240" height="24"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="240" id="IMc-qU-ZM5"/>
@@ -56,9 +53,8 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Gto-P7-HOH">
-                                        <rect key="frame" x="6" y="38" width="280" height="192"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Gto-P7-HOH">
+                                        <rect key="frame" x="6" y="58" width="280" height="192"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="192" id="NV5-iK-RGH"/>
@@ -70,18 +66,14 @@
                                         </connections>
                                     </tableView>
                                     <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yQx-Vn-Y6A">
-                                        <rect key="frame" x="199" y="238" width="87" height="40"/>
+                                        <rect key="frame" x="199" y="258" width="87" height="39"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="39" id="O2f-Za-riT"/>
                                             <constraint firstAttribute="width" constant="87" id="TgO-7G-Ekm"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" title="Clear list">
-                                            <color key="titleColor" red="0.19607843137254902" green="0.30980392156862746" blue="0.52156862745098043" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
                                             <action selector="sendSignalPressed:" destination="2" eventType="touchUpInside" id="u7P-cN-xIf"/>
@@ -91,16 +83,15 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="uI6-eT-TUc" firstAttribute="leading" secondItem="Zvq-wA-IZa" secondAttribute="leading" constant="8" id="Sz3-qj-2IP"/>
-                                    <constraint firstItem="Gto-P7-HOH" firstAttribute="top" secondItem="uI6-eT-TUc" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="aX4-bS-PrL"/>
-                                    <constraint firstItem="yQx-Vn-Y6A" firstAttribute="top" secondItem="Gto-P7-HOH" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="o9e-wo-MDq"/>
-                                    <constraint firstItem="yQx-Vn-Y6A" firstAttribute="trailing" secondItem="Gto-P7-HOH" secondAttribute="trailing" type="default" id="pXq-Yf-Ni7"/>
-                                    <constraint firstAttribute="bottom" secondItem="yQx-Vn-Y6A" secondAttribute="bottom" type="default" id="q2L-pQ-vZJ"/>
-                                    <constraint firstAttribute="trailing" secondItem="yQx-Vn-Y6A" secondAttribute="trailing" type="default" id="xgo-mc-ebm"/>
+                                    <constraint firstItem="Gto-P7-HOH" firstAttribute="top" secondItem="uI6-eT-TUc" secondAttribute="bottom" constant="8" symbolic="YES" id="aX4-bS-PrL"/>
+                                    <constraint firstItem="yQx-Vn-Y6A" firstAttribute="top" secondItem="Gto-P7-HOH" secondAttribute="bottom" constant="8" symbolic="YES" id="o9e-wo-MDq"/>
+                                    <constraint firstItem="yQx-Vn-Y6A" firstAttribute="trailing" secondItem="Gto-P7-HOH" secondAttribute="trailing" id="pXq-Yf-Ni7"/>
+                                    <constraint firstAttribute="bottom" secondItem="yQx-Vn-Y6A" secondAttribute="bottom" id="q2L-pQ-vZJ"/>
+                                    <constraint firstAttribute="trailing" secondItem="yQx-Vn-Y6A" secondAttribute="trailing" id="xgo-mc-ebm"/>
                                 </constraints>
                             </view>
                             <imageView contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="unlockpc.png" translatesAutoresizingMaskIntoConstraints="NO" id="n3x-Vy-iaG">
                                 <rect key="frame" x="40" y="175" width="240" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="128" id="NJi-lj-jUh"/>
                                     <constraint firstAttribute="width" constant="240" id="gQn-Ic-GoL"/>
@@ -110,17 +101,17 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Zvq-wA-IZa" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="14" id="00g-s0-9DA"/>
-                            <constraint firstItem="Zvq-wA-IZa" firstAttribute="trailing" secondItem="agg-ih-oYm" secondAttribute="trailing" type="default" id="3bf-dh-Gfd"/>
-                            <constraint firstItem="o9c-xZ-Uco" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="7Io-5N-bY4"/>
+                            <constraint firstItem="Zvq-wA-IZa" firstAttribute="trailing" secondItem="agg-ih-oYm" secondAttribute="trailing" id="3bf-dh-Gfd"/>
+                            <constraint firstItem="o9c-xZ-Uco" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" id="7Io-5N-bY4"/>
                             <constraint firstItem="n3x-Vy-iaG" firstAttribute="top" secondItem="3" secondAttribute="top" constant="175" id="SIy-ls-zYJ"/>
-                            <constraint firstItem="n3x-Vy-iaG" firstAttribute="centerX" secondItem="agg-ih-oYm" secondAttribute="centerX" type="default" id="VrW-QP-Xgk"/>
+                            <constraint firstItem="n3x-Vy-iaG" firstAttribute="centerX" secondItem="agg-ih-oYm" secondAttribute="centerX" id="VrW-QP-Xgk"/>
                             <constraint firstItem="Zvq-wA-IZa" firstAttribute="top" secondItem="3" secondAttribute="top" constant="195" id="Wmb-zD-Yrh"/>
                             <constraint firstItem="o9c-xZ-Uco" firstAttribute="top" secondItem="3" secondAttribute="top" constant="27" id="bDc-ld-opX"/>
-                            <constraint firstItem="agg-ih-oYm" firstAttribute="top" secondItem="o9c-xZ-Uco" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="cCl-OZ-7gS"/>
+                            <constraint firstItem="agg-ih-oYm" firstAttribute="top" secondItem="o9c-xZ-Uco" secondAttribute="bottom" constant="8" symbolic="YES" id="cCl-OZ-7gS"/>
                             <constraint firstAttribute="bottom" secondItem="Zvq-wA-IZa" secondAttribute="bottom" constant="76" id="cTK-Ge-2Gc"/>
-                            <constraint firstItem="agg-ih-oYm" firstAttribute="trailing" secondItem="o9c-xZ-Uco" secondAttribute="trailing" type="default" id="kpq-mM-3t9"/>
-                            <constraint firstAttribute="trailing" secondItem="o9c-xZ-Uco" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="m9c-oL-Moh"/>
-                            <constraint firstItem="o9c-xZ-Uco" firstAttribute="leading" secondItem="agg-ih-oYm" secondAttribute="leading" type="default" id="mUI-r3-Kl2"/>
+                            <constraint firstItem="agg-ih-oYm" firstAttribute="trailing" secondItem="o9c-xZ-Uco" secondAttribute="trailing" id="kpq-mM-3t9"/>
+                            <constraint firstAttribute="trailing" secondItem="o9c-xZ-Uco" secondAttribute="trailing" constant="20" symbolic="YES" id="m9c-oL-Moh"/>
+                            <constraint firstItem="o9c-xZ-Uco" firstAttribute="leading" secondItem="agg-ih-oYm" secondAttribute="leading" id="mUI-r3-Kl2"/>
                         </constraints>
                     </view>
                     <connections>
@@ -137,9 +128,4 @@
     <resources>
         <image name="unlockpc.png" width="72" height="72"/>
     </resources>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
 </document>
