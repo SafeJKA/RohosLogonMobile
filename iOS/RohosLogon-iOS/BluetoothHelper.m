@@ -50,6 +50,7 @@
   
   @try
   {
+    NSLog(@"Sending data to BT peripheral");
     [mDiscoveredPeripheral writeValue: data
                     forCharacteristic: mDiscoveredCharacteristics
                                  type: CBCharacteristicWriteWithResponse];
@@ -77,7 +78,7 @@
     // Scan
     NSLog(@"Start scanning for peripherals");
     [mCentralManager scanForPeripheralsWithServices: @[[CBUUID UUIDWithString: ROHOS_DATA_SERVICE]]
-                                            options:  @{ CBCentralManagerScanOptionAllowDuplicatesKey : @YES }];
+                                            options: @{ CBCentralManagerScanOptionAllowDuplicatesKey : @YES }];
   }
 }
 
@@ -149,13 +150,16 @@
   
   BOOL foundTarget = NO;
   
-  NSLog(@"Discovered characteristics for service");
+  NSLog(@"Discovered characteristics for service %@", [service.UUID UUIDString]);
+  
   for (CBCharacteristic *characteristic in service.characteristics)
   {
     if ([characteristic.UUID isEqual: [CBUUID UUIDWithString: ROHOS_DATA_CHARACTERISTICS]])
     {
       [mDiscoveredCharacteristics release];
       mDiscoveredCharacteristics = [characteristic retain];
+      
+      NSLog(@"Found target data characteristics %@", [characteristic.UUID UUIDString]);
       
       // Wait for data from device
       //[peripheral setNotifyValue: YES forCharacteristic: characteristic];
@@ -303,7 +307,7 @@
     mTransferCharacteristic = [[CBMutableCharacteristic alloc] initWithType: [CBUUID UUIDWithString: ROHOS_DATA_CHARACTERISTICS]
                                                                  properties: CBCharacteristicPropertyWriteWithoutResponse | CBCharacteristicPropertyWrite
                                                                       value: nil
-                                                                permissions: CBAttributePermissionsWriteEncryptionRequired];
+                                                                permissions: CBAttributePermissionsWriteEncryptionRequired | CBAttributePermissionsWriteable];
     
     CBMutableService *transferService = [[CBMutableService alloc] initWithType: [CBUUID UUIDWithString: ROHOS_DATA_SERVICE] primary: YES];
     

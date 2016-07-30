@@ -642,7 +642,7 @@ AuthRecord ar;
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
-    NSDictionary * record =[mRecords objectAtIndex:indexPath.row];
+    NSDictionary * record = [mRecords objectAtIndex:indexPath.row];
     
     cell.textLabel.text = [NSString stringWithFormat:@"%@ [%@]",
                            [record objectForKey:USER_NAME_KEY],
