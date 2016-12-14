@@ -24,8 +24,9 @@ public class HelpActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_help);
-		
+
+        setContentView(R.layout.activity_help);
+
         //setPageContentView(R.layout.activity_help);
         //setTextViewHtmlFromResource(R.id.details, R.string.howitworks_page_enter_code_details);
     }
