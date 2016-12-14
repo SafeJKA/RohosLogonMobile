@@ -1,0 +1,35 @@
+
+    <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+        <CheckBoxPreference android:key="knock_recog"
+            android:defaultValue="@bool/knock_recg_d"
+            android:title="@string/knock_recog_title"
+            android:summary="@string/knock_recog_summ"/>
+        <ListPreference
+            android:key="number_knocks"
+            android:dialogTitle="Select number of knocks"
+            android:entries="@array/entries_list"
+            android:entryValues="@array/entry_values_list"
+            android:title="@string/number_knock_title"
+            android:summary="@string/number_knock_summ"
+            android:defaultValue="2"/>
+        <PreferenceScreen
+            android:key="test_knock"
+            android:summary="@string/test_konck_summ"
+            android:title="@string/test_knock_title"/>
+        <CheckBoxPreference
+            android:key="lock_if_leavs_conn"
+            android:defaultValue="@bool/lock_if_leav_d"
+            android:title="@string/lock_if_leavs_conn_title"/>
+        <CheckBoxPreference
+            android:key="use_bluetooth_unlock"
+            android:defaultValue="@bool/use_bluetooth_d"
+            android:title="@string/use_bluetooth_unlock_title"/>
+        <CheckBoxPreference
+            android:key="unlock_on_table"
+            android:defaultValue="@bool/unlock_on_table_d"
+            android:title="@string/unlock_on_table_title"/>
+        <CheckBoxPreference
+            android:defaultValue="@bool/show_icon_on_tb"
+            android:title="@string/show_icon_on_tb_title"
+            android:key="show_icon" />
+    </PreferenceScreen>
