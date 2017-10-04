@@ -1202,7 +1202,7 @@
 				ORGANIZATIONNAME = "Tesline-Service";
 				TargetAttributes = {
 					6023CF9D16F00CDA009AFE9E = {
-						DevelopmentTeam = 563QRB9S29;
+						DevelopmentTeam = 5BSEC579P8;
 					};
 				};
 			};
@@ -1525,6 +1525,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 5BSEC579P8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
@@ -1549,6 +1550,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 5BSEC579P8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
