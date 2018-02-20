@@ -528,9 +528,11 @@ AuthRecord ar;
 */
 - (void)parseUriString:(NSString*)strUri
 {
-    
     // replace all '(' with '&' - thats a trick for android.
     strUri = [strUri stringByReplacingOccurrencesOfString:@"(" withString:@"&"];
+  
+    // replace all ' ' with %20 - because [NSURL URLWithString] does not accept spaces
+    strUri = [strUri stringByReplacingOccurrencesOfString: @" " withString: @"%20"];
     NSURL *url = [NSURL URLWithString:strUri];
     
     ar.userName = @""; //
