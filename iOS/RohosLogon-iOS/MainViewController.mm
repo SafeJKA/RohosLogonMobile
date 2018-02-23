@@ -557,10 +557,14 @@ AuthRecord ar;
     ar.hostIP = [[NSString stringWithString:[url host]] retain];
     
     NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-    for (NSString *param in [[url query] componentsSeparatedByString:@"&"]) {
-        NSArray *elts = [param componentsSeparatedByString:@"="];
-        if([elts count] < 2) continue;
-        [params setObject:[elts objectAtIndex:1] forKey:[elts objectAtIndex:0]];
+    for (NSString *param in [[url query] componentsSeparatedByString:@"&"])
+    {
+        NSArray *elts = [param componentsSeparatedByString: @"="];
+        if ([elts count] < 2)
+          continue;
+      
+      NSString* value = [elts[1] stringByReplacingOccurrencesOfString: @"%20" withString: @" "];
+      [params setObject: value  forKey: elts[0]];
     }
     
     ar.userName = [params objectForKey:@"USER"];
