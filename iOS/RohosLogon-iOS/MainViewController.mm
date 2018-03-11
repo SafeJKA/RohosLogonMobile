@@ -334,15 +334,15 @@ AuthRecord ar;
 {
     // Open a socket
     int sd = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
-    if (sd<=0) {
+    if (sd <= 0) {
         NSLog(@"Error: Could not open socket");
         return -1;
     }
     
     // Set socket options
     // Enable broadcast
-    int optionVal=1;
-    int ret=setsockopt(sd, SOL_SOCKET, SO_BROADCAST, &optionVal, sizeof(optionVal));
+    int optionVal = 1;
+    int ret = setsockopt(sd, SOL_SOCKET, SO_BROADCAST, &optionVal, sizeof(optionVal));
     if (ret) {
         NSLog(@"Error: Could not open set socket to broadcast mode");
         close(sd);
@@ -414,14 +414,13 @@ AuthRecord ar;
     
     AuthRecord r;
     
-    r.hostName = [record objectForKey:HOST_NAME_KEY];
-    NSNumber * port = [record objectForKey:PORT_NAME_KEY];
-    r.hostPort = [port intValue];
-    r.secretKey = [record objectForKey:SECRET_NAME_KEY];
-    r.data = [record objectForKey:DATA_NAME_KEY];
-    r.userName = [record objectForKey:USER_NAME_KEY];
+    r.hostName = record[HOST_NAME_KEY];
+    r.hostPort = [record[PORT_NAME_KEY] intValue];
+    r.secretKey = record[SECRET_NAME_KEY];
+    r.data = record[DATA_NAME_KEY];
+    r.userName = record[USER_NAME_KEY];
     
-    [self sendSignalUpdateUI:&r];
+    [self sendSignalUpdateUI: &r];
     
     return;
 
@@ -662,7 +661,7 @@ AuthRecord ar;
     
    // UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
     
-    [self sendSignalForRecord:indexPath.row];
+    [self sendSignalForRecord: indexPath.row];
 }
 
 - (void)onCentralManagerInit:(NSError *)error

@@ -1544,7 +1544,7 @@
 					./zxing/cpp/core/src,
 				);
 				INFOPLIST_FILE = "RohosLogon-iOS/RohosLogon-iOS-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "60eab31f-aa92-449a-ba09-ee560fbf9b7d";
 				PROVISIONING_PROFILE_SPECIFIER = Rohos_Logon_Dev_2;
@@ -1570,7 +1570,7 @@
 					./zxing/cpp/core/src,
 				);
 				INFOPLIST_FILE = "RohosLogon-iOS/RohosLogon-iOS-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "0c7e2611-c356-48c3-a859-3ddff1176439";
 				PROVISIONING_PROFILE_SPECIFIER = Rohos_Logon_AppStore;
