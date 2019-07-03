@@ -1,33 +1,33 @@
-apply plugin: 'com.android.model.application'
+apply plugin: 'com.android.application'
 
-model {
-    android {
-        compileSdkVersion = 23
-        buildToolsVersion = "23.0.3"
+android {
+    compileSdkVersion 28
 
-        defaultConfig {
-            applicationId = "com.rohos.logon1"
-            minSdkVersion.apiLevel = 14
-            targetSdkVersion.apiLevel = 23
-            versionCode = 14
-            versionName = "1.14"
+    defaultConfig {
+        applicationId 'com.rohos.logon1'
+        minSdkVersion 14
+        targetSdkVersion 23
+        versionCode 14
+        versionName "1.14"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules.pro'
         }
+    }
 
-        ndk {
-            moduleName = 'knock'
-            ldLibs.addAll('android', 'log')
-        }
-
-        buildTypes {
-            release {
-                minifyEnabled = false
-                proguardFiles.add(file('proguard-rules.txt'))
-            }
+    externalNativeBuild {
+        cmake {
+            version '3.10.2'
+            path "src/main/cpp/CMakeLists.txt"
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.3.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:23.3.0'
 }
