@@ -7,19 +7,14 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.res.Resources;
-import android.net.DhcpInfo;
 import android.net.Uri;
-import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -30,20 +25,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.accessibility.AccessibilityEvent;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.SocketTimeoutException;
+import org.eclipse.paho.android.service.MqttAndroidClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+
 import java.util.ArrayList;
 
 /* Main Activity
@@ -55,10 +45,10 @@ public class MainActivity extends AppCompatActivity {
      * Intent action to that tells this Activity to initiate the scanning of barcode to add an
      * account.
      */
-	public static Handler mHandler;
-	
-	public static final int SET_RESULT_TEXT = 1001;
-	
+    public static Handler mHandler;
+
+    public static final int SET_RESULT_TEXT = 1001;
+
     // @VisibleForTesting
     static final String ACTION_SCAN_BARCODE =
             MainActivity.class.getName() + ".ScanBarcode";
@@ -73,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "RohosPrefs1";
 
     private static final String OTP_SCHEME = "rohos1";
-    
+
     public static final int REMOVE_ID = 2;
 
     // Links
@@ -85,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG = "MainActivity";
 
     private boolean mSaveKeyIntentConfirmationInProgress;
-
 
     private NetworkSender netSender;
     private AuthRecordsDb mRecordsDb;
@@ -111,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 scanBarcode();
             }
         });
-        
+
         findViewById(R.id.helpButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mAboutText = (TextView)findViewById(R.id.aboutText);
+        mAboutText = (TextView) findViewById(R.id.aboutText);
         mAboutText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,10 +116,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button unlocPC = (Button)findViewById(R.id.unlock_pc);
-        unlocPC.setOnClickListener(new View.OnClickListener(){
+        Button unlocPC = (Button) findViewById(R.id.unlock_pc);
+        unlocPC.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 unlockPC();
             }
         });
@@ -144,12 +133,12 @@ public class MainActivity extends AppCompatActivity {
         mRecordsList = (ListView) findViewById(R.id.listView);
         mRecordsList.setAdapter(mRecordsAdapter);
 
-        mRecordsList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        mRecordsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> unusedParent, View row,
                                     int unusedPosition, long unusedId) {
 
-                String accName = ((TextView)row.findViewById(R.id.recordName)).getText().toString();
+                String accName = ((TextView) row.findViewById(R.id.recordName)).getText().toString();
                 sendIpLogin(accName);
 
             }
@@ -172,12 +161,10 @@ public class MainActivity extends AppCompatActivity {
             // interpretScanResult( Uri.parse("rohos1://192.168.1.8:1005/zed?USER=Alex(KEY=538a44883958c2961c3c10e419c931ab(DATA=6c345545645664a802938219371bb832e3cc503373aa0b6f6ed1b07f41e52005728e092d468dff6841f9d2c34e5f6ad6cc8aee67792f693c828a018e16bfa41ad08bb7132298afdfa9e70df29b023661"), false);
             // interpretScanResult( Uri.parse("rohos1://192.168.1.1:1005/zed123?USER=AlexAnder(KEY=538a44883958c2961c3c10e419c931ab(DATA=6c5345645645745672938219371bb832e3cc503373aa0b6f6ed1b07f41e52005728e092d468dff6841f9d2c34e5f6ad6cc8aee67792f693c828a018e16bfa41ad08bb7132298afdfa9e70df29b023661"), false);
 
-        } else
-        {
+        } else {
 
         }
-
-    }    
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,28 +175,28 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
-        }        
-        
-        mHandler = new Handler(){
-        	@Override
-        	public void handleMessage(Message msg){
-        		super.handleMessage(msg);
-        		switch(msg.what){
-        		case SET_RESULT_TEXT:
-        			String result = (String)msg.obj;
-        			if(result != null)
-        				((TextView) findViewById(R.id.textQRcode)).setText(result);
-        			break;
-        		}
-        	}
+        }
+
+        mHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what) {
+                    case SET_RESULT_TEXT:
+                        String result = (String) msg.obj;
+                        if (result != null)
+                            ((TextView) findViewById(R.id.textQRcode)).setText(result);
+                        break;
+                }
+            }
         };
-        
+
         //startService(new Intent(MainActivity.this, UPDService.class));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
@@ -225,17 +212,17 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, Settings.class));
                 return true;
             case R.id.action_check_updates:
-            	checkUpdates();
-            	return true;
-            default:	
-            	return super.onOptionsItemSelected(item);
-        }        
+                checkUpdates();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
-    
+
     @Override
-    protected void onDestroy(){
-    	super.onDestroy();
-    	mHandler = null;
+    protected void onDestroy() {
+        super.onDestroy();
+        mHandler = null;
     }
 
     /**
@@ -248,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+                                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             return rootView;
         }
@@ -272,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
         // Try to unlock PC via bluetooth
         Resources res = getResources();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        if(sp.getBoolean("use_bluetooth_unlock", res.getBoolean(R.bool.use_bluetooth_d))){
+        if (sp.getBoolean("use_bluetooth_unlock", res.getBoolean(R.bool.use_bluetooth_d))) {
             startService(new Intent(MainActivity.this, BTService.class));
             //Log.d(TAG, "Start BTService");
         }
@@ -280,14 +267,12 @@ public class MainActivity extends AppCompatActivity {
 
         AuthRecord ar = mRecordsDb.getAuthRecord(accountName);
 
-        if (ar.qr_user == null || ar.qr_user.length()==0 )
-        {
+        if (ar.qr_user == null || ar.qr_user.length() == 0) {
             ((TextView) findViewById(R.id.textQRcode)).setText(String.format("Please install Rohos Logon Key on the desktop and scan QR-code first."));
             return;
         }
 
-        if (netSender != null)
-        {
+        if (netSender != null) {
             netSender.cancel(true);
             netSender = null;
         }
@@ -296,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
         netSender.execute(ar);
 
     }
-    
+
     private void showHelp() {
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -319,12 +304,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void fillAboutTextView(){
-        try{
+    private void fillAboutTextView() {
+        try {
             PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
-            mAboutText = (TextView)findViewById(R.id.aboutText);
+            mAboutText = (TextView) findViewById(R.id.aboutText);
             mAboutText.setText(getString(R.string.about_text, pi.versionName));
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
     }
@@ -362,14 +347,14 @@ public class MainActivity extends AppCompatActivity {
             interpretScanResult(uri, false);
         }
     }
-    
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
-        if (v.getId()==R.id.listView  ) {
+        if (v.getId() == R.id.listView) {
             super.onCreateContextMenu(menu, v, menuInfo);
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
-            menu.setHeaderTitle( mAuthRecords[info.position].qr_user+ " " + mAuthRecords[info.position].qr_host_name );
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            menu.setHeaderTitle(mAuthRecords[info.position].qr_user + " " + mAuthRecords[info.position].qr_host_name);
 
             /*String[] menuItems = getResources().getStringArray(R.array.menu);
             for (int i = 0; i<menuItems.length; i++) {
@@ -467,7 +452,6 @@ public class MainActivity extends AppCompatActivity {
                         .show();
 
 
-
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -481,7 +465,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected Dialog onCreateDialog(final int id) {
         Dialog dialog = null;
-        switch(id) {
+        switch (id) {
             /**
              * Prompt to download ZXing from Market. If Market app is not installed,
              * such as on a development phone, open the HTTPS URI for the ZXing apk.
@@ -499,8 +483,7 @@ public class MainActivity extends AppCompatActivity {
                                         Uri.parse(ZXING_MARKET));
                                 try {
                                     startActivity(intent);
-                                }
-                                catch (ActivityNotFoundException e) { // if no Market app
+                                } catch (ActivityNotFoundException e) { // if no Market app
                                     intent = new Intent(Intent.ACTION_VIEW,
                                             Uri.parse(ZXING_DIRECT));
                                     startActivity(intent);
@@ -520,8 +503,6 @@ public class MainActivity extends AppCompatActivity {
                         .create();
                 break;
 
-
-
             default:
                 break;
         }
@@ -529,26 +510,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void
-    unlockPC(){
-        try{
+    unlockPC() {
+        try {
             //Resources res = getResources();
             //SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
             //if(sp.getBoolean("use_bluetooth_unlock", res.getBoolean(R.bool.use_bluetooth_d))){
             //    startService(new Intent(MainActivity.this, BTService.class));
-                //Log.d(TAG, "Start BTService");
+            //Log.d(TAG, "Start BTService");
             //}
-
+            //get the data from the database
+            //send the data to the PC using MQTT
+            //
             // send unlock package via WiFi
+
             AuthRecordsDb authRecordDb = new AuthRecordsDb(getApplicationContext());
             ArrayList<String> recordNames = new ArrayList<String>();
             authRecordDb.getNames(recordNames);
 
-            for(int i = 0; i < recordNames.size(); i++){
+            for (int i = 0; i < recordNames.size(); i++) {
                 AuthRecord ar = authRecordDb.getAuthRecord(recordNames.get(i));
                 NetworkSender netSender = new NetworkSender(getApplicationContext());
                 netSender.execute(ar);
             }
-        }catch(Exception e){
+            //connect to the broker and send authentication data
+            MqttConnectOptions connOpts = new MqttConnectOptions();
+            connOpts.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1_1);
+            String brokerURI = "tcp://test.mosquitto.org:1883";
+            String clientID = "tstClientID";
+            MqttAndroidClient client = new MqttAndroidClient(this.getApplicationContext(), brokerURI, clientID);
+        } catch (Exception e) {
             Log.e(LOCAL_TAG, e.toString());
         }
     }
@@ -568,7 +558,7 @@ public class MainActivity extends AppCompatActivity {
          * Displays the user and host name
          */
         @Override
-        public View getView(int position, View convertView, ViewGroup parent){
+        public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = getLayoutInflater();
             AuthRecord currentRecord = getItem(position);
 
@@ -625,7 +615,7 @@ public class MainActivity extends AppCompatActivity {
 
             registerForContextMenu(mRecordsList);
 
-            ((TextView) findViewById(R.id.textQRcode)).setText( R.string.click_to_unlock);
+            ((TextView) findViewById(R.id.textQRcode)).setText(R.string.click_to_unlock);
 
         } else {
             mAuthRecords = new AuthRecord[0]; // clear any existing user PIN state
@@ -647,8 +637,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void saveRecordAndRefreshList(AuthRecord ar)
-    {
+    private void saveRecordAndRefreshList(AuthRecord ar) {
         mRecordsDb.update(ar);
         refreshRecordsList(true);
     }
@@ -658,7 +647,7 @@ public class MainActivity extends AppCompatActivity {
      * Interprets the QR code that was scanned by the user.  Decides whether to
      * launch the key provisioning sequence or the OTP seed setting sequence.
      *
-     * @param scanResult a URI holding the contents of the QR scan result
+     * @param scanResult        a URI holding the contents of the QR scan result
      * @param confirmBeforeSave a boolean to indicate if the user should be
      *                          prompted for confirmation before updating the otp
      *                          account information.
@@ -695,7 +684,7 @@ public class MainActivity extends AppCompatActivity {
         if (OTP_SCHEME.equals(scanResult.getScheme()) && scanResult.getAuthority() != null) {
             parseSecret(scanResult, confirmBeforeSave);
         } else {
-            Log.e(TAG, "getScheme " +  scanResult.getScheme() + " getAuthority " + scanResult.getAuthority());
+            Log.e(TAG, "getScheme " + scanResult.getScheme() + " getAuthority " + scanResult.getAuthority());
             showDialog(INVALID_QR_CODE);
         }
     }
@@ -703,48 +692,47 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Parses a secret value from a URI. The format will be:
+     * <p>
+     * QR code format:
+     * rohos1://192.168.1.15:995/ZED?USER=Alex&KEY=XXXXXX&DATA=YYYYYY     *
+     * <p>
+     * <p>
+     * where:
+     * 192.168.1.15:995 - host IP and Port
+     * ZED - host name (PC name)
+     * Alex = user name whos login is configured | OR | secret Rohos disk name
+     * KEY - encryption key (HEX)
+     * DATA - authentication data (HEX)
      *
-     *   QR code format:
-     *   rohos1://192.168.1.15:995/ZED?USER=Alex&KEY=XXXXXX&DATA=YYYYYY     *
-     *
-     *
-     *    where:
-     *     192.168.1.15:995 - host IP and Port
-     *     ZED - host name (PC name)
-     *     Alex = user name whos login is configured | OR | secret Rohos disk name
-     *     KEY - encryption key (HEX)
-     *     DATA - authentication data (HEX)
-     *
-     * @param uri The URI containing the secret key
+     * @param uri               The URI containing the secret key
      * @param confirmBeforeSave a boolean to indicate if the user should be
      *                          prompted for confirmation before updating the otp
      *                          account information.
      */
     private void parseSecret(Uri uri, boolean confirmBeforeSave) {
 
-        try{
+        try {
             /* final String scheme = uri.getScheme().toLowerCase(); */
 
-        String url = uri.toString();
-        url = url.replace('(', '&');
-        uri = Uri.parse(url);
+            String url = uri.toString();
+            url = url.replace('(', '&');
+            uri = Uri.parse(url);
 
-        AuthRecord ai = new AuthRecord();
-        ai.url  = url;
-        ai.qr_host_name = uri.getPath().toUpperCase();
-        ai.qr_host_ip = uri.getAuthority();
-        ai.qr_host_port = 1205;
+            AuthRecord ai = new AuthRecord();
+            ai.url = url;
+            ai.qr_host_name = uri.getPath().toUpperCase();
+            ai.qr_host_ip = uri.getAuthority();
+            ai.qr_host_port = 1205;
 
 
-        int i = ai.qr_host_ip.indexOf(":");
-            if (i>0)
-            {
-                ai.qr_host_port = Integer.parseInt(ai.qr_host_ip.substring(i+1));
+            int i = ai.qr_host_ip.indexOf(":");
+            if (i > 0) {
+                ai.qr_host_port = Integer.parseInt(ai.qr_host_ip.substring(i + 1));
                 ai.qr_host_ip = ai.qr_host_ip.substring(0, i);
             }
 
 
-        ((TextView) findViewById(R.id.textQRcode)).setText(uri.toString());
+            ((TextView) findViewById(R.id.textQRcode)).setText(uri.toString());
 
        /* if (!OTP_SCHEME.equals(scheme)) {
             Log.e(getString(R.string.app_name), LOCAL_TAG + ": Invalid or missing scheme in uri");
@@ -765,11 +753,11 @@ public class MainActivity extends AppCompatActivity {
 
 
             String str;
-            str = String.format("QR code:\nIP: %s (%d)\nHOST:%s\nUser: %s", ai.qr_host_ip, ai.qr_host_port, ai.qr_host_name, ai.qr_user );
+            str = String.format("QR code:\nIP: %s (%d)\nHOST:%s\nUser: %s", ai.qr_host_ip, ai.qr_host_port, ai.qr_host_name, ai.qr_user);
             ((TextView) findViewById(R.id.textQRcode)).setText(str);
 
 
-         ((Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(100L);
+            ((Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(100L);
 
             // save it now!
             saveRecordAndRefreshList(ai);
@@ -790,18 +778,18 @@ public class MainActivity extends AppCompatActivity {
         } else {
             saveSecretAndRefreshUserList(user, secret, null, type, counter);
         }*/
-        }catch(java.lang.NumberFormatException err2){
-            ((TextView) findViewById(R.id.textQRcode)).setText( String.format(" %s",err2.toString() ));
+        } catch (java.lang.NumberFormatException err2) {
+            ((TextView) findViewById(R.id.textQRcode)).setText(String.format(" %s", err2.toString()));
             Log.e(TAG, Log.getStackTraceString(err2));
             showDialog(INVALID_QR_CODE);
-        }catch(NullPointerException error){
-            ((TextView) findViewById(R.id.textQRcode)).setText( String.format(" %s",error.toString() ));
+        } catch (NullPointerException error) {
+            ((TextView) findViewById(R.id.textQRcode)).setText(String.format(" %s", error.toString()));
             Log.e(TAG, Log.getStackTraceString(error));
             showDialog(INVALID_QR_CODE);
         }
 
 
-    }   
+    }
 }
 
 

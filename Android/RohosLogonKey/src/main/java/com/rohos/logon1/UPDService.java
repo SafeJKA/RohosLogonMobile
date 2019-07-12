@@ -81,7 +81,7 @@ public class UPDService extends Service {
             ncBuilder.setContentIntent(pi);
 
             NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-            nm.notify(NOTIFICATION_ID, ncBuilder.build());
+            nm.notify(NOTIFICATION_ID, ncBuilder.getNotification());
 
 			/*
 			Context context = getApplicationContext();

@@ -13,9 +13,8 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".RohosApplication"
@@ -67,7 +66,7 @@
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <activity android:name=".ControlActivity" />
-
+        <service android:name="org.eclipse.paho.android.service.MqttService" />
         <service android:name=".widget.UnlockPcService" />
         <service android:name=".services.KnockService" />
         <service android:name=".UPDService" />
