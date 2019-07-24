@@ -32,7 +32,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
+import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.DisconnectedBufferOptions;
+import org.eclipse.paho.client.mqttv3.IMqttActionListener;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
+import org.eclipse.paho.client.mqttv3.IMqttToken;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.util.ArrayList;
 
@@ -82,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
     private AuthRecord[] mAuthRecords = {};
     private RecordsListAdapter mRecordsAdapter;
     private TextView mAboutText;
+    private String strPublishTopic;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -134,13 +144,18 @@ public class MainActivity extends AppCompatActivity {
         mRecordsList.setAdapter(mRecordsAdapter);
 
         mRecordsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> unusedParent, View row,
                                     int unusedPosition, long unusedId) {
 
+                //get the data from the database here
+                //decode the data using getEncryptedDataString function from AuthRecord class
+                //Send this data using MQTT
+                //Would be nice to create some form of dialog with log information when the user taps the record from the list
                 String accName = ((TextView) row.findViewById(R.id.recordName)).getText().toString();
-                sendIpLogin(accName);
 
+                sendMqttLoginRequest(accName);
             }
         });
 
@@ -223,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         mHandler = null;
+        mqttAndroidClient = null;
     }
 
     /**
@@ -252,6 +268,136 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //save the topic in the database
+    //use it when sending the message
+    //do the same and on the PC side
+    /*
+     * try to unlock using MQTT
+     *
+     *
+     * */
+    private MqttAndroidClient mqttAndroidClient;
+
+    public void publishMessage(String publishMessage, String publishTopic) {
+
+        try {
+            if (!mqttAndroidClient.isConnected()) {
+                //make something here - display log information
+                return;
+            }
+            MqttMessage message = new MqttMessage();
+            message.setPayload(publishMessage.getBytes());
+            mqttAndroidClient.publish(publishTopic, message);//play with this function overloads
+
+
+        } catch (MqttException e) {
+            System.err.println("Error Publishing: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void sendMqttLoginRequest(String accountName) {
+
+        AuthRecord ar = mRecordsDb.getAuthRecord(accountName);
+
+        if (ar.qr_user == null || ar.qr_user.length() == 0) {
+            ((TextView) findViewById(R.id.textQRcode)).setText(String.format("Please install Rohos Logon Key on the desktop and scan QR-code first."));
+            return;
+        }
+        String strEncodedDataString = ar.getEncryptedDataString();
+        //get the topic here
+        //but firstly set it when there is registration phase
+        //strPublishTopic = ar.strGetTopic();
+        if (strEncodedDataString.isEmpty()) {
+            //disconnect and clear all the data
+            //also display some message somewhere
+            return;
+        }
+        //make connection to the matt broker
+        MqttConnectOptions connOpts = new MqttConnectOptions();
+        connOpts.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1_1);
+        connOpts.setAutomaticReconnect(true);
+        connOpts.setMaxReconnectDelay(2000); //check this value here
+        connOpts.setCleanSession(true);
+
+        String brokerURI = "tcp://test.mosquitto.org:1883";
+        String clientID = MqttClient.generateClientId();  //generate random client id
+
+
+        //get the topic from the database - it will be generated during the "registration" phase
+        mqttAndroidClient = new MqttAndroidClient(this.getApplicationContext(), brokerURI, clientID);
+
+        mqttAndroidClient.setCallback(new MqttCallbackExtended() {
+            @Override
+            public void connectComplete(boolean reconnect, String serverURI) {
+                if (reconnect) {
+
+                }
+            }
+
+            @Override
+            public void connectionLost(Throwable cause) {
+
+            }
+            //left for future use
+            @Override
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+
+            }
+        });
+
+        //try and connect to the broker
+        try {
+            mqttAndroidClient.connect(connOpts, null, new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+
+                    //send message here
+                    //try to resend it in case of error
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+
+                }
+            });
+        } catch (MqttException ex) {
+
+        }
+        if(mqttAndroidClient.isConnected()) {
+            //send the message here
+            //if not - try a few more times in case of error, but should be OK
+            //listen for incoming
+            publishMessage(strEncodedDataString, "tstTopic");
+        }
+
+        //after some time or delivery callback to ensure that the message is delivered
+        try {
+            IMqttToken disconnectToken = mqttAndroidClient.disconnect();
+            disconnectToken.setActionCallback(new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    // we are now successfully disconnected
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken,
+                                      Throwable exception) {
+                    // something went wrong, but probably we are disconnected anyway
+                }
+            });
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+        //close the connection here
+        //release and nullify the acquired resources
+    }
+
     /*
     send Authentication data block to the network
      */
@@ -279,7 +425,6 @@ public class MainActivity extends AppCompatActivity {
 
         netSender = new NetworkSender(this.getApplicationContext());
         netSender.execute(ar);
-
     }
 
     private void showHelp() {
@@ -523,6 +668,8 @@ public class MainActivity extends AppCompatActivity {
             //
             // send unlock package via WiFi
 
+            //get the data from the database and try to send the data to the broker
+            //or, which is better - get the selected item from the listview, fetch the selected data with the DB record and send the data to the broker
             AuthRecordsDb authRecordDb = new AuthRecordsDb(getApplicationContext());
             ArrayList<String> recordNames = new ArrayList<String>();
             authRecordDb.getNames(recordNames);
@@ -532,12 +679,6 @@ public class MainActivity extends AppCompatActivity {
                 NetworkSender netSender = new NetworkSender(getApplicationContext());
                 netSender.execute(ar);
             }
-            //connect to the broker and send authentication data
-            MqttConnectOptions connOpts = new MqttConnectOptions();
-            connOpts.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1_1);
-            String brokerURI = "tcp://test.mosquitto.org:1883";
-            String clientID = "tstClientID";
-            MqttAndroidClient client = new MqttAndroidClient(this.getApplicationContext(), brokerURI, clientID);
         } catch (Exception e) {
             Log.e(LOCAL_TAG, e.toString());
         }
@@ -743,6 +884,12 @@ public class MainActivity extends AppCompatActivity {
             ai.qr_user = uri.getQueryParameter("USER");
             ai.qr_secret_key = uri.getQueryParameter("KEY");
             ai.qr_data = uri.getQueryParameter("DATA");
+
+
+
+            //get mqtt topic by taking some data from qr_secret_key or qr_data
+            //add additional field in the AuthRecord and AuthRecordsDb
+
 
         /*if (secret_key == null || secret_key.length() == 0) {
             Log.e(getString(R.string.app_name), LOCAL_TAG +
