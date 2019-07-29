@@ -19,8 +19,6 @@ import android.widget.Button;
  * Created by Alex on 03.01.14.
  * Rohos Loogn Key How it works help
  *
- *
- *
  * @author AlexShilon
  */
 public class HelpActivity extends Activity {
@@ -34,23 +32,23 @@ public class HelpActivity extends Activity {
 
         setContentView(R.layout.activity_help);
 
-        Button learnMore = (Button)findViewById(R.id.learn_more);
-        learnMore.setOnClickListener(new View.OnClickListener(){
-           public void onClick(View v){
-               openWebPage();
-           }
+        Button learnMore = (Button) findViewById(R.id.learn_more);
+        learnMore.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                openWebPage();
+            }
         });
 
         //setPageContentView(R.layout.activity_help);
         //setTextViewHtmlFromResource(R.id.details, R.string.howitworks_page_enter_code_details);
     }
 
-    private void openWebPage(){
-        try{
+    private void openWebPage() {
+        try {
             Intent intent = new Intent(Intent.ACTION_VIEW,
                     Uri.parse("http://www.rohos.com/2013/12/login-unlock-computer-by-using-smartphone/"));
             startActivity(intent);
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
     }

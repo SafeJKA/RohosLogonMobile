@@ -8,10 +8,9 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Created by Alex on 03.01.14.
-  Rohos Loogn Key authentication record + encryption routine.
-
- * @author AlexShilon
+ * Rohos Loogn Key authentication record + encryption routine.
  *
+ * @author AlexShilon
  */
 public class AuthRecord {
     /*
@@ -40,14 +39,13 @@ public class AuthRecord {
     /*
     encrypt (time + 0 + 7 + qr_data)
      */
-    String getEncryptedDataString()
-    {
+    String getEncryptedDataString() {
         try {
 
             // for example 0x52B4284E - represent 2014 year.
             // "2014-1970 = 44years"
             // so 'int' should be OK to store at least (44 * 3) years of seconds
-            int intSec = (int)(System.currentTimeMillis() / 1000);
+            int intSec = (int) (System.currentTimeMillis() / 1000);
 
             Random r = new Random();
             int randomInt = r.nextInt();
@@ -59,9 +57,9 @@ public class AuthRecord {
             byte[] byteData = ByteBuffer.allocate(14 + qr_data.length() / 2)
                     .putInt(randomInt) // Random, adding entropy to first 16 bytes of data block
                     .putInt(intSec) // OTP parameter
-                    .putChar( '0')  // protocol signature '01'
-                    .putChar( '1')
-                    .putChar((char)(qr_data.length() / 2)) // data len
+                    .putChar('0')  // protocol signature '01'
+                    .putChar('1')
+                    .putChar((char) (qr_data.length() / 2)) // data len
                     .put(HexEncoding.decode(qr_data)) // data itself
                     .array();
 
@@ -83,7 +81,7 @@ public class AuthRecord {
             return HexEncoding.encode(encryptedByteData);
 
         } catch (Exception e) {
-            return "ERR."+e.toString();
+            return "ERR." + e.toString();
         }
 
     }
