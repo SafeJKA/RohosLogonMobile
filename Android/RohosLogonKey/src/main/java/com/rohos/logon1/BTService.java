@@ -59,7 +59,7 @@ public class BTService extends Service {
             //Log.d(TAG, "Action - " + action);
 
             // When discovery finds a device
-            if(action.equals(BluetoothDevice.ACTION_FOUND)){
+            if (action.equals(BluetoothDevice.ACTION_FOUND)) {
                 // Get the BluetoothDevice object from the Intent
                 BluetoothDevice device = intent
                         .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
@@ -67,15 +67,15 @@ public class BTService extends Service {
                 //Log.d(TAG, "Device state-" + device.getBondState());
                 if (device.getBondState() == BluetoothDevice.BOND_BONDED) {
                     AuthRecord ar = mRecordsDb.getAuthRecordByHostName("/" + device.getName());
-                    if(ar != null && ar.qr_host_name != null && ar.qr_host_name.length() > 0){
+                    if (ar != null && ar.qr_host_name != null && ar.qr_host_name.length() > 0) {
                         String devName = ar.qr_host_name.substring(ar.qr_host_name.indexOf("/") + 1);
 
-                        if(devName.equals(device.getName())){
+                        if (devName.equals(device.getName())) {
                             String encryptedAuthString = ar.getEncryptedDataString();
                             String str_data = String.format("%s.%s.%s", ar.qr_user,
                                     ar.qr_host_name, encryptedAuthString);
 
-                            if(!isNetConnected()) connectToServer(device.getAddress());
+                            if (!isNetConnected()) connectToServer(device.getAddress());
                             mExecutor.submit(new SendRunnable(str_data + "\n"));
 
                             mSendingData = true;
@@ -85,16 +85,16 @@ public class BTService extends Service {
                     }
                     Log.d(TAG, "Bonded device-" + device.getName());
                 }
-            }else if(action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)){
-                if(!mSendingData) BTService.this.stopSelf();
-            }else if(action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)){
+            } else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
+                if (!mSendingData) BTService.this.stopSelf();
+            } else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
                 Toast.makeText(BTService.this, "BT device is disonnected", Toast.LENGTH_LONG);
             }
         }
     };
 
     @Override
-    public void onCreate(){
+    public void onCreate() {
         mRecordsDb = new AuthRecordsDb(getApplicationContext());
 
         // Register for broadcasts when a device is discovered
@@ -109,7 +109,7 @@ public class BTService extends Service {
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         this.unregisterReceiver(mReceiver);
         disconnectFromServer();
 
@@ -127,26 +127,25 @@ public class BTService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         doDiscovery();
 
-        if(mIsEnabled) unlockPC();
+        if (mIsEnabled) unlockPC();
 
         return START_NOT_STICKY;
     }
 
-    private void unlockPC(){
-        try{
-            if(mFoundDevices.size() > 0){
-                for(String s : mFoundDevices){
+    private void unlockPC() {
+        try {
+            if (mFoundDevices.size() > 0) {
+                for (String s : mFoundDevices) {
                     Log.d(TAG, "Device name-" + s);
                 }
             }
 
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.d(TAG, "unlockPC");
         }
     }
 
-    private void sendData(byte[] array, int len)
-    {
+    private void sendData(byte[] array, int len) {
         try {
             synchronized (sendLock) {
                 mServerOutputStream.write(array, 0, len);
@@ -162,14 +161,14 @@ public class BTService extends Service {
                 }
             });
             //Log.d(TAG, "Error writing to output stream !!!");
-            RohosApplication app = (RohosApplication)getApplication();
-            if(app != null) app.logError(TAG + e.toString());
+            RohosApplication app = (RohosApplication) getApplication();
+            if (app != null) app.logError(TAG + e.toString());
             BTService.this.stopSelf();
         }
     }
 
-    private void connectToServer(String serverBTAddress){
-        try{
+    private void connectToServer(String serverBTAddress) {
+        try {
             mBtAdapter.cancelDiscovery();
             // Get the BluetoothDevice object
             BluetoothDevice device = mBtAdapter
@@ -180,11 +179,11 @@ public class BTService extends Service {
             mBTSocket.connect();
 
             mServerOutputStream = mBTSocket.getOutputStream();
-        }catch(Exception e){
+        } catch (Exception e) {
             mSendingData = false;
             //Log.e(TAG, e.toString());
-            RohosApplication app = (RohosApplication)getApplication();
-            if(app != null) app.logError(TAG + e.toString());
+            RohosApplication app = (RohosApplication) getApplication();
+            if (app != null) app.logError(TAG + e.toString());
             BTService.this.stopSelf();
         }
     }
@@ -201,34 +200,34 @@ public class BTService extends Service {
             }
 
         } catch (Exception e) {
-            RohosApplication app = (RohosApplication)getApplication();
-            if(app != null) app.logError(TAG + e.toString());
+            RohosApplication app = (RohosApplication) getApplication();
+            if (app != null) app.logError(TAG + e.toString());
             BTService.this.stopSelf();
             //Log.e(TAG, "Error closing socket!!!");
             //e.printStackTrace();
         }
     }
 
-    public boolean isNetConnected(){
-        try{
+    public boolean isNetConnected() {
+        try {
             if (mBTSocket == null) {
                 return false;
             } else {
                 return mBTSocket.isConnected();
             }
-        }catch(Exception e){
-            RohosApplication app = (RohosApplication)getApplication();
-            if(app != null) app.logError(TAG + e.toString());
+        } catch (Exception e) {
+            RohosApplication app = (RohosApplication) getApplication();
+            if (app != null) app.logError(TAG + e.toString());
             BTService.this.stopSelf();
             //Log.e(TAG, e.toString());
         }
         return false;
     }
 
-    private void doDiscovery(){
-        try{
+    private void doDiscovery() {
+        try {
             mIsEnabled = mBtAdapter.isEnabled();
-            if(!mIsEnabled) return;
+            if (!mIsEnabled) return;
 
             mFoundDevices.clear();
 
@@ -240,19 +239,20 @@ public class BTService extends Service {
             // Request discover from BluetoothAdapter
             mBtAdapter.startDiscovery();
             Log.d(TAG, "doDiscovery");
-        }catch(Exception e){
-            RohosApplication app = (RohosApplication)getApplication();
-            if(app != null) app.logError(TAG + e.toString());
+        } catch (Exception e) {
+            RohosApplication app = (RohosApplication) getApplication();
+            if (app != null) app.logError(TAG + e.toString());
             //Log.e(TAG, e.toString());
         }
     }
 
-    public class MyBluetoothDevice  {
+    public class MyBluetoothDevice {
         private BluetoothDevice mBTD = null;
 
         MyBluetoothDevice(BluetoothDevice btd) {
             mBTD = btd;
         }
+
         @Override
         public String toString() {
             return mBTD.getName();
@@ -266,12 +266,12 @@ public class BTService extends Service {
     private class SendRunnable implements Runnable {
         String mSendData;
 
-        public SendRunnable(String sendData){
+        public SendRunnable(String sendData) {
             mSendData = sendData;
         }
 
         @Override
-        public void run(){
+        public void run() {
             sendData(mSendData.getBytes(), mSendData.length());
             BTService.this.stopSelf();
         }

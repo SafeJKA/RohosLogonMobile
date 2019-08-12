@@ -268,7 +268,6 @@ public class AuthRecordsDb {
         values.put(HOST_IP_COLUMN, ai.qr_host_ip);
         values.put(HOST_PORT_COLUMN, ai.qr_host_port);
         values.put(SETT_COLUMN, ".");
-        values.put(P1_COLUMN, ai.someStrParamForFuture);   //set the topic here
 
         int updated = mDatabase.update(TABLE_NAME, values,
                 whereClause(ai.qr_user), null);

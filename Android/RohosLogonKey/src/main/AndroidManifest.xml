@@ -71,6 +71,7 @@
         <service android:name=".services.KnockService" />
         <service android:name=".UPDService" />
         <service android:name=".BTService" />
+        <service android:name=".MQTTService" />
 
         <activity android:name=".HelpActivity" />
         <activity
