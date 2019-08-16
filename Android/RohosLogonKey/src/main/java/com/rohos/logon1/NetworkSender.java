@@ -19,15 +19,15 @@ import android.util.Log;
 import android.widget.TextView;
 
 /*
-*
-*   Great Broadcast sender module. Send Authentication signal and receive an answer from desktop.
-    *   @author AlexShilon
-     *
+ *
+ *   Great Broadcast sender module. Send Authentication signal and receive an answer from desktop.
+ *   @author AlexShilon
+ *
  */
 public class NetworkSender extends AsyncTask<AuthRecord, Void, Long> {
     private final String TAG = "NetworkSender";
-	
-	public Socket socket;
+
+    public Socket socket;
     private Context context;
     public String strResult;
     public String strHostIp;
@@ -40,7 +40,7 @@ public class NetworkSender extends AsyncTask<AuthRecord, Void, Long> {
     }
 
     InetAddress getBroadcastAddress() throws IOException {
-        WifiManager wifi = (WifiManager)this.context.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifi = (WifiManager) this.context.getSystemService(Context.WIFI_SERVICE);
         DhcpInfo dhcp = wifi.getDhcpInfo();
         // handle null somehow
 
@@ -61,20 +61,19 @@ public class NetworkSender extends AsyncTask<AuthRecord, Void, Long> {
 
     @Override
     protected Long doInBackground(AuthRecord... ai) {
-    	
-    	int attempts = 4;
-        long result=0;
-        
+
+        int attempts = 4;
+        long result = 0;
+
         //DatagramSocket udp_socket = null;
 
-        if (ai[0].qr_user == null || ai[0].qr_user.isEmpty())
-        {
+        if (ai[0].qr_user == null || ai[0].qr_user.isEmpty()) {
             return result;
         }
-        
-        for(int i = 0; i < attempts; i++){
-        	//Log.d(TAG, "step " + i);
-        	if(sendPacket(ai)) break;
+
+        for (int i = 0; i < attempts; i++) {
+            //Log.d(TAG, "step " + i);
+            if (sendPacket(ai)) break;
         }
 
         /*
@@ -119,12 +118,12 @@ public class NetworkSender extends AsyncTask<AuthRecord, Void, Long> {
 
             udp_socket.close();
 			*/
-           //strResult = String.format("Authentication signal sent OK.\n%s %d %d\nUnlocked:%s",
-           //         str_data.substring(0, 29), encryptedAuthString.length(), ai[0].qr_secret_key.length(),
-           //         /*ai[0].plainHexAuthStr,*/
-           //         serverReply);
+        //strResult = String.format("Authentication signal sent OK.\n%s %d %d\nUnlocked:%s",
+        //         str_data.substring(0, 29), encryptedAuthString.length(), ai[0].qr_secret_key.length(),
+        //         /*ai[0].plainHexAuthStr,*/
+        //         serverReply);
 
-           // return result;
+        // return result;
             
 
             /*
@@ -186,27 +185,27 @@ public class NetworkSender extends AsyncTask<AuthRecord, Void, Long> {
         }
 	*/
 
-     return result;
+        return result;
     }
 
     protected void onPostExecute(Long result) {
-    	//Log.d(TAG, "result " + result + ", strResult " + strResult);
-    	if(MainActivity.mHandler != null){
-    		Message msg = MainActivity.mHandler.obtainMessage(MainActivity.SET_RESULT_TEXT,
-    				new String(strResult));
-    		MainActivity.mHandler.sendMessage(msg);
-    	}
-    	
-    	// Stop service if it's started
-    	if(UnlockPcService.mHandler != null){
-    		Message stop = UnlockPcService.mHandler.obtainMessage(UnlockPcService.FINISH_SERVICE);
-    		UnlockPcService.mHandler.sendMessage(stop);
-    	}
+        //Log.d(TAG, "result " + result + ", strResult " + strResult);
+        if (MainActivity.mHandler != null) {
+            Message msg = MainActivity.mHandler.obtainMessage(MainActivity.SET_RESULT_TEXT,
+                    new String(strResult));
+            MainActivity.mHandler.sendMessage(msg);
+        }
 
-        if(strResult.indexOf("Rohos:", 0) >0){
+        // Stop service if it's started
+        if (UnlockPcService.mHandler != null) {
+            Message stop = UnlockPcService.mHandler.obtainMessage(UnlockPcService.FINISH_SERVICE);
+            UnlockPcService.mHandler.sendMessage(stop);
+        }
+
+        if (strResult.indexOf("Rohos:", 0) > 0) {
             // vibarate if result contains server reply
             ((Vibrator) this.context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(100L);
-            
+
             //Stop recognizing service
             //RohosApplication app = RohosApplication.getInstance();
             //if(app != null){
@@ -215,13 +214,13 @@ public class NetworkSender extends AsyncTask<AuthRecord, Void, Long> {
             //}
         }
     }
-    
-    
-    private boolean sendPacket(AuthRecord... ai){
-    	DatagramSocket udp_socket = null;
-    	boolean result = true;
-    	try {
-        	//Log.d(TAG, ai[0].qr_host_name);
+
+
+    private boolean sendPacket(AuthRecord... ai) {
+        DatagramSocket udp_socket = null;
+        boolean result = true;
+        try {
+            //Log.d(TAG, ai[0].qr_host_name);
             //InetSocketAddress bindSocketAddress = new InetSocketAddress("localhost", service.getNetworkConfiguration().getBindSocketAddress().getPort());
 
             udp_socket = new DatagramSocket(ai[0].qr_host_port);
@@ -229,11 +228,11 @@ public class NetworkSender extends AsyncTask<AuthRecord, Void, Long> {
             udp_socket.setReuseAddress(true);
 
             String encryptedAuthString = ai[0].getEncryptedDataString();
-            String str_data = String.format("%s.%s.%s", ai[0].qr_user, ai[0].qr_host_name, encryptedAuthString );
+            String str_data = String.format("%s.%s.%s", ai[0].qr_user, ai[0].qr_host_name, encryptedAuthString);
 
             DatagramPacket packet = new DatagramPacket(str_data.getBytes(), str_data.length(),
                     getBroadcastAddress(), ai[0].qr_host_port);
-                        
+
             udp_socket.send(packet);
 
 
@@ -241,13 +240,12 @@ public class NetworkSender extends AsyncTask<AuthRecord, Void, Long> {
             DatagramPacket recv_packet = new DatagramPacket(new byte[300], 300);
             String serverReply = "";
 
-            try{
+            try {
                 udp_socket.receive(recv_packet);
 
                 // if we have received ourself packet...
                 // receive once again server reply...
-                if (recv_packet.getData().length > 30)
-                {
+                if (recv_packet.getData().length > 30) {
                     recv_packet.setData(new byte[100], 0, 100);
                     //Thread.sleep( 300 );//1 sec
                     udp_socket.receive(recv_packet);
@@ -255,31 +253,31 @@ public class NetworkSender extends AsyncTask<AuthRecord, Void, Long> {
 
                 serverReply = new String(recv_packet.getData());
 
-            }catch(SocketTimeoutException err){
+            } catch (SocketTimeoutException err) {
                 // ... oops no server reply
-            	result = false;
+                result = false;
             }
 
             udp_socket.close();
-            
-           strResult = String.format("Authentication signal sent OK.\n%s %d %d\nUnlocked:%s",
+
+            strResult = String.format("Authentication signal sent OK.\n%s %d %d\nUnlocked:%s",
                     str_data.substring(0, 29), encryptedAuthString.length(), ai[0].qr_secret_key.length(),
                     /*ai[0].plainHexAuthStr,*/
                     serverReply);
 
-            if(!result)
-            	return result;
-        }catch(IOException e){
+            if (!result)
+                return result;
+        } catch (IOException e) {
             strResult = String.format("IO Exception.. %s", e.toString());
             result = false;
-        }catch(Exception e){
+        } catch (Exception e) {
             strResult = String.format("Exception.. %s", e.toString());
             //if (udp_socket!=null) udp_socket.close();
-            result = false;   
-        }finally{
-            if (udp_socket!=null) udp_socket.close();            
+            result = false;
+        } finally {
+            if (udp_socket != null) udp_socket.close();
         }
-    	
-    	return result;
+
+        return result;
     }
 }

@@ -71,6 +71,7 @@ public class MQTTService extends Service {
     @Override
     public void onDestroy() {
         //disconnect here
+        System.err.println("Received onDestroy() event in MQTTService");
         try {
             IMqttToken disconnectToken = mqttClient.disconnect();
             disconnectToken.setActionCallback(new IMqttActionListener() {
@@ -132,8 +133,8 @@ public class MQTTService extends Service {
 
         return new NotificationCompat.Builder(this, "65854225")
                 .setSmallIcon(R.drawable.ic_launcher)
-                .setContentTitle("My Awesome App")
-                .setContentText("Doing some work...")
+                .setContentTitle("MQTT Service")
+                .setContentText("Performing required operations...")
                 .setContentIntent(pendingIntent).build();
     }
 

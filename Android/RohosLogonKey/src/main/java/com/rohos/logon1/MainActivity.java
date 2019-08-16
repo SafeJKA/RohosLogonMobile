@@ -37,16 +37,7 @@ import android.os.IBinder;
 import android.widget.Toast;
 
 //required MQTT imports
-import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.android.service.MqttService;
-import org.eclipse.paho.client.mqttv3.IMqttActionListener;
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.IMqttToken;
-import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.MqttClient;
 
 import java.util.ArrayList;
 
@@ -98,8 +89,9 @@ public class MainActivity extends AppCompatActivity {
     private AuthRecord[] mAuthRecords = {};
     private RecordsListAdapter mRecordsAdapter;
     private TextView mAboutText;
-    boolean mBounded;
-    MQTTService mService;
+    // boolean mBounded;
+    // private MQTTService mService;
+    private MQTTSender mSender;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -192,24 +184,38 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
 
+        System.err.println("Received onResume() event");
         super.onResume();
-        Intent mIntent = new Intent(MainActivity.this, MQTTService.class);
+       /* Intent mIntent = new Intent(MainActivity.this, MQTTService.class);
         mIntent.setAction(MqttConstants.ACTION.START_ACTION);
         startService(mIntent);
-        bindService(mIntent, mConnection, BIND_AUTO_CREATE);
+        bindService(mIntent, mConnection, BIND_AUTO_CREATE);*/
+    }
+
+    @Override
+    public void onPause() {
+        System.err.println("Received onPause() event");
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        System.err.println("Received stop event");
+        super.onStop();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
+      /*  System.err.println("Received onStart() event");
         Intent mIntent = new Intent(MainActivity.this, MQTTService.class);
         mIntent.setAction(MqttConstants.ACTION.START_ACTION);
         startService(mIntent);
-        bindService(mIntent, mConnection, BIND_AUTO_CREATE);
+        bindService(mIntent, mConnection, BIND_AUTO_CREATE);*/
     }
 
-    ServiceConnection mConnection = new ServiceConnection() {
+
+   /* ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceDisconnected(ComponentName name) {
             Toast.makeText(MainActivity.this, "Service is disconnected", Toast.LENGTH_SHORT).show();
@@ -224,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
             LocalBinder mLocalBinder = (LocalBinder) service;
             mService = mLocalBinder.getMqttServiceInstance();
         }
-    };
+    };*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -282,13 +288,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
 
-        Intent stopIntent = new Intent(MainActivity.this, MqttService.class);
+        System.err.println("Received onDestroy() event");
+       /* Intent stopIntent = new Intent(MainActivity.this, MqttService.class);
         stopIntent.setAction(MqttConstants.ACTION.STOP_ACTION);
         startService(stopIntent);
         unbindService(mConnection);
         mConnection = null;
         mService = null;
-        mHandler = null;
+        mHandler = null;*/
         super.onDestroy();
     }
 
@@ -354,15 +361,15 @@ public class MainActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.textQRcode)).setText(String.format("Please install Rohos Logon Key on the desktop and scan QR-code first."));
             return;
         }
-        String strEncodedDataString = ar.getEncryptedDataString();
+        // String strEncodedDataString = ar.getEncryptedDataString();
         //get the topic here
         //but firstly set it when there is registration phase
         //strPublishTopic = ar.strGetTopic();
-        if (strEncodedDataString.isEmpty()) {
+      /*  if (strEncodedDataString.isEmpty()) {
             //disconnect and clear all the data
             //also display some message somewhere
             return;
-        }
+        }*/
         //make connection to the mqtt broker
 
         //send the message here
@@ -370,7 +377,19 @@ public class MainActivity extends AppCompatActivity {
         //listen for incoming
 
         //here, call the function from bound service instead
-        mService.sendMqttMessage(strEncodedDataString, ar.qr_host_name);
+
+       /* if (mService != null) {
+            mService.sendMqttMessage(strEncodedDataString, ar.qr_host_name);
+        }*/
+        if (mSender != null) {
+            mSender.cancel(true);
+            mSender = null;
+        }
+
+        mSender = new MQTTSender(this.getApplicationContext());
+        mSender.execute(ar);
+
+
        /* if (mqttAndroidClient.isConnected()) {
             publishMessage(strEncodedDataString, ar.qr_host_name);  //send the message, change the name of the topic
         }*/
