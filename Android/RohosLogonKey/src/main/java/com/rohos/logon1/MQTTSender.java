@@ -2,7 +2,6 @@ package com.rohos.logon1;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -43,10 +42,11 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
         //get the encrypted message and topic here
         //send the message and return the number of sent bytes
         String msgToSend = ai[0].getEncryptedDataString();
+        String str_data = String.format("%s.%s.%s", ai[0].qr_user, ai[0].qr_host_name, msgToSend);
         String topicToSend = ai[0].qr_host_name;
         long s = msgToSend.length();
 
-        sendMqttMessage(msgToSend, topicToSend);
+        sendMqttMessage(str_data, topicToSend);
         //disconnect gracefully here
         //should be make some pause here, about 1 sec to ensure that we delivered the data
         disconnect();
