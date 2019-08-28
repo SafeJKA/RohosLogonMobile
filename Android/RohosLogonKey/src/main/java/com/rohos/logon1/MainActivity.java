@@ -293,6 +293,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendMqttLoginRequest(String accountName) {
 
+        Resources res = getResources();
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sp.getBoolean("use_bluetooth_unlock", res.getBoolean(R.bool.use_bluetooth_d))) {
+            startService(new Intent(MainActivity.this, BTService.class));
+            //Log.d(TAG, "Start BTService");
+        } else {
+
+        }
+
         AuthRecord ar = mRecordsDb.getAuthRecord(accountName);
 
         if (ar.qr_user == null || ar.qr_user.length() == 0) {
@@ -314,14 +323,12 @@ public class MainActivity extends AppCompatActivity {
      */
     private void sendIpLogin(String accountName) {
         // Try to unlock PC via bluetooth
-        Resources res = getResources();
+      /*  Resources res = getResources();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         if (sp.getBoolean("use_bluetooth_unlock", res.getBoolean(R.bool.use_bluetooth_d))) {
             startService(new Intent(MainActivity.this, BTService.class));
             //Log.d(TAG, "Start BTService");
-        }
-
-
+        }*/
         AuthRecord ar = mRecordsDb.getAuthRecord(accountName);
 
         if (ar.qr_user == null || ar.qr_user.length() == 0) {
@@ -336,6 +343,7 @@ public class MainActivity extends AppCompatActivity {
 
         netSender = new NetworkSender(this.getApplicationContext());
         netSender.execute(ar);
+
     }
 
     private void showHelp() {

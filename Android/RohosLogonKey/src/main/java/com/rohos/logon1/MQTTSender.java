@@ -15,6 +15,9 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 
 import java.util.concurrent.Semaphore;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
 
     private Context context;
@@ -86,7 +89,7 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
                     @Override
                     public void connectionLost(Throwable cause) {
                         System.err.println("Connection to the server lost");
-                       // cause.printStackTrace();
+                        // cause.printStackTrace();
                     }
 
                     //left for future use
@@ -182,6 +185,14 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
         //create and return client
         String clientID = MqttClient.generateClientId();  //generate random client id
         //get the topic from the database - it will be generated during the "registration" phase
-        return new MqttAndroidClient(context, "tcp://broker.hivemq.com:1883", clientID);
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        String defaultBrokerAddress = sp.getString("broker", "");
+
+        if (defaultBrokerAddress != null && defaultBrokerAddress.length() > 2) {
+            return new MqttAndroidClient(context, defaultBrokerAddress, clientID);
+        } else {
+            return new MqttAndroidClient(context, "tcp://broker.hivemq.com:1883", clientID);  //start default broker
+        }
     }
 }

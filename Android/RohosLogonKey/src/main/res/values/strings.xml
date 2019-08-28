@@ -11,7 +11,7 @@
     <string name="install_dialog_title">Install barcode scanner?</string>
 
     <!-- Error message displayed when user attempts to scan a barcode without a scanner app. -->
-  <string name="install_dialog_message">
+    <string name="install_dialog_message">
     To scan barcodes containing keys, you must install the ZXing barcode scanner.
    </string>
 
@@ -28,7 +28,7 @@
     <string name="error_qr">Cannot interpret QR code.</string>
 
     <string name="scan_qrcode">Scan Rohos Logon QR code</string>
-	<string name="click_to_unlock">Touch the record to unlock computer:</string>
+    <string name="click_to_unlock">Touch the record to unlock computer:</string>
 
     <string name="helpButton">How to use</string>
     <string name="help_use_1">1. Install Rohos Logon Key on your computer, click setup phone and then scan QR-code by the phone...</string>
@@ -50,9 +50,9 @@
     <string name="service_summ">Lock PC when leaves network</string>
     <string name="about_text">v.%1$s \n(c) Rohos.com</string>
     <string name="learn_more_btn">Learn more</string>
- <string name="number_knock_title">Number of knocks</string>
- <string name="number_knock_summ">Select number of knocks to unlock PC</string>
- <string name="unlock_on_table_title">Unlock as you put phone on the table</string>
- <string name="show_icon_on_tb_title">Show incon on toolbar</string>
- <string name="notifi_title">Click here to unlock computer</string>
+    <string name="number_knock_title">Number of knocks</string>
+    <string name="number_knock_summ">Select number of knocks to unlock PC</string>
+    <string name="unlock_on_table_title">Unlock as you put phone on the table</string>
+    <string name="show_icon_on_tb_title">Show incon on toolbar</string>
+    <string name="notifi_title">Click here to unlock computer</string>
 </resources>

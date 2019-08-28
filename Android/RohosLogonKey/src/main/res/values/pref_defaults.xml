@@ -5,4 +5,5 @@
     <bool name="use_bluetooth_d">true</bool>
     <bool name="unlock_on_table_d">true</bool>
     <bool name="show_icon_on_tb">true</bool>
+    <string name="mqtt_broker_res">""</string>
 </resources>

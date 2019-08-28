@@ -1,5 +1,6 @@
 
     <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
         <CheckBoxPreference android:key="knock_recog"
             android:defaultValue="@bool/knock_recg_d"
             android:title="@string/knock_recog_title"
@@ -32,4 +33,11 @@
             android:defaultValue="@bool/show_icon_on_tb"
             android:title="@string/show_icon_on_tb_title"
             android:key="show_icon" />
+
+        <EditTextPreference
+            android:key="broker"
+            android:dialogTitle="Set MQTT broker"
+            android:defaultValue="@string/mqtt_broker_res"
+            android:title="Set preferred broker"
+            />
     </PreferenceScreen>
