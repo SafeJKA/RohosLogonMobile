@@ -295,12 +295,12 @@ public class MainActivity extends AppCompatActivity {
 
         Resources res = getResources();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        if (sp.getBoolean("use_bluetooth_unlock", res.getBoolean(R.bool.use_bluetooth_d))) {
+        /*if (sp.getBoolean("use_bluetooth_unlock", res.getBoolean(R.bool.use_bluetooth_d))) {
             startService(new Intent(MainActivity.this, BTService.class));
             //Log.d(TAG, "Start BTService");
         } else {
 
-        }
+        }*/
 
         AuthRecord ar = mRecordsDb.getAuthRecord(accountName);
 

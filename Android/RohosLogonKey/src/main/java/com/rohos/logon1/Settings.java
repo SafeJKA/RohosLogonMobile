@@ -17,6 +17,11 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
 import com.rohos.logon1.services.KnockService;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import android.widget.Toast;
+
 public class Settings extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 
     private final String TAG = "Settings";
@@ -71,15 +76,37 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                                           String key) {
-        // Toast.makeText(this, sharedPreferenceNewData, Toast.LENGTH_LONG).show();
+
         if (key.equals(KEY_EDIT_TEXT_PREFERENCE)) {
-            Preference preference = findPreference(key);
-            if (preference instanceof EditTextPreference) {
-                String sharedPreferenceNewData = sharedPreferences.getString(key, "");
-                if (sharedPreferenceNewData != null && sharedPreferenceNewData.length() > 2) {
-                    preference.setSummary("Broker URI: " + sharedPreferenceNewData);
+
+            String sharedPreferenceNewData = sharedPreferences.getString(key, "");
+            if (sharedPreferenceNewData != null && sharedPreferenceNewData.length() > 2) {
+
+                final String regex = "(tcp://)(?:(\\S+):(\\S+)@)?(\\S+):(\\d+)(?:@(\\S+))?";
+                final Pattern pattern = Pattern.compile(regex);
+                final Matcher matcher = pattern.matcher(sharedPreferenceNewData);
+
+                if (matcher.matches()) {
+                    Preference preference = findPreference(key);
+                    if (preference instanceof EditTextPreference) {
+                        Toast.makeText(this, "URI accepted", Toast.LENGTH_SHORT).show();
+                        preference.setSummary("Broker URI: " + sharedPreferenceNewData);
+                    }
                 } else {
-                    preference.setSummary("Set Mqtt broker URI");
+                    System.err.println("The provided URL does not match the required pattern");
+                    Toast.makeText(this, "Pattern mismatch.Introduce URI again", Toast.LENGTH_SHORT).show();  //show some information to the user, either as toast or some dialog
+                    Preference preference = findPreference(key);
+                    if (preference instanceof EditTextPreference) {
+                        preference.setSummary("Provided broker URI:" + sharedPreferenceNewData);
+                    }
+                }
+            }
+            else {
+                Preference preference = findPreference(key);
+                if (preference instanceof EditTextPreference) {
+                    SharedPreferences.Editor editor = preference.getEditor();
+                    editor.clear().apply();   //clear the store data
+                    preference.setSummary("Set MQTT broker URI");
                 }
             }
         }
