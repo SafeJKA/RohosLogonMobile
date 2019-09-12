@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
     private AuthRecord[] mAuthRecords = {};
     private RecordsListAdapter mRecordsAdapter;
     private TextView mAboutText;
-    private MQTTSender mSender;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -295,14 +294,15 @@ public class MainActivity extends AppCompatActivity {
 
         Resources res = getResources();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        /*if (sp.getBoolean("use_bluetooth_unlock", res.getBoolean(R.bool.use_bluetooth_d))) {
+        if (sp.getBoolean("use_bluetooth_unlock", res.getBoolean(R.bool.use_bluetooth_d))) {
             startService(new Intent(MainActivity.this, BTService.class));
-            //Log.d(TAG, "Start BTService");
+            Log.d(TAG, "Start BTService");
         } else {
+            Log.d(TAG, "not using BT");
+            //use mqtt here?
+        }
 
-        }*/
-
-        AuthRecord ar = mRecordsDb.getAuthRecord(accountName);
+       /* AuthRecord ar = mRecordsDb.getAuthRecord(accountName);
 
         if (ar.qr_user == null || ar.qr_user.length() == 0) {
             ((TextView) findViewById(R.id.textQRcode)).setText(String.format("Please install Rohos Logon Key on the desktop and scan QR-code first."));
@@ -315,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mSender = new MQTTSender(this.getApplicationContext());
-        mSender.execute(ar);
+        mSender.execute(ar);*/
     }
 
     /*
@@ -575,12 +575,12 @@ public class MainActivity extends AppCompatActivity {
     private void
     unlockPC() {
         try {
-            //Resources res = getResources();
-            //SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-            //if(sp.getBoolean("use_bluetooth_unlock", res.getBoolean(R.bool.use_bluetooth_d))){
-            //    startService(new Intent(MainActivity.this, BTService.class));
-            //Log.d(TAG, "Start BTService");
-            //}
+            Resources res = getResources();
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+            if(sp.getBoolean("use_bluetooth_unlock", res.getBoolean(R.bool.use_bluetooth_d))){
+                startService(new Intent(MainActivity.this, BTService.class));
+            Log.d(TAG, "Start BTService");
+            }
             //get the data from the database
             //send the data to the PC using MQTT
             //

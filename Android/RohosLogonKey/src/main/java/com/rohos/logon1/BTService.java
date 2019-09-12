@@ -150,6 +150,8 @@ public class BTService extends Service {
             synchronized (sendLock) {
                 mServerOutputStream.write(array, 0, len);
                 mServerOutputStream.flush();
+                Log.d(TAG, "Bluetooth data sent...");
+                Log.d(TAG, array.toString());
             }
 
         } catch (IOException e) {
@@ -160,7 +162,7 @@ public class BTService extends Service {
                     disconnectFromServer();
                 }
             });
-            //Log.d(TAG, "Error writing to output stream !!!");
+            Log.d(TAG, "Error writing to output stream !!!");
             RohosApplication app = (RohosApplication) getApplication();
             if (app != null) app.logError(TAG + e.toString());
             BTService.this.stopSelf();

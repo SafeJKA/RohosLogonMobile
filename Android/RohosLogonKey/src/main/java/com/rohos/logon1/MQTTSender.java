@@ -179,7 +179,7 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
             }
             System.err.println("Client connected. Sending message...");
             MqttMessage message = new MqttMessage();
-            message.setQos(2);
+            message.setQos(0);
             message.setPayload(publishMessage.getBytes());
 
             mqttClient.publish(publishTopic, message);
