@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
     private AuthRecord[] mAuthRecords = {};
     private RecordsListAdapter mRecordsAdapter;
     private TextView mAboutText;
+    private MQTTSender mSender;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -278,17 +279,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.rohos.com/2013/12/login-unlock-computer-by-using-smartphone/"));
         startActivity(browserIntent);
-
     }
-
-    //save the topic in the database
-    //use it when sending the message
-    //do the same and on the PC side
-    /*
-     * try to unlock using MQTT
-     *
-     *
-     * */
 
     private void sendMqttLoginRequest(String accountName) {
 
@@ -297,12 +288,9 @@ public class MainActivity extends AppCompatActivity {
         if (sp.getBoolean("use_bluetooth_unlock", res.getBoolean(R.bool.use_bluetooth_d))) {
             startService(new Intent(MainActivity.this, BTService.class));
             Log.d(TAG, "Start BTService");
-        } else {
-            Log.d(TAG, "not using BT");
-            //use mqtt here?
         }
 
-       /* AuthRecord ar = mRecordsDb.getAuthRecord(accountName);
+        AuthRecord ar = mRecordsDb.getAuthRecord(accountName);
 
         if (ar.qr_user == null || ar.qr_user.length() == 0) {
             ((TextView) findViewById(R.id.textQRcode)).setText(String.format("Please install Rohos Logon Key on the desktop and scan QR-code first."));
@@ -315,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mSender = new MQTTSender(this.getApplicationContext());
-        mSender.execute(ar);*/
+        mSender.execute(ar);
     }
 
     /*
@@ -572,21 +560,15 @@ public class MainActivity extends AppCompatActivity {
         return dialog;
     }
 
-    private void
-    unlockPC() {
+    private void unlockPC() {
         try {
             Resources res = getResources();
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-            if(sp.getBoolean("use_bluetooth_unlock", res.getBoolean(R.bool.use_bluetooth_d))){
+            if (sp.getBoolean("use_bluetooth_unlock", res.getBoolean(R.bool.use_bluetooth_d))) {
                 startService(new Intent(MainActivity.this, BTService.class));
-            Log.d(TAG, "Start BTService");
+                Log.d(TAG, "Start BTService");
             }
-            //get the data from the database
-            //send the data to the PC using MQTT
-            //
-            // send unlock package via WiFi
 
-            //get the data from the database and try to send the data to the broker
             //or, which is better - get the selected item from the listview, fetch the selected data with the DB record and send the data to the broker
             AuthRecordsDb authRecordDb = new AuthRecordsDb(getApplicationContext());
             ArrayList<String> recordNames = new ArrayList<String>();
@@ -594,8 +576,8 @@ public class MainActivity extends AppCompatActivity {
 
             for (int i = 0; i < recordNames.size(); i++) {
                 AuthRecord ar = authRecordDb.getAuthRecord(recordNames.get(i));
-                NetworkSender netSender = new NetworkSender(getApplicationContext());
-                netSender.execute(ar);
+                MQTTSender sender = new MQTTSender(this.getApplicationContext());
+                sender.execute(ar);
             }
         } catch (Exception e) {
             Log.e(LOCAL_TAG, e.toString());

@@ -33,7 +33,6 @@ public class BTService extends Service {
     //MUST match the one defined in the Windows App
     private static final UUID PT_SERVER_UUID = UUID
             .fromString("46D5833A-997C-4854-9139-8C3510622ACF");
-
     private final String TAG = "BTService";
 
     private BluetoothAdapter mBtAdapter;
@@ -63,8 +62,8 @@ public class BTService extends Service {
                 // Get the BluetoothDevice object from the Intent
                 BluetoothDevice device = intent
                         .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                //Log.d(TAG, "Device name-" + device.getName());
-                //Log.d(TAG, "Device state-" + device.getBondState());
+                Log.d(TAG, "Device name-" + device.getName());
+                Log.d(TAG, "Device state-" + device.getBondState());
                 if (device.getBondState() == BluetoothDevice.BOND_BONDED) {
                     AuthRecord ar = mRecordsDb.getAuthRecordByHostName("/" + device.getName());
                     if (ar != null && ar.qr_host_name != null && ar.qr_host_name.length() > 0) {
@@ -76,6 +75,7 @@ public class BTService extends Service {
                                     ar.qr_host_name, encryptedAuthString);
 
                             if (!isNetConnected()) connectToServer(device.getAddress());
+                            Log.d(TAG, "Data to send: " + str_data);
                             mExecutor.submit(new SendRunnable(str_data + "\n"));
 
                             mSendingData = true;
@@ -88,7 +88,7 @@ public class BTService extends Service {
             } else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
                 if (!mSendingData) BTService.this.stopSelf();
             } else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
-                Toast.makeText(BTService.this, "BT device is disonnected", Toast.LENGTH_LONG);
+                Toast.makeText(BTService.this, "BT device is disonnected", Toast.LENGTH_LONG).show();
             }
         }
     };
@@ -183,7 +183,7 @@ public class BTService extends Service {
             mServerOutputStream = mBTSocket.getOutputStream();
         } catch (Exception e) {
             mSendingData = false;
-            //Log.e(TAG, e.toString());
+            Log.e(TAG, e.toString());
             RohosApplication app = (RohosApplication) getApplication();
             if (app != null) app.logError(TAG + e.toString());
             BTService.this.stopSelf();
@@ -205,7 +205,7 @@ public class BTService extends Service {
             RohosApplication app = (RohosApplication) getApplication();
             if (app != null) app.logError(TAG + e.toString());
             BTService.this.stopSelf();
-            //Log.e(TAG, "Error closing socket!!!");
+            Log.e(TAG, "Error closing socket!!!");
             //e.printStackTrace();
         }
     }
@@ -221,7 +221,7 @@ public class BTService extends Service {
             RohosApplication app = (RohosApplication) getApplication();
             if (app != null) app.logError(TAG + e.toString());
             BTService.this.stopSelf();
-            //Log.e(TAG, e.toString());
+            Log.e(TAG, e.toString());
         }
         return false;
     }
@@ -244,7 +244,7 @@ public class BTService extends Service {
         } catch (Exception e) {
             RohosApplication app = (RohosApplication) getApplication();
             if (app != null) app.logError(TAG + e.toString());
-            //Log.e(TAG, e.toString());
+            Log.e(TAG, e.toString());
         }
     }
 
