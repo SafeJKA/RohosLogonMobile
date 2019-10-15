@@ -36,7 +36,7 @@ public class BTConnReceiver extends BroadcastReceiver {
                 Toast.makeText(context, "BT connection state changed", Toast.LENGTH_LONG);
             }
         }catch(Exception e){
-            Log.e(TAG, e.toString());
+           // Log.e(TAG, e.toString());
         }
     }
 }

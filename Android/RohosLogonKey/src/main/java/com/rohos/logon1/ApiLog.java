@@ -22,7 +22,7 @@ public class ApiLog {
 			if(!mPath.exists()){
 				mPath.mkdir();
 			}
-			Log.d("ApiLog", mPath.getAbsolutePath());
+		//	Log.d("ApiLog", mPath.getAbsolutePath());
 		}catch(Exception e){
 			
 		}
@@ -83,7 +83,7 @@ public class ApiLog {
 				sb.append(CR);
 			}
 		} catch (IOException e) {
-			Log.e("SysLog.readLog", "Error: " + e.toString());
+			//Log.e("SysLog.readLog", "Error: " + e.toString());
 			return null;
 		}
 		

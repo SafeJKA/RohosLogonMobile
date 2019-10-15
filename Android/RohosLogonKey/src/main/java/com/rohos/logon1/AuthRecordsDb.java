@@ -167,7 +167,7 @@ public class AuthRecordsDb {
 
             return !cursorIsEmpty(cursor);
         } catch (Exception e) {
-            Log.e(TAG, "ERROR " + e.toString());
+           // Log.e(TAG, "ERROR " + e.toString());
         } finally {
             if (cursor != null)
                 tryCloseCursor(cursor);
@@ -181,13 +181,13 @@ public class AuthRecordsDb {
         try {
             cursor = getNames();
             if (!cursorIsEmpty(cursor)) {
-                Log.d(TAG, "Cursor size " + cursor.getCount());
+               // Log.d(TAG, "Cursor size " + cursor.getCount());
                 while (cursor.moveToNext()) {
                     String host = cursor.getString(cursor.getColumnIndex(HOST_NAME_COLUMN));
-                    Log.d(TAG, "host: " + host + ", length " + host.length());
+                //    Log.d(TAG, "host: " + host + ", length " + host.length());
                 }
             } else {
-                Log.d(TAG, "Cursor id empty");
+              //  Log.d(TAG, "Cursor id empty");
             }
         } finally {
             tryCloseCursor(cursor);
@@ -237,7 +237,7 @@ public class AuthRecordsDb {
                 return ai;
             }
         } catch (Exception e) {
-            Log.e("DB", e.toString());
+          //  Log.e("DB", e.toString());
         } finally {
             tryCloseCursor(cursor);
         }

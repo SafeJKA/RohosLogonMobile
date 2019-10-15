@@ -122,7 +122,7 @@ public class RohosApplication extends Application {
 	        
 	        logError("RohosApplication.onCreate launched");
 		}catch(Exception e){
-			Log.e(TAG, e.toString());
+			//Log.e(TAG, e.toString());
 		}        
 	}
 	
@@ -135,7 +135,7 @@ public class RohosApplication extends Application {
 			mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "RohosLogon");
 			mWakeLock.acquire();
 		}catch(Exception e){
-			Log.e(TAG, e.toString());
+			//Log.e(TAG, e.toString());
 		}
 	}
 	
@@ -146,7 +146,7 @@ public class RohosApplication extends Application {
 				mWakeLock = null;
 			}
 		}catch(Exception e){
-			Log.e(TAG, e.toString());
+			//Log.e(TAG, e.toString());
 		}
 	}
 	
@@ -169,7 +169,7 @@ public class RohosApplication extends Application {
 			result = true;
 		}
 		
-		Log.d(TAG, "Result is " + result);
+		//Log.d(TAG, "Result is " + result);
 		return result;
 	}
 	
@@ -187,7 +187,7 @@ public class RohosApplication extends Application {
 			Message msg = mHandler.obtainMessage(START_RECOGNIZING_SERVICE);
 			mHandler.sendMessage(msg);
 		}catch(Exception e){
-			Log.e(TAG, e.toString());
+			//Log.e(TAG, e.toString());
 		}
 	}
 	

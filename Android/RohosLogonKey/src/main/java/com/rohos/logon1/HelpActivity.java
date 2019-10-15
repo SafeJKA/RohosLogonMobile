@@ -49,7 +49,7 @@ public class HelpActivity extends Activity {
                     Uri.parse("http://www.rohos.com/2013/12/login-unlock-computer-by-using-smartphone/"));
             startActivity(intent);
         } catch (Exception e) {
-            Log.e(TAG, e.toString());
+           // Log.e(TAG, e.toString());
         }
     }
 

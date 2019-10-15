@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
@@ -24,7 +23,7 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 public class MQTTService extends Service {
 
     IBinder mBinder = new LocalBinder();
-    private static final String TAG = MQTTService.class.getSimpleName();
+   // private static final String TAG = MQTTService.class.getSimpleName();
     private MqttAndroidClient mqttClient;
     private MqttConnectOptions mqttConnOptions;
     private static int stateService = MqttConstants.STATE_SERVICE.NOT_CONNECTED;
@@ -44,8 +43,7 @@ public class MQTTService extends Service {
 
         try {
             if (!mqttClient.isConnected()) {
-                //make something here - display log information
-                Log.d(TAG, "MQTT client is not connected");
+               // Log.d(TAG, "MQTT client is not connected");
                 Toast.makeText(this, "Unable to send message.Client disconnected", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -108,18 +106,21 @@ public class MQTTService extends Service {
         } else {
             // if user starts the service
             switch (intent.getAction()) {
-                case MqttConstants.ACTION.START_ACTION:
-                    Log.d(TAG, "Received user starts foreground intent");
+                case MqttConstants.ACTION.START_ACTION: {
+                    //  Log.d(TAG, "Received user starts foreground intent");
                     startForeground(MqttConstants.NOTIFICATION_ID_FOREGROUND_SERVICE, prepareNotification());
                     this.connect(mqttClient, mqttConnOptions);
                     break;
-                case MqttConstants.ACTION.STOP_ACTION:
+                }
+                case MqttConstants.ACTION.STOP_ACTION: {
                     stopForeground(true);
                     stopSelf();
                     break;
-                default:
+                }
+                default: {
                     stopForeground(true);
                     stopSelf();
+                }
             }
         }
         return START_NOT_STICKY;
@@ -150,7 +151,6 @@ public class MQTTService extends Service {
     private MqttAndroidClient createMqttAndroidClient() {
         //create and return client
         String clientID = MqttClient.generateClientId();  //generate random client id
-        //get the topic from the database - it will be generated during the "registration" phase
         return new MqttAndroidClient(getApplicationContext(), "tcp://broker.hivemq.com:1883", clientID);
     }
 
@@ -164,8 +164,6 @@ public class MQTTService extends Service {
                     @Override
                     public void onSuccess(IMqttToken asyncActionToken) {
                         System.err.println("Connection OK");
-                        //send message here
-                        //try to resend it in case of error
                         stateService = MqttConstants.STATE_SERVICE.CONNECTED;
                     }
 

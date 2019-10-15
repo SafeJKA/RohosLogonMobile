@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -14,7 +13,6 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 
-import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,17 +25,21 @@ import android.widget.Toast;
 public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
 
     private Context context;
-    private final String TAG = MQTTSender.class.getSimpleName();
+    // private final String TAG = MQTTSender.class.getSimpleName();
     private MqttAndroidClient mqttClient;
     private MqttConnectOptions mqttConnOptions;
     private Semaphore s;
     private String userURI;
     private static final String serverUriPattern = "(tcp://)(?:(\\S+):(\\S+)@)?(\\S+):(\\d+)(?:@(\\S+))?";
 
+    private static final String defaultUserName = "***********";
+    private static final String defaultPassword = "***********";
+    private static final String defaultBrokerURI = "***********";
+    private static final String defaultClientID = "***********";
+
+
     public MQTTSender(Context ctx) {
         this.context = ctx;
-        //create the connection and connection options here
-        //get the shared preference URI
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         userURI = sp.getString("broker", "");
 
@@ -51,19 +53,13 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
     @Override
     protected Long doInBackground(AuthRecord... ai) {
 
-        //try to connect here
-        //get the URL here from
         connect(mqttClient, mqttConnOptions);
-        //get the encrypted message and topic here
-        //send the message and return the number of sent bytes
         String msgToSend = ai[0].getEncryptedDataString();
         String str_data = String.format("%s.%s.%s", ai[0].qr_user, ai[0].qr_host_name, msgToSend);
         String topicToSend = ai[0].qr_host_name;
         long s = msgToSend.length();
 
         sendMqttMessage(str_data, topicToSend);
-        //disconnect gracefully here
-        //should be make some pause here, about 1 sec to ensure that we delivered the data
         disconnect();
         return s;
     }
@@ -89,7 +85,9 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
                     @Override
                     public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                         System.err.println("Connection failure");
-                        Toast.makeText(context, "Connection failure", Toast.LENGTH_SHORT).show();
+                        if (context != null) {
+                            Toast.makeText(context, "Connection failure", Toast.LENGTH_SHORT).show();
+                        }
                         exception.printStackTrace();
                         s.release();
                     }
@@ -99,7 +97,9 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
                     public void connectComplete(boolean reconnect, String serverURI) {
                         if (reconnect) {
                             System.err.println("Reconnected to the server");
-                            Toast.makeText(context, "Reconnected to the server", Toast.LENGTH_SHORT).show();
+                            if (context != null) {
+                                Toast.makeText(context, "Reconnected to the server", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
 
@@ -117,7 +117,9 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
 
                     @Override
                     public void deliveryComplete(IMqttDeliveryToken token) {
-                        Toast.makeText(context, "Message delivered", Toast.LENGTH_SHORT).show();
+                        if (context != null) {
+                            Toast.makeText(context, "Message delivered", Toast.LENGTH_SHORT).show();
+                        }
                         System.err.println("Message delivery complete");
                     }
                 });
@@ -204,6 +206,9 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
                     }
                 }
             }
+        } else {
+            connOpts.setUserName(defaultUserName);
+            connOpts.setPassword(defaultPassword.toCharArray());
         }
         connOpts.setAutomaticReconnect(true);
         connOpts.setCleanSession(true);
@@ -211,15 +216,14 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
     }
 
     private MqttAndroidClient generateDefaultClientId() {
-        String serverURL = "tcp://broker.hivemq.com:1883";
-        String clientID = MqttClient.generateClientId();
-        return new MqttAndroidClient(context, serverURL, clientID);
+
+        return new MqttAndroidClient(context, defaultBrokerURI, defaultClientID);
     }
 
     private MqttAndroidClient createMqttAndroidClient() {
 
         String clientID;
-        String serverURL;
+        String serverURL = "";
         //get the topic from the database - it will be generated during the "registration" phase
         if (userURI.length() > 1) {
             //get the server uri
@@ -230,24 +234,24 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
                         (matcher.group(4) != null && !matcher.group(4).isEmpty()) &&
                         (matcher.group(5) != null && !matcher.group(5).isEmpty())) {
                     serverURL = matcher.group(1) + matcher.group(4) + ":" + matcher.group(5);
-                } else {
-                    serverURL = "tcp://broker.hivemq.com:1883";
                 }
                 if (matcher.group(6) != null && !matcher.group(6).isEmpty()) {
                     clientID = matcher.group(6);
                 } else {
                     clientID = MqttClient.generateClientId();  //generate random client id
                 }
-                // Toast.makeText(context, "Connecting to user provided URI", Toast.LENGTH_SHORT).show();
                 return new MqttAndroidClient(context, serverURL, clientID);
             } else {
                 //do some alarm that you want to connect with default values
-                Toast.makeText(context, "Connecting with default values", Toast.LENGTH_SHORT).show();
+                if (context != null) {
+                    Toast.makeText(context, "Connecting with default values", Toast.LENGTH_SHORT).show();
+                }
                 return generateDefaultClientId();
             }
         } else {
-            //do some alarm that you connect with default values
-            Toast.makeText(context, "Connecting with default values", Toast.LENGTH_SHORT).show();
+            if (context != null) {
+                Toast.makeText(context, "Connecting with default values", Toast.LENGTH_SHORT).show();
+            }
             return generateDefaultClientId();
         }
     }

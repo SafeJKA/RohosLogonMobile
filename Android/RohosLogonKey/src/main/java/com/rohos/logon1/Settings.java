@@ -45,7 +45,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
             ft.replace(android.R.id.content, pf);
             ft.commit();
         } catch (Exception e) {
-            Log.e(TAG, e.toString());
+            // Log.e(TAG, e.toString());
         }
     }
 
@@ -100,8 +100,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
                         preference.setSummary("Provided broker URI:" + sharedPreferenceNewData);
                     }
                 }
-            }
-            else {
+            } else {
                 Preference preference = findPreference(key);
                 if (preference instanceof EditTextPreference) {
                     SharedPreferences.Editor editor = preference.getEditor();
@@ -159,7 +158,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
                     })
                     .show();
         } catch (Exception e) {
-            Log.e(TAG, e.toString());
+            // Log.e(TAG, e.toString());
         }
     }
 }

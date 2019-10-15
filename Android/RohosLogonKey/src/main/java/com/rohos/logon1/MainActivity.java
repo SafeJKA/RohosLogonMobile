@@ -13,6 +13,7 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -74,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean mSaveKeyIntentConfirmationInProgress;
 
-    private NetworkSender netSender;
     private AuthRecordsDb mRecordsDb;
     private ListView mRecordsList;
     private AuthRecord[] mAuthRecords = {};
@@ -85,13 +85,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-
-        /*findViewById(R.id.unlock_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendIpLogin("");
-            }
-        });*/
 
         findViewById(R.id.scan_barcode).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mAboutText = (TextView) findViewById(R.id.aboutText);
+        mAboutText = findViewById(R.id.aboutText);
         mAboutText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button unlocPC = (Button) findViewById(R.id.unlock_pc);
+        Button unlocPC = findViewById(R.id.unlock_pc);
         unlocPC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,13 +116,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /* todo - display version from XML
-        String versionName = this.getPackageManager()
-                .getPackageInfo(this.getPackageName(), 0).versionName;*/
-
         mRecordsDb = new AuthRecordsDb(getApplicationContext());
         mRecordsAdapter = new RecordsListAdapter(this, R.layout.list_row_view, mAuthRecords);
-        mRecordsList = (ListView) findViewById(R.id.listView);
+        mRecordsList = findViewById(R.id.listView);
         mRecordsList.setAdapter(mRecordsAdapter);
 
         mRecordsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -138,10 +127,6 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> unusedParent, View row,
                                     int unusedPosition, long unusedId) {
 
-                //get the data from the database here
-                //decode the data using getEncryptedDataString function from AuthRecord class
-                //Send this data using MQTT
-                //Would be nice to create some form of dialog with log information when the user taps the record from the list
                 String accName = ((TextView) row.findViewById(R.id.recordName)).getText().toString();
 
                 sendMqttLoginRequest(accName);
@@ -151,23 +136,6 @@ public class MainActivity extends AppCompatActivity {
         refreshRecordsList(false);
 
         fillAboutTextView();
-
-        /*if ( ai = null || ai.qr_secret_key == null)
-        {
-            ((TextView) findViewById(R.id.textQRcode)).setText( "No records" );
-        }*/
-
-
-        if (savedInstanceState == null) {
-
-            //  for testing purposes
-            // interpretScanResult( Uri.parse("rohos1://192.168.1.8:1005/ZED?USER=Alex&KEY=XXXXXX&DATA=YYYYYY"), false);
-            // interpretScanResult( Uri.parse("rohos1://192.168.1.8:1005/zed?USER=Alex(KEY=538a44883958c2961c3c10e419c931ab(DATA=6c345545645664a802938219371bb832e3cc503373aa0b6f6ed1b07f41e52005728e092d468dff6841f9d2c34e5f6ad6cc8aee67792f693c828a018e16bfa41ad08bb7132298afdfa9e70df29b023661"), false);
-            // interpretScanResult( Uri.parse("rohos1://192.168.1.1:1005/zed123?USER=AlexAnder(KEY=538a44883958c2961c3c10e419c931ab(DATA=6c5345645645745672938219371bb832e3cc503373aa0b6f6ed1b07f41e52005728e092d468dff6841f9d2c34e5f6ad6cc8aee67792f693c828a018e16bfa41ad08bb7132298afdfa9e70df29b023661"), false);
-
-        } else {
-
-        }
     }
 
     @Override
@@ -194,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -219,8 +186,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-        //startService(new Intent(MainActivity.this, UPDService.class));
-
     }
 
     @Override
@@ -233,9 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         switch (item.getItemId()) {
             case R.id.action_settings:
                 startActivity(new Intent(this, Settings.class));
@@ -266,15 +229,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
+            return inflater.inflate(R.layout.fragment_main, container, false);
         }
     }
 
-
-    /*
-    open Rohos URL.
-     */
     private void checkUpdates() {
 
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.rohos.com/2013/12/login-unlock-computer-by-using-smartphone/"));
@@ -287,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         if (sp.getBoolean("use_bluetooth_unlock", res.getBoolean(R.bool.use_bluetooth_d))) {
             startService(new Intent(MainActivity.this, BTService.class));
-            Log.d(TAG, "Start BTService");
+            // Log.d(TAG, "Start BTService");
         }
 
         AuthRecord ar = mRecordsDb.getAuthRecord(accountName);
@@ -306,39 +264,10 @@ public class MainActivity extends AppCompatActivity {
         mSender.execute(ar);
     }
 
-    /*
-    send Authentication data block to the network
-     */
-    private void sendIpLogin(String accountName) {
-        // Try to unlock PC via bluetooth
-      /*  Resources res = getResources();
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        if (sp.getBoolean("use_bluetooth_unlock", res.getBoolean(R.bool.use_bluetooth_d))) {
-            startService(new Intent(MainActivity.this, BTService.class));
-            //Log.d(TAG, "Start BTService");
-        }*/
-        AuthRecord ar = mRecordsDb.getAuthRecord(accountName);
-
-        if (ar.qr_user == null || ar.qr_user.length() == 0) {
-            ((TextView) findViewById(R.id.textQRcode)).setText(String.format("Please install Rohos Logon Key on the desktop and scan QR-code first."));
-            return;
-        }
-
-        if (netSender != null) {
-            netSender.cancel(true);
-            netSender = null;
-        }
-
-        netSender = new NetworkSender(this.getApplicationContext());
-        netSender.execute(ar);
-
-    }
-
     private void showHelp() {
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setClass(this, HelpActivity.class);
-        //Intent intent = new Intent(this, HelpActivity.class);
         startActivity(intent);
     }
 
@@ -350,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             startActivityForResult(intentScan, SCAN_REQUEST);
         } catch (ActivityNotFoundException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            // Log.e(TAG, Log.getStackTraceString(e));
             showDialog(0);
         }
     }
@@ -358,10 +287,10 @@ public class MainActivity extends AppCompatActivity {
     private void fillAboutTextView() {
         try {
             PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
-            mAboutText = (TextView) findViewById(R.id.aboutText);
+            mAboutText = findViewById(R.id.aboutText);
             mAboutText.setText(getString(R.string.about_text, pi.versionName));
         } catch (Exception e) {
-            Log.e(TAG, e.toString());
+            // Log.e(TAG, e.toString());
         }
     }
 
@@ -395,7 +324,9 @@ public class MainActivity extends AppCompatActivity {
             // Grab the scan results and convert it into a URI
             String scanResult = (intent != null) ? intent.getStringExtra("SCAN_RESULT") : null;
             Uri uri = (scanResult != null) ? Uri.parse(scanResult) : null;
-            interpretScanResult(uri, false);
+            if (uri != null) {
+                interpretScanResult(uri, false);
+            }
         }
     }
 
@@ -407,10 +338,6 @@ public class MainActivity extends AppCompatActivity {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
             menu.setHeaderTitle(mAuthRecords[info.position].qr_user + " " + mAuthRecords[info.position].qr_host_name);
 
-            /*String[] menuItems = getResources().getStringArray(R.array.menu);
-            for (int i = 0; i<menuItems.length; i++) {
-                menu.add(Menu.NONE, i, i, menuItems[i]);
-            }*/
             menu.add(0, REMOVE_ID, 0, R.string.remove);
         }
     }
@@ -419,72 +346,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Intent intent;
         final String recordName = mAuthRecords[info.position].qr_user; // final so listener can see value
         final String recordHostName = mAuthRecords[info.position].qr_host_name; // final so listener can see value
         switch (item.getItemId()) {
-          /*  case COPY_TO_CLIPBOARD_ID:
-                ClipboardManager clipboard =
-                        (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                clipboard.setText(mUsers[(int) info.id].pin);
-                return true;
-            case CHECK_KEY_VALUE_ID:
-                intent = new Intent(Intent.ACTION_VIEW);
-                intent.setClass(this, CheckCodeActivity.class);
-                intent.putExtra("user", user);
-                startActivity(intent);
-                return true;
-            case RENAME_ID:
-                final Context context = this; // final so listener can see value
-                final View frame = getLayoutInflater().inflate(R.layout.rename,
-                        (ViewGroup) findViewById(R.id.rename_root));
-                final EditText nameEdit = (EditText) frame.findViewById(R.id.rename_edittext);
-                nameEdit.setText(user);
-                new AlertDialog.Builder(this)
-                        .setTitle(String.format(getString(R.string.rename_message), user))
-                        .setView(frame)
-                        .setPositiveButton(R.string.submit,
-                                this.getRenameClickListener(context, user, nameEdit))
-                        .setNegativeButton(R.string.cancel, null)
-                        .show();
-                return true;
-            case REMOVE_ID:
-                // Use a WebView to display the prompt because it contains non-trivial markup, such as list
-                View promptContentView =
-                        getLayoutInflater().inflate(R.layout.remove_account_prompt, null, false);
-                WebView webView = (WebView) promptContentView.findViewById(R.id.web_view);
-                webView.setBackgroundColor(Color.TRANSPARENT);
-                // Make the WebView use the same font size as for the mEnterPinPrompt field
-                double pixelsPerDip =
-                        TypedValue.applyDimension(
-                                TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics()) / 10d;
-                webView.getSettings().setDefaultFontSize(
-                        (int) (mEnterPinPrompt.getTextSize() / pixelsPerDip));
-                Utilities.setWebViewHtml(
-                        webView,
-                        "<html><body style=\"background-color: transparent;\" text=\"white\">"
-                                + getString(
-                                mAccountDb.isGoogleAccount(user)
-                                        ? R.string.remove_google_account_dialog_message
-                                        : R.string.remove_account_dialog_message)
-                                + "</body></html>");
-
-                new AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.remove_account_dialog_title, user))
-                        .setView(promptContentView)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton(R.string.remove_account_dialog_button_remove,
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        mAccountDb.delete(user);
-                                        refreshUserList(true);
-                                    }
-                                }
-                        )
-                        .setNegativeButton(R.string.cancel, null)
-                        .show();
-                return true;*/
             case REMOVE_ID:
                 new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.remove_account_title, recordName))
@@ -501,8 +365,6 @@ public class MainActivity extends AppCompatActivity {
                         )
                         .setNegativeButton(R.string.cancel, null)
                         .show();
-
-
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -566,10 +428,9 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
             if (sp.getBoolean("use_bluetooth_unlock", res.getBoolean(R.bool.use_bluetooth_d))) {
                 startService(new Intent(MainActivity.this, BTService.class));
-                Log.d(TAG, "Start BTService");
+                // Log.d(TAG, "Start BTService");
             }
 
-            //or, which is better - get the selected item from the listview, fetch the selected data with the DB record and send the data to the broker
             AuthRecordsDb authRecordDb = new AuthRecordsDb(getApplicationContext());
             ArrayList<String> recordNames = new ArrayList<String>();
             authRecordDb.getNames(recordNames);
@@ -578,9 +439,10 @@ public class MainActivity extends AppCompatActivity {
                 AuthRecord ar = authRecordDb.getAuthRecord(recordNames.get(i));
                 MQTTSender sender = new MQTTSender(this.getApplicationContext());
                 sender.execute(ar);
+                SystemClock.sleep(400);
             }
         } catch (Exception e) {
-            Log.e(LOCAL_TAG, e.toString());
+            // Log.e(LOCAL_TAG, e.toString());
         }
     }
 
@@ -612,10 +474,10 @@ public class MainActivity extends AppCompatActivity {
                 row = inflater.inflate(R.layout.list_row_view, null);
             }
 
-            TextView nameView = (TextView) row.findViewById(R.id.recordName);
+            TextView nameView = row.findViewById(R.id.recordName);
             nameView.setText(currentRecord.qr_user);
 
-            nameView = (TextView) row.findViewById(R.id.hostName);
+            nameView = row.findViewById(R.id.hostName);
             nameView.setText(currentRecord.qr_host_name);
 
             return row;
@@ -641,8 +503,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (newListRequired) {
-                // Make the list display the data from the newly created array of records
-                // This forces the list to scroll to top.
                 mRecordsAdapter = new RecordsListAdapter(this, R.layout.list_row_view, mAuthRecords);
                 mRecordsList.setAdapter(mRecordsAdapter);
             }
@@ -651,7 +511,6 @@ public class MainActivity extends AppCompatActivity {
 
             if (mRecordsList.getVisibility() != View.VISIBLE) {
                 mRecordsList.setVisibility(View.VISIBLE);
-                //((ScrollView) findViewById(R.id.scrollView)).setVisibility(View.GONE);
             }
 
             registerForContextMenu(mRecordsList);
@@ -662,27 +521,13 @@ public class MainActivity extends AppCompatActivity {
             mAuthRecords = new AuthRecord[0]; // clear any existing user PIN state
             mRecordsList.setVisibility(View.GONE);
 
-            /*
-            // setting "How it Works" view when there is no records...
-
-            ((ScrollView) findViewById(R.id.scrollView)).setVisibility(View.VISIBLE);
-
-            View promptContentView =
-                    getLayoutInflater().inflate(R.layout.activity_help , null, false);
-
-            mRecordsList.vi
-            ((ScrollView) findViewById(R.id.scrollView)).setVi
-            */
         }
-
-
     }
 
     private void saveRecordAndRefreshList(AuthRecord ar) {
         mRecordsDb.update(ar);
         refreshRecordsList(true);
     }
-
 
     /**
      * Interprets the QR code that was scanned by the user.  Decides whether to
@@ -696,27 +541,18 @@ public class MainActivity extends AppCompatActivity {
     private void
     interpretScanResult(Uri scanResult, boolean confirmBeforeSave) {
 
-
-        // The scan result is expected to be a URL that adds an account.
         ((TextView) findViewById(R.id.textQRcode)).setText(scanResult.toString());
-
-        // If confirmBeforeSave is true, the user has to confirm/reject the action.
-        // We need to ensure that new results are accepted only if the previous ones have been
-        // confirmed/rejected by the user. This is to prevent the attacker from sending multiple results
-        // in sequence to confuse/DoS the user.
         if (confirmBeforeSave) {
             if (mSaveKeyIntentConfirmationInProgress) {
-                Log.w(LOCAL_TAG, "Ignoring save key Intent: previous Intent not yet confirmed by user");
+                //  Log.w(LOCAL_TAG, "Ignoring save key Intent: previous Intent not yet confirmed by user");
                 return;
             }
-            // No matter what happens below, we'll show a prompt which, once dismissed, will reset the
-            // flag below.
             mSaveKeyIntentConfirmationInProgress = true;
         }
 
         // Sanity check
         if (scanResult == null) {
-            Log.e(TAG, "Scan result is null");
+            // Log.e(TAG, "Scan result is null");
             showDialog(INVALID_QR_CODE);
             return;
         }
@@ -725,7 +561,7 @@ public class MainActivity extends AppCompatActivity {
         if (OTP_SCHEME.equals(scanResult.getScheme()) && scanResult.getAuthority() != null) {
             parseSecret(scanResult, confirmBeforeSave);
         } else {
-            Log.e(TAG, "getScheme " + scanResult.getScheme() + " getAuthority " + scanResult.getAuthority());
+            // Log.e(TAG, "getScheme " + scanResult.getScheme() + " getAuthority " + scanResult.getAuthority());
             showDialog(INVALID_QR_CODE);
         }
     }
@@ -754,7 +590,6 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             /* final String scheme = uri.getScheme().toLowerCase(); */
-
             String url = uri.toString();
             url = url.replace('(', '&');
             uri = Uri.parse(url);
@@ -775,63 +610,27 @@ public class MainActivity extends AppCompatActivity {
 
             ((TextView) findViewById(R.id.textQRcode)).setText(uri.toString());
 
-       /* if (!OTP_SCHEME.equals(scheme)) {
-            Log.e(getString(R.string.app_name), LOCAL_TAG + ": Invalid or missing scheme in uri");
-            showDialog(INVALID_QR_CODE);
-            return;
-        }*/
-
             ai.qr_user = uri.getQueryParameter("USER");
             ai.qr_secret_key = uri.getQueryParameter("KEY");
             ai.qr_data = uri.getQueryParameter("DATA");
-
-
-            //get mqtt topic by taking some data from qr_secret_key or qr_data
-            //add additional field in the AuthRecord and AuthRecordsDb
-
-
-        /*if (secret_key == null || secret_key.length() == 0) {
-            Log.e(getString(R.string.app_name), LOCAL_TAG +
-                    ": Secret key not found in URI");
-            showDialog(INVALID_QR_CODE);
-            return;
-        }*/
-
 
             String str;
             str = String.format("QR code:\nIP: %s (%d)\nHOST:%s\nUser: %s", ai.qr_host_ip, ai.qr_host_port, ai.qr_host_name, ai.qr_user);
             ((TextView) findViewById(R.id.textQRcode)).setText(str);
 
-
             ((Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(100L);
 
-            // save it now!
             saveRecordAndRefreshList(ai);
 
-            // send back Authenticaion signal to confirm desktop that Setup is OK
-            //sendIpLogin(ai.qr_user);
             sendMqttLoginRequest(ai.qr_user);
-        /*
 
-        if (secret.equals(mAccountDb.getSecret(user)) &&
-                counter == mAccountDb.getCounter(user) &&
-                type == mAccountDb.getType(user)) {
-            return;  // nothing to update.
-        }
-
-        if (confirmBeforeSave) {
-            mSaveKeyDialogParams = new SaveKeyDialogParams(user, secret, type, counter);
-            showDialog(DIALOG_ID_SAVE_KEY);
-        } else {
-            saveSecretAndRefreshUserList(user, secret, null, type, counter);
-        }*/
         } catch (java.lang.NumberFormatException err2) {
             ((TextView) findViewById(R.id.textQRcode)).setText(String.format(" %s", err2.toString()));
-            Log.e(TAG, Log.getStackTraceString(err2));
+            // Log.e(TAG, Log.getStackTraceString(err2));
             showDialog(INVALID_QR_CODE);
         } catch (NullPointerException error) {
             ((TextView) findViewById(R.id.textQRcode)).setText(String.format(" %s", error.toString()));
-            Log.e(TAG, Log.getStackTraceString(error));
+            // Log.e(TAG, Log.getStackTraceString(error));
             showDialog(INVALID_QR_CODE);
         }
     }
