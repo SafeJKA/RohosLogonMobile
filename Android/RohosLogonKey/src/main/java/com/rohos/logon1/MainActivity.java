@@ -1,5 +1,7 @@
 package com.rohos.logon1;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -19,7 +21,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+//import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -49,11 +51,11 @@ public class MainActivity extends AppCompatActivity {
     public static final int SET_RESULT_TEXT = 1001;
 
     // @VisibleForTesting
-    static final String ACTION_SCAN_BARCODE =
+    private static final String ACTION_SCAN_BARCODE =
             MainActivity.class.getName() + ".ScanBarcode";
 
     // @VisibleForTesting
-    static final int SCAN_REQUEST = 31337;
+    private static final int SCAN_REQUEST = 31337;
 
     public static final int DOWNLOAD_DIALOG = 0;
     public static final int INVALID_QR_CODE = 1;
@@ -186,6 +188,17 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+
+       /* Notification notification = new Notification(R.drawable.ic_launcher,
+                "Rohos Logon Key",
+                System.currentTimeMillis());
+
+        notification.flags |= Notification.FLAG_NO_CLEAR
+                | Notification.FLAG_ONGOING_EVENT;
+        NotificationManager notifier = (NotificationManager)
+                getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notifier.notify(1, notification);*/
+       
     }
 
     @Override

@@ -28,7 +28,7 @@ public class RohosApplication extends Application {
 	
 	private final String TAG = "RohosApplication";	
 	
-	public Handler mHandler = null;
+	public static Handler mHandler = null;
 	public NativeKnockRecognizer mNativeKnockRecog;
 	
 	public volatile String mHostName = null; // is set in UPDClient, is used in NativeKnockRecognizer
@@ -196,4 +196,5 @@ public class RohosApplication extends Application {
 			mNativeKnockRecog.initRecognizing();
 		}catch(Exception e){}
 	}*/
+
 }
