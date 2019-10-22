@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
         NotificationManager notifier = (NotificationManager)
                 getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notifier.notify(1, notification);*/
-       
+
     }
 
     @Override

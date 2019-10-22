@@ -23,16 +23,16 @@ public class BTConnReceiver extends BroadcastReceiver {
             RohosApplication app = (RohosApplication)context.getApplicationContext();
             String action = intent.getAction();
             if(action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)){
-                app.logError(TAG + ", BT device connected");
+               // app.logError(TAG + ", BT device connected");
                 Toast.makeText(context, "BT device connected", Toast.LENGTH_LONG);
             }else if(action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)){
-                app.logError(TAG + ", BT device disconnected");
+               // app.logError(TAG + ", BT device disconnected");
                 Toast.makeText(context, "BT device disconnected", Toast.LENGTH_LONG);
             }else if(action.equals(BluetoothDevice.ACTION_BOND_STATE_CHANGED)){
-                app.logError(TAG + ", BT bond state changed");
+               // app.logError(TAG + ", BT bond state changed");
                 Toast.makeText(context, "BT bond state changed", Toast.LENGTH_LONG);
             }else if(action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)){
-                app.logError(TAG + ", BT connection state changed");
+              //  app.logError(TAG + ", BT connection state changed");
                 Toast.makeText(context, "BT connection state changed", Toast.LENGTH_LONG);
             }
         }catch(Exception e){

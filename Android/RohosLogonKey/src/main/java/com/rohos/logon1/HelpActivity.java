@@ -32,7 +32,7 @@ public class HelpActivity extends Activity {
 
         setContentView(R.layout.activity_help);
 
-        Button learnMore = (Button) findViewById(R.id.learn_more);
+        Button learnMore = findViewById(R.id.learn_more);
         learnMore.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 openWebPage();

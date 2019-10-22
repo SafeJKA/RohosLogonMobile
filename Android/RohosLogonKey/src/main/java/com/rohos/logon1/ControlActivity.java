@@ -33,7 +33,7 @@ public class ControlActivity extends Activity {
 		
 		setContentView(R.layout.control_activity);	
 		
-		ImageButton ib = (ImageButton)findViewById(R.id.btn_stop);
+		ImageButton ib = findViewById(R.id.btn_stop);
 		ib.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
@@ -41,7 +41,7 @@ public class ControlActivity extends Activity {
 			}			
 		});
 		
-		Button close = (Button)findViewById(R.id.btn_close);
+		Button close = findViewById(R.id.btn_close);
 		close.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){

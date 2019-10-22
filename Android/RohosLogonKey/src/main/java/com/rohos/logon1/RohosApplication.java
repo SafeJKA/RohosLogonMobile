@@ -154,7 +154,7 @@ public class RohosApplication extends Application {
 		//final File path = getFilesDir();
 		new Thread(new Runnable(){
 			public void run(){
-				apiLog.writeLog(new String(message));
+				apiLog.writeLog(message);
 			}
 		}).start();
 	}

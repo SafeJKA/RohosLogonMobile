@@ -32,10 +32,10 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
     private String userURI;
     private static final String serverUriPattern = "(tcp://)(?:(\\S+):(\\S+)@)?(\\S+):(\\d+)(?:@(\\S+))?";
 
-    private static final String defaultUserName = "***********";
-    private static final String defaultPassword = "***********";
-    private static final String defaultBrokerURI = "***********";
-    private static final String defaultClientID = "***********";
+    private static final String defaultUserName = "***";
+    private static final String defaultPassword = "***";
+    private static final String defaultBrokerURI = "***";
+    private static final String defaultClientID = "***";
 
 
     public MQTTSender(Context ctx) {

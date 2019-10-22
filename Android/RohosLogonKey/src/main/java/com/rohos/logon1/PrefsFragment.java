@@ -36,7 +36,7 @@ public class PrefsFragment extends PreferenceFragment implements Preference.OnPr
             startKnockServ.setOnPreferenceChangeListener(this);
 
             final Settings activity = (Settings) getActivity();
-            Preference testRecog = (Preference) findPreference("test_knock");
+            Preference testRecog = findPreference("test_knock");
             testRecog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -77,11 +77,11 @@ public class PrefsFragment extends PreferenceFragment implements Preference.OnPr
             } else if (key.equals("knock_recog")) {
                 RohosApplication app = (RohosApplication) getActivity().getApplication();
                 if (((Boolean) newValue).booleanValue()) {
-                    Message msg = app.mHandler.obtainMessage(RohosApplication.START_RECOGNIZING_SERVICE);
-                    app.mHandler.sendMessage(msg);
+                    Message msg = RohosApplication.mHandler.obtainMessage(RohosApplication.START_RECOGNIZING_SERVICE);
+                    RohosApplication.mHandler.sendMessage(msg);
                 } else {
-                    Message msg = app.mHandler.obtainMessage(RohosApplication.STOP_RECOGNIZING_SERVICE);
-                    app.mHandler.sendMessage(msg);
+                    Message msg = RohosApplication.mHandler.obtainMessage(RohosApplication.STOP_RECOGNIZING_SERVICE);
+                    RohosApplication.mHandler.sendMessage(msg);
                 }
                 return true;
             } else if (key.equals("show_icon")) {

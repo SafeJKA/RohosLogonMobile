@@ -27,7 +27,7 @@ public class UPDClient implements Runnable {
     public void run() {
         AuthRecordsDb recordsDb = null;
         try {
-            String text = new String();
+            String text = "";
             int server_port = 1206;
             mDatagramPacket = new DatagramPacket(mMessage, mMessage.length);
             //mDatagramSocket = new DatagramSocket(server_port);

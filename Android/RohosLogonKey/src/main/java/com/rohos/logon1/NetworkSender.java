@@ -192,7 +192,7 @@ public class NetworkSender extends AsyncTask<AuthRecord, Void, Long> {
         //Log.d(TAG, "result " + result + ", strResult " + strResult);
         if (MainActivity.mHandler != null) {
             Message msg = MainActivity.mHandler.obtainMessage(MainActivity.SET_RESULT_TEXT,
-                    new String(strResult));
+                    strResult);
             MainActivity.mHandler.sendMessage(msg);
         }
 
@@ -202,7 +202,7 @@ public class NetworkSender extends AsyncTask<AuthRecord, Void, Long> {
             UnlockPcService.mHandler.sendMessage(stop);
         }
 
-        if (strResult.indexOf("Rohos:", 0) > 0) {
+        if (strResult.indexOf("Rohos:") > 0) {
             // vibarate if result contains server reply
             ((Vibrator) this.context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(100L);
 
