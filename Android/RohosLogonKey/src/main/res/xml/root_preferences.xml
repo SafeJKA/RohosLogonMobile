@@ -1,10 +1,12 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <CheckBoxPreference
         android:defaultValue="@bool/knock_recg_d"
         android:key="knock_recog"
         android:summary="@string/knock_recog_summ"
         android:title="@string/knock_recog_title" />
+
     <ListPreference
         android:defaultValue="2"
         android:dialogTitle="Select number of knocks"
@@ -13,22 +15,27 @@
         android:key="number_knocks"
         android:summary="@string/number_knock_summ"
         android:title="@string/number_knock_title" />
+
     <PreferenceScreen
         android:key="test_knock"
         android:summary="@string/test_konck_summ"
         android:title="@string/test_knock_title" />
-    <CheckBoxPreference
+
+    <!-- <CheckBoxPreference
         android:defaultValue="@bool/lock_if_leav_d"
         android:key="lock_if_leavs_conn"
-        android:title="@string/lock_if_leavs_conn_title" />
+        android:title="@string/lock_if_leavs_conn_title" /> -->
+
     <CheckBoxPreference
         android:defaultValue="@bool/use_bluetooth_d"
         android:key="use_bluetooth_unlock"
         android:title="@string/use_bluetooth_unlock_title" />
+
     <CheckBoxPreference
         android:defaultValue="@bool/unlock_on_table_d"
         android:key="unlock_on_table"
         android:title="@string/unlock_on_table_title" />
+
     <CheckBoxPreference
         android:defaultValue="@bool/show_icon_on_tb"
         android:key="show_icon"
@@ -39,4 +46,37 @@
         android:dialogTitle="Set MQTT broker"
         android:key="broker"
         android:title="Set preferred broker" />
+    <!--
+    <PreferenceCategory app:title="@string/messages_header">
+
+        <EditTextPreference
+            app:key="signature"
+            app:title="@string/signature_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="reply"
+            app:entries="@array/reply_entries"
+            app:entryValues="@array/reply_values"
+            app:key="reply"
+            app:title="@string/reply_title"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/sync_header">
+
+        <SwitchPreferenceCompat
+            app:key="sync"
+            app:title="@string/sync_title" />
+
+        <SwitchPreferenceCompat
+            app:dependency="sync"
+            app:key="attachment"
+            app:summaryOff="@string/attachment_summary_off"
+            app:summaryOn="@string/attachment_summary_on"
+            app:title="@string/attachment_title" />
+
+    </PreferenceCategory>
+    -->
 </PreferenceScreen>

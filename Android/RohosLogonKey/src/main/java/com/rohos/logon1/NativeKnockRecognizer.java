@@ -7,9 +7,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Message;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.preference.PreferenceManager;
 
 public class NativeKnockRecognizer {
 
@@ -84,7 +85,9 @@ public class NativeKnockRecognizer {
             authRecordsDb.getNames(recordNames);
 
             for (int i = 0; i < recordNames.size(); i++) {
-                AuthRecord ar = authRecordsDb.getAuthRecord(recordNames.get(i));
+                String name = recordNames.get(i).substring(0, recordNames.get(i).indexOf("|"));
+                String hostName = recordNames.get(i).substring(recordNames.get(i).indexOf("|")+1);
+                AuthRecord ar = authRecordsDb.getAuthRecord(name, hostName);
                 NetworkSender netSender = new NetworkSender(mContext.getApplicationContext());
                 netSender.execute(ar);
             }

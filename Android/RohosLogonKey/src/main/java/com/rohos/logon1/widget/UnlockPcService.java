@@ -5,18 +5,22 @@ import java.util.ArrayList;
 import com.rohos.logon1.AuthRecord;
 import com.rohos.logon1.AuthRecordsDb;
 import com.rohos.logon1.BTService;
+import com.rohos.logon1.MQTTSender;
+import com.rohos.logon1.MainActivity;
 import com.rohos.logon1.NetworkSender;
 import com.rohos.logon1.R;
-import com.rohos.logon1.RohosApplication;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.util.Log;
+
+import androidx.preference.PreferenceManager;
 
 public class UnlockPcService extends Service {
 	
@@ -39,7 +43,7 @@ public class UnlockPcService extends Service {
 	@Override
 	public void onCreate(){
 		mAuthRecordsDb  = new AuthRecordsDb(getApplicationContext());
-		mHandler = new Handler(){
+		mHandler = new Handler(Looper.getMainLooper()){
 			@Override
 			public void handleMessage(Message msg){
 				super.handleMessage(msg);
@@ -66,7 +70,7 @@ public class UnlockPcService extends Service {
 				
 				Message msg = mHandler.obtainMessage(UNLOCK_PC);
 					mHandler.sendMessageDelayed(msg, 100L);
-				Log.d(TAG, "Unlock PC message is sent");
+				//Log.d(TAG, "Unlock PC message is sent");
 			}			
 		}catch(Exception e){
 			Log.e(TAG, e.toString());
@@ -101,8 +105,9 @@ public class UnlockPcService extends Service {
 
 	        if(userCount > 0){
 	            for(int i = 0; i < userCount; ++i){
-	                String name = recordNames.get(i);
-	                AuthRecord ar1  = mAuthRecordsDb.getAuthRecord(name);
+					String name = recordNames.get(i).substring(0, recordNames.get(i).indexOf("|"));
+					String hostName = recordNames.get(i).substring(recordNames.get(i).indexOf("|")+1);
+					AuthRecord ar1  = mAuthRecordsDb.getAuthRecord(name, hostName);
 
 	                NetworkSender  mNetSender1 = new NetworkSender(getApplicationContext());
 	                mNetSender1.execute(ar1);
@@ -121,6 +126,31 @@ public class UnlockPcService extends Service {
 			if(sp.getBoolean("use_bluetooth_unlock", getResources().getBoolean(R.bool.use_bluetooth_d))){
 				startService(new Intent(UnlockPcService.this, BTService.class));
 			}
+
+			Runnable r = new Runnable(){
+				@Override
+				public void run() {
+					try{
+						Context ctx = getApplicationContext();
+						AuthRecordsDb authRecordDb = new AuthRecordsDb(ctx);
+
+						ArrayList<String> recordNames = new ArrayList<String>();
+						authRecordDb.getNames(recordNames);
+
+						for (int i = 0; i < recordNames.size(); i++) {
+							String name = recordNames.get(i).substring(0, recordNames.get(i).indexOf("|"));
+							String hostName = recordNames.get(i).substring(recordNames.get(i).indexOf("|")+1);
+							AuthRecord ar = authRecordDb.getAuthRecord(name, hostName);
+							MQTTSender sender = new MQTTSender(ctx, Looper.getMainLooper());
+							sender.execute(ar);
+							Thread.sleep(400L);
+						}
+					}catch(Exception e){
+						Log.e(TAG, Log.getStackTraceString(e));
+					}
+				}
+			};
+			new Thread(r).start();
 		}catch(Exception e){
 			Log.e(TAG, e.toString());
 		}

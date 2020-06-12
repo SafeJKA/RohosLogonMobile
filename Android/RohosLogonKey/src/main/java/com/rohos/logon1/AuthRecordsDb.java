@@ -150,6 +150,8 @@ public class AuthRecordsDb {
         return true;
     }
 
+    /*
+     * Commented, not being used
     public boolean nameExists(String email) {
         Cursor cursor = getAccount(email);
         try {
@@ -158,6 +160,7 @@ public class AuthRecordsDb {
             tryCloseCursor(cursor);
         }
     }
+     */
 
     public boolean hostExists(String host) {
         Cursor cursor = null;
@@ -194,8 +197,8 @@ public class AuthRecordsDb {
         }
     }
 
-    public AuthRecord getAuthRecord(String name) {
-        Cursor cursor = getAccount(name);
+    public AuthRecord getAuthRecord(String name, String host) {
+        Cursor cursor = getAccount(name, host);
         AuthRecord ai = new AuthRecord();
         try {
             if (!cursorIsEmpty(cursor)) {
@@ -269,8 +272,8 @@ public class AuthRecordsDb {
         values.put(HOST_PORT_COLUMN, ai.qr_host_port);
         values.put(SETT_COLUMN, ".");
 
-        int updated = mDatabase.update(TABLE_NAME, values,
-                whereClause(ai.qr_user), null);
+        int updated = mDatabase.update(TABLE_NAME, values, USER_NAME_COLUMN + "= ? AND " + HOST_NAME_COLUMN + "= ?",
+                new String[]{ai.qr_user, ai.qr_host_name});
         if (updated == 0) {
             mDatabase.insert(TABLE_NAME, null, values);
         }
@@ -280,9 +283,9 @@ public class AuthRecordsDb {
         return mDatabase.query(TABLE_NAME, null, null, null, null, null, null, null);
     }
 
-    private Cursor getAccount(String name) {
-        return mDatabase.query(TABLE_NAME, null, USER_NAME_COLUMN + "= ?",
-                new String[]{name}, null, null, null);
+    private Cursor getAccount(String name, String host) {
+        return mDatabase.query(TABLE_NAME, null, USER_NAME_COLUMN + "= ? AND " + HOST_NAME_COLUMN + "= ?",
+                new String[]{name, host}, null, null, null);
     }
 
     private Cursor getAccountByHostName(String host) {
@@ -321,12 +324,14 @@ public class AuthRecordsDb {
                 return 0;
 
             int nameCount = cursor.getCount();
-            int index = cursor.getColumnIndex(AuthRecordsDb.USER_NAME_COLUMN);
+            int indexName = cursor.getColumnIndex(AuthRecordsDb.USER_NAME_COLUMN);
+            int indexHost = cursor.getColumnIndex(AuthRecordsDb.HOST_NAME_COLUMN);
 
             for (int i = 0; i < nameCount; ++i) {
                 cursor.moveToPosition(i);
-                String username = cursor.getString(index);
-                result.add(username);
+                String name = cursor.getString(indexName);
+                String host = cursor.getString(indexHost);
+                result.add(name + "|" + host);
             }
 
             return nameCount;

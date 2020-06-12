@@ -11,9 +11,11 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.util.Log;
+
+import androidx.preference.PreferenceManager;
 
 import com.rohos.logon1.AuthRecord;
 import com.rohos.logon1.AuthRecordsDb;
@@ -52,7 +54,7 @@ public class DetectMovementService extends Service implements SensorEventListene
             mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
             mSensorManager.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_UI);
 
-            mHandler = new Handler(){
+            mHandler = new Handler(Looper.getMainLooper()){
                 public void handleMessage(Message msg){
                     switch(msg.what){
                         case BEGIN_DETECTING:
@@ -160,7 +162,9 @@ public class DetectMovementService extends Service implements SensorEventListene
             authRecordsDb.getNames(recordNames);
 
             for(int i = 0; i < recordNames.size(); i++){
-                AuthRecord ar = authRecordsDb.getAuthRecord(recordNames.get(i));
+                String name = recordNames.get(i).substring(0, recordNames.get(i).indexOf("|"));
+                String hostName = recordNames.get(i).substring(recordNames.get(i).indexOf("|")+1);
+                AuthRecord ar = authRecordsDb.getAuthRecord(name, hostName);
                 NetworkSender netSender = new NetworkSender(getApplicationContext());
                 netSender.execute(ar);
             }

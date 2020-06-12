@@ -1,7 +1,5 @@
 package com.rohos.logon1;
 
-import java.io.File;
-
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -9,14 +7,15 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.preference.PreferenceManager;
-import android.util.Log;
+
+import androidx.preference.PreferenceManager;
 
 import com.rohos.logon1.services.KnockService;
-import com.rohos.logon1.services.LockPCService;
+
 
 public class RohosApplication extends Application {
 	
@@ -70,7 +69,7 @@ public class RohosApplication extends Application {
 	        mScreenState = new ScreenStateReceiver();
 	        registerReceiver(mScreenState, intentFilter);
 	        
-	        mHandler = new Handler(){
+	        mHandler = new Handler(Looper.getMainLooper()){
 	        	@Override
 	        	public void handleMessage(Message msg){
 	        		switch(msg.what){
@@ -132,7 +131,7 @@ public class RohosApplication extends Application {
 				mWakeLock = null;
 			
 			PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
-			mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "RohosLogon");
+			mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "RohosLogon:wake");
 			mWakeLock.acquire();
 		}catch(Exception e){
 			//Log.e(TAG, e.toString());
@@ -177,11 +176,11 @@ public class RohosApplication extends Application {
 		try{
 			startService(new Intent(RohosApplication.this, UPDService.class));
 
-			Resources res = getResources();
-			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-			if(sp.getBoolean("lock_if_leavs_conn", res.getBoolean(R.bool.lock_if_leav_d))){
-				startService(new Intent(this, LockPCService.class));
-			}
+			//Resources res = getResources();
+			//SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+			//if(sp.getBoolean("lock_if_leavs_conn", res.getBoolean(R.bool.lock_if_leav_d))){
+			//	startService(new Intent(this, LockPCService.class));
+			//}
 
             // This code is used for test only
 			Message msg = mHandler.obtainMessage(START_RECOGNIZING_SERVICE);

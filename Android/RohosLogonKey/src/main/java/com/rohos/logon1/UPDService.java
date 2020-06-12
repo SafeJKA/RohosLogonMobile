@@ -2,16 +2,21 @@ package com.rohos.logon1;
 
 //import android.app.Notification;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import androidx.preference.PreferenceManager;
+import androidx.core.app.NotificationCompat;
 
 import com.rohos.logon1.widget.UnlockPcService;
 
@@ -20,8 +25,10 @@ public class UPDService extends Service {
     static private UPDService mUPDService = null;
 
     private final String TAG = "UPDService";
+    private final String CHANNEL_ID = "RohosChannel";
 
-    private final int NOTIFICATION_ID = 1001;
+    private final int NOTIFICATION_ID = 1101;
+
 
     public static UPDService getInstance() {
         return mUPDService;
@@ -66,23 +73,30 @@ public class UPDService extends Service {
 
     public void showNotification() {
         try {
-            //Context context = getApplicationContext();
+            Context ctx = getApplicationContext();
             Resources res = getResources();
 
-            NotificationCompat.Builder ncBuilder = new NotificationCompat.Builder(this)
+            NotificationCompat.Builder ncBuilder = new NotificationCompat.Builder(ctx, CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_notification)
                     .setContentTitle(res.getString(R.string.app_name))
-                    .setContentText(res.getString(R.string.notifi_title));
+                    .setContentText(res.getString(R.string.notifi_title))
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setAutoCancel(false);
             PendingIntent pi = PendingIntent
                     .getService(this, 0, new Intent(this, UnlockPcService.class), 0);
 
             ncBuilder.setContentIntent(pi);
 
             NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            nm.notify(NOTIFICATION_ID, ncBuilder.getNotification());
+            if(Build.VERSION.SDK_INT >= 26){
+                NotificationChannel nc = new NotificationChannel(CHANNEL_ID,
+                        "RohosChannelName", NotificationManager.IMPORTANCE_HIGH);
+                ncBuilder.setChannelId(CHANNEL_ID);
+                nm.createNotificationChannel(nc);            }
+            nm.notify(NOTIFICATION_ID, ncBuilder.build());
 
         } catch (Exception e) {
-            //Log.e(TAG, e.toString());
+            Log.e(TAG, Log.getStackTraceString(e));
         }
     }
 

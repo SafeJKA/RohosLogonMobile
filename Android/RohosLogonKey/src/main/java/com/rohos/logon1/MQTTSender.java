@@ -1,6 +1,7 @@
 package com.rohos.logon1;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -18,9 +19,11 @@ import java.util.regex.Pattern;
 
 import java.util.concurrent.Semaphore;
 
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
+
+import androidx.preference.PreferenceManager;
 
 public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
 
@@ -32,14 +35,19 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
     private String userURI;
     private static final String serverUriPattern = "(tcp://)(?:(\\S+):(\\S+)@)?(\\S+):(\\d+)(?:@(\\S+))?";
 
-    private static final String defaultUserName = "***";
-    private static final String defaultPassword = "***";
-    private static final String defaultBrokerURI = "***";
-    private static final String defaultClientID = "***";
+    private static final String defaultUserName = "*";
+    private static final String defaultPassword = "*";
+    private static final String defaultBrokerURI = "*";
+    private static final String defaultClientID = "*";
 
+    private Handler mHandler = null;
+    private Looper mLoop = null;
 
-    public MQTTSender(Context ctx) {
+    public MQTTSender(Context ctx, Looper loop) {
         this.context = ctx;
+        mLoop = loop;
+        mHandler = new Handler(loop);
+
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         userURI = sp.getString("broker", "");
 
@@ -47,6 +55,8 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
         mqttClient = createMqttAndroidClient();
 
         s = new Semaphore(0);
+
+
     }
 
     //to decide: make the connection in the constructor or in another function, like onPreExcute() or before sending of the data
@@ -244,15 +254,26 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
             } else {
                 //do some alarm that you want to connect with default values
                 if (context != null) {
-                    Toast.makeText(context, "Connecting with default values", Toast.LENGTH_SHORT).show();
+                    toastMessage("Connecting with default values");
                 }
                 return generateDefaultClientId();
             }
         } else {
             if (context != null) {
-                Toast.makeText(context, "Connecting with default values", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Connecting with default values", Toast.LENGTH_SHORT).show();
+                toastMessage("Connecting with default values");
             }
             return generateDefaultClientId();
         }
+    }
+
+    private void toastMessage(final String text){
+        Runnable r = new Runnable(){
+            @Override
+            public void run() {
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+            }
+        };
+        mHandler.post(r);
     }
 }

@@ -14,8 +14,9 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.util.Log;
+
+import androidx.preference.PreferenceManager;
 
 import com.rohos.logon1.AuthRecord;
 import com.rohos.logon1.AuthRecordsDb;
@@ -118,7 +119,9 @@ public class LockPCService extends Service {
             mAuthRecordsDb.getNames(recordNames);
 
             for(int i = 0; i < recordNames.size(); i++){
-                AuthRecord ar = mAuthRecordsDb.getAuthRecord(recordNames.get(i));
+                String name = recordNames.get(i).substring(0, recordNames.get(i).indexOf("|"));
+                String hostName = recordNames.get(i).substring(recordNames.get(i).indexOf("|")+1);
+                AuthRecord ar = mAuthRecordsDb.getAuthRecord(name, hostName);
                 NetworkSender netSender = new NetworkSender(getApplicationContext());
                 netSender.execute(ar);
             }

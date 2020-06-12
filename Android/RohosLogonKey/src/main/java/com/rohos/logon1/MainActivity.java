@@ -14,14 +14,15 @@ import android.content.pm.PackageInfo;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
+
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
 //import android.util.Log;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,6 +34,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import java.util.ArrayList;
 
@@ -130,8 +135,8 @@ public class MainActivity extends AppCompatActivity {
                                     int unusedPosition, long unusedId) {
 
                 String accName = ((TextView) row.findViewById(R.id.recordName)).getText().toString();
-
-                sendMqttLoginRequest(accName);
+                String accHost = ((TextView) row.findViewById(R.id.hostName)).getText().toString();
+                sendMqttLoginRequest(accName, accHost);
             }
         });
 
@@ -175,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
-        mHandler = new Handler() {
+        mHandler = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -188,17 +193,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-
-       /* Notification notification = new Notification(R.drawable.ic_launcher,
-                "Rohos Logon Key",
-                System.currentTimeMillis());
-
-        notification.flags |= Notification.FLAG_NO_CLEAR
-                | Notification.FLAG_ONGOING_EVENT;
-        NotificationManager notifier = (NotificationManager)
-                getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        notifier.notify(1, notification);*/
-
     }
 
     @Override
@@ -252,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(browserIntent);
     }
 
-    private void sendMqttLoginRequest(String accountName) {
+    private void sendMqttLoginRequest(String accountName, String hostName) {
 
         Resources res = getResources();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
@@ -261,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
             // Log.d(TAG, "Start BTService");
         }
 
-        AuthRecord ar = mRecordsDb.getAuthRecord(accountName);
+        AuthRecord ar = mRecordsDb.getAuthRecord(accountName, hostName);
 
         if (ar.qr_user == null || ar.qr_user.length() == 0) {
             ((TextView) findViewById(R.id.textQRcode)).setText(String.format("Please install Rohos Logon Key on the desktop and scan QR-code first."));
@@ -273,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
             mSender = null;
         }
 
-        mSender = new MQTTSender(this.getApplicationContext());
+        mSender = new MQTTSender(this.getApplicationContext(), Looper.getMainLooper());
         mSender.execute(ar);
     }
 
@@ -349,8 +343,9 @@ public class MainActivity extends AppCompatActivity {
         if (v.getId() == R.id.listView) {
             super.onCreateContextMenu(menu, v, menuInfo);
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            menu.setHeaderTitle(mAuthRecords[info.position].qr_user + " " + mAuthRecords[info.position].qr_host_name);
-
+            String name = mAuthRecords[info.position].qr_user;
+            String hostName = mAuthRecords[info.position].qr_host_name;
+            menu.setHeaderTitle(name + " " + hostName);
             menu.add(0, REMOVE_ID, 0, R.string.remove);
         }
     }
@@ -444,16 +439,30 @@ public class MainActivity extends AppCompatActivity {
                 // Log.d(TAG, "Start BTService");
             }
 
-            AuthRecordsDb authRecordDb = new AuthRecordsDb(getApplicationContext());
-            ArrayList<String> recordNames = new ArrayList<String>();
-            authRecordDb.getNames(recordNames);
+            Runnable r = new Runnable(){
+                @Override
+                public void run() {
+                    try{
+                        Context ctx = getApplicationContext();
+                        AuthRecordsDb authRecordDb = new AuthRecordsDb(ctx);
 
-            for (int i = 0; i < recordNames.size(); i++) {
-                AuthRecord ar = authRecordDb.getAuthRecord(recordNames.get(i));
-                MQTTSender sender = new MQTTSender(this.getApplicationContext());
-                sender.execute(ar);
-                SystemClock.sleep(400);
-            }
+                        ArrayList<String> recordNames = new ArrayList<String>();
+                        authRecordDb.getNames(recordNames);
+
+                        for (int i = 0; i < recordNames.size(); i++) {
+                            String name = recordNames.get(i).substring(0, recordNames.get(i).indexOf("|"));
+                            String hostName = recordNames.get(i).substring(recordNames.get(i).indexOf("|")+1);
+                            AuthRecord ar = authRecordDb.getAuthRecord(name, hostName);
+                            MQTTSender sender = new MQTTSender(ctx, Looper.getMainLooper());
+                            sender.execute(ar);
+                            Thread.sleep(400L);
+                        }
+                    }catch(Exception e){
+                        Log.e(TAG, Log.getStackTraceString(e));
+                    }
+                }
+            };
+            new Thread(r).start();
         } catch (Exception e) {
             // Log.e(LOCAL_TAG, e.toString());
         }
@@ -510,9 +519,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             for (int i = 0; i < userCount; ++i) {
-                String name = recordNames.get(i);
-                mAuthRecords[i] = mRecordsDb.getAuthRecord(name);
-
+                String name = recordNames.get(i).substring(0, recordNames.get(i).indexOf("|"));
+                String host = recordNames.get(i).substring(recordNames.get(i).indexOf("|")+1);
+                mAuthRecords[i] = mRecordsDb.getAuthRecord(name, host);
             }
 
             if (newListRequired) {
@@ -635,7 +644,7 @@ public class MainActivity extends AppCompatActivity {
 
             saveRecordAndRefreshList(ai);
 
-            sendMqttLoginRequest(ai.qr_user);
+            sendMqttLoginRequest(ai.qr_user, ai.qr_host_name);
 
         } catch (java.lang.NumberFormatException err2) {
             ((TextView) findViewById(R.id.textQRcode)).setText(String.format(" %s", err2.toString()));
