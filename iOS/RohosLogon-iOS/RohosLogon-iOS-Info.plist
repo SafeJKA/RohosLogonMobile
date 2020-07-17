@@ -20,7 +20,7 @@
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.tesline.Rohos-logon</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -35,6 +35,10 @@
 	<string>1.1.1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Rohos uses bluetooth to send authentication data.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Rohos uses camera to scan configuration data from QR image.</string>
 	<key>UIMainStoryboardFile</key>
 	<string>MainStoryboard_iPhone</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -48,10 +52,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Rohos uses bluetooth to send authentication data.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Rohos uses camera to scan configuration data from QR image.</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		175393E524C20A4D00F85CE4 /* MQTTClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 175393DA24C207BB00F85CE4 /* MQTTClient.framework */; };
 		17DA66261D1A58490031108F /* BluetoothHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DA66251D1A58490031108F /* BluetoothHelper.m */; };
 		17DA66291D1A58A40031108F /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17DA66281D1A58A40031108F /* CoreBluetooth.framework */; };
 		6023CFA216F00CDA009AFE9E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023CFA116F00CDA009AFE9E /* UIKit.framework */; };
@@ -28,10 +29,6 @@
 		6023D1C616F00ED9009AFE9E /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023D1C416F00ED9009AFE9E /* AddressBook.framework */; };
 		6023D1C716F00ED9009AFE9E /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023D1C516F00ED9009AFE9E /* AddressBookUI.framework */; };
 		6023D1C916F00F01009AFE9E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023D1C816F00F01009AFE9E /* libiconv.dylib */; };
-		6023D31716F01C17009AFE9E /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 6023D1D116F01C16009AFE9E /* .gitignore */; };
-		6023D31816F01C17009AFE9E /* .svnignore in Resources */ = {isa = PBXBuildFile; fileRef = 6023D1D216F01C16009AFE9E /* .svnignore */; };
-		6023D31916F01C17009AFE9E /* .valgrind.supp in Resources */ = {isa = PBXBuildFile; fileRef = 6023D1D316F01C16009AFE9E /* .valgrind.supp */; };
-		6023D31A16F01C17009AFE9E /* .valgrindrc in Resources */ = {isa = PBXBuildFile; fileRef = 6023D1D416F01C16009AFE9E /* .valgrindrc */; };
 		6023D31B16F01C17009AFE9E /* AztecDetectorResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6023D1D916F01C16009AFE9E /* AztecDetectorResult.cpp */; };
 		6023D31C16F01C17009AFE9E /* AztecReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6023D1DB16F01C16009AFE9E /* AztecReader.cpp */; };
 		6023D31D16F01C17009AFE9E /* Decoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6023D1DE16F01C16009AFE9E /* Decoder.cpp */; };
@@ -119,8 +116,6 @@
 		6023D36F16F01C17009AFE9E /* Result.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6023D29216F01C17009AFE9E /* Result.cpp */; };
 		6023D37016F01C17009AFE9E /* ResultPoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6023D29416F01C17009AFE9E /* ResultPoint.cpp */; };
 		6023D37116F01C17009AFE9E /* ResultPointCallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6023D29616F01C17009AFE9E /* ResultPointCallback.cpp */; };
-		6023D37216F01C17009AFE9E /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 6023D29916F01C17009AFE9E /* .gitignore */; };
-		6023D37316F01C17009AFE9E /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 6023D29B16F01C17009AFE9E /* .gitignore */; };
 		6023D37416F01C17009AFE9E /* beep-beep.caf in Resources */ = {isa = PBXBuildFile; fileRef = 6023D29C16F01C17009AFE9E /* beep-beep.caf */; };
 		6023D37516F01C17009AFE9E /* AddContactAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 6023D2A016F01C17009AFE9E /* AddContactAction.m */; };
 		6023D37616F01C17009AFE9E /* CallAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 6023D2A216F01C17009AFE9E /* CallAction.m */; };
@@ -183,6 +178,48 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		175393D924C207BB00F85CE4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 175393D024C207BB00F85CE4 /* MQTTClient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DE9EF5C51C0628B1009EF667;
+			remoteInfo = MQTTClientiOS;
+		};
+		175393DB24C207BB00F85CE4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 175393D024C207BB00F85CE4 /* MQTTClient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8404875E1C51212600569C79;
+			remoteInfo = MQTTClientiOSTests;
+		};
+		175393DD24C207BB00F85CE4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 175393D024C207BB00F85CE4 /* MQTTClient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F6D08FD81E535E9900CD2566;
+			remoteInfo = MQTTClienttvOS;
+		};
+		175393DF24C207BB00F85CE4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 175393D024C207BB00F85CE4 /* MQTTClient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8425D7011BBE8D3D005AD733;
+			remoteInfo = MQTTClienttvOSTests;
+		};
+		175393E124C207BB00F85CE4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 175393D024C207BB00F85CE4 /* MQTTClient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F6D08FA41E535B6800CD2566;
+			remoteInfo = MQTTClientmacOS;
+		};
+		175393E324C207BB00F85CE4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 175393D024C207BB00F85CE4 /* MQTTClient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 840716321BBEF13A00FBB3CB;
+			remoteInfo = MQTTClientmacOSTests;
+		};
 		6023D3B516F01C17009AFE9E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6023D31316F01C17009AFE9E /* ZXingWidget.xcodeproj */;
@@ -207,6 +244,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		175393D024C207BB00F85CE4 /* MQTTClient.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MQTTClient.xcodeproj; path = mqtt/MQTTClient/MQTTClient.xcodeproj; sourceTree = "<group>"; };
 		17DA66241D1A58490031108F /* BluetoothHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothHelper.h; sourceTree = "<group>"; };
 		17DA66251D1A58490031108F /* BluetoothHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluetoothHelper.m; sourceTree = "<group>"; };
 		17DA66281D1A58A40031108F /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
@@ -234,10 +272,6 @@
 		6023D1C416F00ED9009AFE9E /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		6023D1C516F00ED9009AFE9E /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		6023D1C816F00F01009AFE9E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
-		6023D1D116F01C16009AFE9E /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		6023D1D216F01C16009AFE9E /* .svnignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .svnignore; sourceTree = "<group>"; };
-		6023D1D316F01C16009AFE9E /* .valgrind.supp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .valgrind.supp; sourceTree = "<group>"; };
-		6023D1D416F01C16009AFE9E /* .valgrindrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .valgrindrc; sourceTree = "<group>"; };
 		6023D1D916F01C16009AFE9E /* AztecDetectorResult.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AztecDetectorResult.cpp; sourceTree = "<group>"; };
 		6023D1DA16F01C16009AFE9E /* AztecDetectorResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AztecDetectorResult.h; sourceTree = "<group>"; };
 		6023D1DB16F01C16009AFE9E /* AztecReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AztecReader.cpp; sourceTree = "<group>"; };
@@ -414,8 +448,6 @@
 		6023D29516F01C17009AFE9E /* ResultPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultPoint.h; sourceTree = "<group>"; };
 		6023D29616F01C17009AFE9E /* ResultPointCallback.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ResultPointCallback.cpp; sourceTree = "<group>"; };
 		6023D29716F01C17009AFE9E /* ResultPointCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultPointCallback.h; sourceTree = "<group>"; };
-		6023D29916F01C17009AFE9E /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		6023D29B16F01C17009AFE9E /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		6023D29C16F01C17009AFE9E /* beep-beep.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "beep-beep.caf"; sourceTree = "<group>"; };
 		6023D29F16F01C17009AFE9E /* AddContactAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddContactAction.h; sourceTree = "<group>"; };
 		6023D2A016F01C17009AFE9E /* AddContactAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContactAction.m; sourceTree = "<group>"; };
@@ -544,6 +576,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				175393E524C20A4D00F85CE4 /* MQTTClient.framework in Frameworks */,
 				17DA66291D1A58A40031108F /* CoreBluetooth.framework in Frameworks */,
 				6023D1C916F00F01009AFE9E /* libiconv.dylib in Frameworks */,
 				6023D1C616F00ED9009AFE9E /* AddressBook.framework in Frameworks */,
@@ -561,10 +594,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		175393CF24C2079F00F85CE4 /* mqtt */ = {
+			isa = PBXGroup;
+			children = (
+				175393D024C207BB00F85CE4 /* MQTTClient.xcodeproj */,
+			);
+			name = mqtt;
+			sourceTree = "<group>";
+		};
+		175393D124C207BB00F85CE4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				175393DA24C207BB00F85CE4 /* MQTTClient.framework */,
+				175393DC24C207BB00F85CE4 /* MQTTClientiOSTests.xctest */,
+				175393DE24C207BB00F85CE4 /* MQTTClient.framework */,
+				175393E024C207BB00F85CE4 /* MQTTClienttvOSTests.xctest */,
+				175393E224C207BB00F85CE4 /* MQTTClient.framework */,
+				175393E424C207BB00F85CE4 /* MQTTClientmacOSTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		6023CF9516F00CDA009AFE9E = {
 			isa = PBXGroup;
 			children = (
 				FA0A29BB187F49EE00001D2A /* iPad */,
+				175393CF24C2079F00F85CE4 /* mqtt */,
 				6023D1CF16F01C16009AFE9E /* zxing */,
 				6023CFA716F00CDA009AFE9E /* RohosLogon-iOS */,
 				6023CFA016F00CDA009AFE9E /* Frameworks */,
@@ -645,10 +700,6 @@
 		6023D1D016F01C16009AFE9E /* cpp */ = {
 			isa = PBXGroup;
 			children = (
-				6023D1D116F01C16009AFE9E /* .gitignore */,
-				6023D1D216F01C16009AFE9E /* .svnignore */,
-				6023D1D316F01C16009AFE9E /* .valgrind.supp */,
-				6023D1D416F01C16009AFE9E /* .valgrindrc */,
 				6023D1D516F01C16009AFE9E /* core */,
 			);
 			path = cpp;
@@ -984,7 +1035,6 @@
 		6023D29816F01C17009AFE9E /* iphone */ = {
 			isa = PBXGroup;
 			children = (
-				6023D29916F01C17009AFE9E /* .gitignore */,
 				6023D29A16F01C17009AFE9E /* ZXingWidget */,
 			);
 			path = iphone;
@@ -993,7 +1043,6 @@
 		6023D29A16F01C17009AFE9E /* ZXingWidget */ = {
 			isa = PBXGroup;
 			children = (
-				6023D29B16F01C17009AFE9E /* .gitignore */,
 				6023D29C16F01C17009AFE9E /* beep-beep.caf */,
 				6023D29D16F01C17009AFE9E /* Classes */,
 				6023D30716F01C17009AFE9E /* exportList */,
@@ -1198,26 +1247,25 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = Main;
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 1160;
 				ORGANIZATIONNAME = "Tesline-Service";
-				TargetAttributes = {
-					6023CF9D16F00CDA009AFE9E = {
-						DevelopmentTeam = 5BSEC579P8;
-						ProvisioningStyle = Manual;
-					};
-				};
 			};
 			buildConfigurationList = 6023CF9916F00CDA009AFE9E /* Build configuration list for PBXProject "RohosLogon-iOS" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 6023CF9516F00CDA009AFE9E;
 			productRefGroup = 6023CF9F16F00CDA009AFE9E /* Products */;
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = 175393D124C207BB00F85CE4 /* Products */;
+					ProjectRef = 175393D024C207BB00F85CE4 /* MQTTClient.xcodeproj */;
+				},
 				{
 					ProductGroup = 6023D31416F01C17009AFE9E /* Products */;
 					ProjectRef = 6023D31316F01C17009AFE9E /* ZXingWidget.xcodeproj */;
@@ -1231,6 +1279,48 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		175393DA24C207BB00F85CE4 /* MQTTClient.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = MQTTClient.framework;
+			remoteRef = 175393D924C207BB00F85CE4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		175393DC24C207BB00F85CE4 /* MQTTClientiOSTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = MQTTClientiOSTests.xctest;
+			remoteRef = 175393DB24C207BB00F85CE4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		175393DE24C207BB00F85CE4 /* MQTTClient.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = MQTTClient.framework;
+			remoteRef = 175393DD24C207BB00F85CE4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		175393E024C207BB00F85CE4 /* MQTTClienttvOSTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = MQTTClienttvOSTests.xctest;
+			remoteRef = 175393DF24C207BB00F85CE4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		175393E224C207BB00F85CE4 /* MQTTClient.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = MQTTClient.framework;
+			remoteRef = 175393E124C207BB00F85CE4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		175393E424C207BB00F85CE4 /* MQTTClientmacOSTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = MQTTClientmacOSTests.xctest;
+			remoteRef = 175393E324C207BB00F85CE4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		6023D3B616F01C17009AFE9E /* libZXingWidget.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1261,13 +1351,7 @@
 				6023CFB816F00CDA009AFE9E /* Default-568h@2x.png in Resources */,
 				6023CFBB16F00CDA009AFE9E /* MainStoryboard_iPhone.storyboard in Resources */,
 				6023CFBE16F00CDA009AFE9E /* MainStoryboard_iPad.storyboard in Resources */,
-				6023D31716F01C17009AFE9E /* .gitignore in Resources */,
 				FAF0C3BE1882B49500BF7E08 /* icon-120.png in Resources */,
-				6023D31816F01C17009AFE9E /* .svnignore in Resources */,
-				6023D31916F01C17009AFE9E /* .valgrind.supp in Resources */,
-				6023D31A16F01C17009AFE9E /* .valgrindrc in Resources */,
-				6023D37216F01C17009AFE9E /* .gitignore in Resources */,
-				6023D37316F01C17009AFE9E /* .gitignore in Resources */,
 				6023D37416F01C17009AFE9E /* beep-beep.caf in Resources */,
 				6023D3A816F01C17009AFE9E /* exportList in Resources */,
 				6023D3B216F01C17009AFE9E /* ZXingTests-Info.plist in Resources */,
@@ -1468,33 +1552,54 @@
 		6023CFC216F00CDA009AFE9E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Alexander Shilonosov (65TB5BVP37)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Alexander Shilonosov (65TB5BVP37)";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 5BSEC579P8;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				HEADER_SEARCH_PATHS = mqtt/MQTTClient/MQTTClient;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "60eab31f-aa92-449a-ba09-ee560fbf9b7d";
 				SDKROOT = iphoneos;
+				SYSTEM_HEADER_SEARCH_PATHS = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1502,26 +1607,46 @@
 		6023CFC316F00CDA009AFE9E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Tesline-Service s.r.l. (5BSEC579P8)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Tesline-Service s.r.l. (5BSEC579P8)";
 				COPY_PHASE_STRIP = YES;
 				DEVELOPMENT_TEAM = 5BSEC579P8;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				HEADER_SEARCH_PATHS = mqtt/MQTTClient/MQTTClient;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "0c7e2611-c356-48c3-a859-3ddff1176439";
 				SDKROOT = iphoneos;
+				SYSTEM_HEADER_SEARCH_PATHS = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1530,8 +1655,11 @@
 		6023CFC516F00CDA009AFE9E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Alexander Shilonosov (65TB5BVP37)";
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Alexander Shilonosov (65TB5BVP37)";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 5BSEC579P8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1542,12 +1670,15 @@
 				HEADER_SEARCH_PATHS = (
 					"./zxing/iphone/ZXingWidget/Classes/**",
 					./zxing/cpp/core/src,
+					"mqtt/MQTTClient/**",
 				);
 				INFOPLIST_FILE = "RohosLogon-iOS/RohosLogon-iOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tesline.Rohos-logon";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "60eab31f-aa92-449a-ba09-ee560fbf9b7d";
-				PROVISIONING_PROFILE_SPECIFIER = Rohos_Logon_Dev_2;
+				PROVISIONING_PROFILE_SPECIFIER = logon_dev;
+				SYSTEM_HEADER_SEARCH_PATHS = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1556,8 +1687,11 @@
 		6023CFC616F00CDA009AFE9E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Tesline-Service s.r.l. (5BSEC579P8)";
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Tesline-Service s.r.l. (5BSEC579P8)";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 5BSEC579P8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1568,12 +1702,15 @@
 				HEADER_SEARCH_PATHS = (
 					"./zxing/iphone/ZXingWidget/Classes/**",
 					./zxing/cpp/core/src,
+					"mqtt/MQTTClient/**",
 				);
 				INFOPLIST_FILE = "RohosLogon-iOS/RohosLogon-iOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tesline.Rohos-logon";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "0c7e2611-c356-48c3-a859-3ddff1176439";
-				PROVISIONING_PROFILE_SPECIFIER = Rohos_Logon_AppStore;
+				PROVISIONING_PROFILE_SPECIFIER = logon_appstore;
+				SYSTEM_HEADER_SEARCH_PATHS = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
