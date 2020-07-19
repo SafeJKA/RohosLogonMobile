@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		17120D6824C4A1AE00CB46ED /* AuthRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 17120D6624C4A1AE00CB46ED /* AuthRecord.m */; };
+		177F323624C4E1DC00B4C26E /* BarcodeScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 177F323324C4E1DC00B4C26E /* BarcodeScanner.m */; };
 		17DA66261D1A58490031108F /* BluetoothHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DA66251D1A58490031108F /* BluetoothHelper.m */; };
 		17DA66291D1A58A40031108F /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17DA66281D1A58A40031108F /* CoreBluetooth.framework */; };
 		6023CFA216F00CDA009AFE9E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023CFA116F00CDA009AFE9E /* UIKit.framework */; };
@@ -205,6 +206,8 @@
 /* Begin PBXFileReference section */
 		17120D6624C4A1AE00CB46ED /* AuthRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthRecord.m; sourceTree = "<group>"; };
 		17120D6724C4A1AE00CB46ED /* AuthRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthRecord.h; sourceTree = "<group>"; };
+		177F323324C4E1DC00B4C26E /* BarcodeScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BarcodeScanner.m; sourceTree = "<group>"; };
+		177F323524C4E1DC00B4C26E /* BarcodeScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarcodeScanner.h; sourceTree = "<group>"; };
 		17DA66241D1A58490031108F /* BluetoothHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothHelper.h; sourceTree = "<group>"; };
 		17DA66251D1A58490031108F /* BluetoothHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluetoothHelper.m; sourceTree = "<group>"; };
 		17DA66281D1A58A40031108F /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
@@ -608,6 +611,8 @@
 		6023CFA716F00CDA009AFE9E /* RohosLogon-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				177F323524C4E1DC00B4C26E /* BarcodeScanner.h */,
+				177F323324C4E1DC00B4C26E /* BarcodeScanner.m */,
 				17120D6724C4A1AE00CB46ED /* AuthRecord.h */,
 				17120D6624C4A1AE00CB46ED /* AuthRecord.m */,
 				17DA66241D1A58490031108F /* BluetoothHelper.h */,
@@ -1369,6 +1374,7 @@
 				6023D35A16F01C17009AFE9E /* UPCEANReader.cpp in Sources */,
 				6023D35B16F01C17009AFE9E /* UPCEReader.cpp in Sources */,
 				6023D35C16F01C17009AFE9E /* BitMatrixParser.cpp in Sources */,
+				177F323624C4E1DC00B4C26E /* BarcodeScanner.m in Sources */,
 				6023D35D16F01C17009AFE9E /* DataBlock.cpp in Sources */,
 				17DA66261D1A58490031108F /* BluetoothHelper.m in Sources */,
 				6023D35E16F01C17009AFE9E /* DataMask.cpp in Sources */,

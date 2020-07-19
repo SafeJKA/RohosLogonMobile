@@ -21,7 +21,7 @@
     UITableView *tableView;
     UIImageView *bigLogoView;
     
-    NSMutableSet *qrReader;
+    // NSMutableSet *qrReader;
     
     // array of dictionaries username=XX hostname=YY
     NSMutableArray * mRecords;
@@ -35,7 +35,6 @@
 
 @property (nonatomic, copy) NSString *resultsToDisplay;
 
-@property(retain, nonatomic) NSMutableSet *qrReader;
 
 - (IBAction)scanPressed:(id)sender;
 - (IBAction)sendSignalPressed:(id)sender;

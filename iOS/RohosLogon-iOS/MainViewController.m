@@ -9,15 +9,14 @@
 //
 
 #import "MainViewController.h"
-#import <QRCodeReader.h>
-#import <Decoder.h>
-#import <TwoDDecoderResult.h>
 #import <CommonCrypto/CommonCryptor.h>
 
 #import "MQTTClient.h"
 #import "MQTTCFSocketTransport.h"
 
 #import "AuthRecord.h"
+#import "BarcodeScanner.h"
+
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -51,7 +50,6 @@ AuthRecord* ar = nil;
 @synthesize bigLogoView;
 
 @synthesize resultsToDisplay;
-@synthesize qrReader;
 
 
 - (void)viewDidLoad
@@ -61,9 +59,9 @@ AuthRecord* ar = nil;
     ar = [[AuthRecord alloc] init];
     
     // Do any additional setup after loading the view, typically from a nib.
-    self.qrReader = [[NSMutableSet alloc] init];
-    QRCodeReader *qrcodeReader = [[QRCodeReader alloc] init];
-    [self.qrReader addObject: qrcodeReader];
+    //self.qrReader = [[NSMutableSet alloc] init];
+    //QRCodeReader *qrcodeReader = [[QRCodeReader alloc] init];
+    //[self.qrReader addObject: qrcodeReader];
     
     // adding Single Tap recognozer to Label and BigLogo images to open "rohos.com... "
     
@@ -80,29 +78,24 @@ AuthRecord* ar = nil;
     
     
     // the mutalbe array of all debts
-     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
-    mRecords = [[defaults objectForKey:AUTHREC_LIST_KEY] mutableCopy];
+    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    mRecords = [[defaults objectForKey: AUTHREC_LIST_KEY] mutableCopy];
     
     if (mRecords == nil)
-    {
         mRecords = [[NSMutableArray alloc] init];
-    }
 
-    if ([mRecords count] == 0)
-    {
-        recordsView.hidden = YES;
-        
-    } else
-    {
     
+    if ([mRecords count] == 0)
+        recordsView.hidden = YES;
+    else
         [self refreshAuthRecordsList];
-    }
   
     mBluetooth = [[BluetoothCentral alloc] init];
     mBluetooth.delegate = self;
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
   [mBluetoothSendData release]; mBluetoothSendData = nil;
   [mBluetooth release]; mBluetooth = nil;
   [super dealloc];
@@ -110,7 +103,7 @@ AuthRecord* ar = nil;
 
 - (void)learnMoreSingleTapRecognized:(UIGestureRecognizer *)gestureRecognizer
 {
-    [[UIApplication sharedApplication] openURL: [NSURL URLWithString:@"http://rohos.com/mob"]];
+    [[UIApplication sharedApplication] openURL: [NSURL URLWithString:@"http://rohos.com/mob"] options: @{} completionHandler: nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -137,8 +130,7 @@ AuthRecord* ar = nil;
         {
             NSString *uName = [rec objectForKey: USER_NAME_KEY];
             NSString *hostName = [rec objectForKey: HOST_NAME_KEY];
-            if ( [uName isEqualToString: r.userName ] &&
-                [hostName isEqualToString: r.hostName ] )
+            if ( [uName isEqualToString: r.userName ] && [hostName isEqualToString: r.hostName ] )
             {
                 // the same record...
                 // todo - update secrt key and data...
@@ -298,7 +290,7 @@ AuthRecord* ar = nil;
 //
 - (void)sendSignalForRecord: (int) recordIndex
 {
-    if (mRecords == nil || [mRecords count] < recordIndex+1 )
+    if (mRecords == nil || [mRecords count] < recordIndex + 1)
     {
         return;
     }
@@ -335,24 +327,25 @@ AuthRecord* ar = nil;
     NSLog(@"%@", strEncrypted);
     
     
-    //lets send multicast over WiFi...
+    // lets send multicast over WiFi...
     
     if ([self sendMQTTPacket: ar] >0 )
     {
-        [resultsView setText: ar->serverReplyStr];
-    } else
+        [resultsView setText: ar.serverReplyStr];
+    }
+    else
     {
         [resultsView setText: @"Signal sent but not unlocked"];
     }
   
     if (mBluetooth.isActive)
-        [mBluetooth sendData: [ar->serverReplyStr dataUsingEncoding: NSUTF8StringEncoding]];
+        [mBluetooth sendData: [ar.serverReplyStr dataUsingEncoding: NSUTF8StringEncoding]];
     else
     {
-      [mBluetoothSendData release];
-      mBluetoothSendData = [[ar->serverReplyStr dataUsingEncoding: NSUTF8StringEncoding] retain];
-      [mBluetooth start];
-      // Logic continues in onCentralManagerInit handler
+        [mBluetoothSendData release];
+        mBluetoothSendData = [[ar.serverReplyStr dataUsingEncoding: NSUTF8StringEncoding] retain];
+        [mBluetooth start];
+        // Logic continues in onCentralManagerInit handler
     }
     return 0;
 }
@@ -364,7 +357,7 @@ AuthRecord* ar = nil;
  
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     
-    [defaults setObject:mRecords forKey:AUTHREC_LIST_KEY];
+    [defaults setObject: mRecords forKey: AUTHREC_LIST_KEY];
     
     // do not forget to save changes
     [defaults synchronize];
@@ -374,7 +367,7 @@ AuthRecord* ar = nil;
     recordsView.hidden = YES;
     bigLogoView.hidden = NO;
     
-    [resultsView setText:@"Install Rohos Logon Key on your desktop to enable authentication by phone. rohos.com/mob"]; //NSLocalizedString(@"Intro", @"How to start")];
+    [resultsView setText: @"Install Rohos Logon Key on your desktop to enable authentication by phone. rohos.com/mob"]; //NSLocalizedString(@"Intro", @"How to start")];
     
     
 }
@@ -389,7 +382,16 @@ AuthRecord* ar = nil;
     return;
     */
     
-    ZXingWidgetController *widController = [[ZXingWidgetController alloc] initWithDelegate:(id)self showCancel:YES OneDMode:NO];
+    BarcodeScannerViewController* scanner = [[BarcodeScannerViewController alloc] init];
+    // scanner.soundToPlay = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource: @"beep-beep" ofType: @"aiff"] isDirectory: NO];
+    
+    [self presentViewController: scanner animated: YES completion:^{
+        
+    }];
+    
+    [scanner release];
+    
+    /*ZXingWidgetController *widController = [[ZXingWidgetController alloc] initWithDelegate:(id)self showCancel:YES OneDMode:NO];
     NSMutableSet *readers = [[NSMutableSet alloc] init];
     QRCodeReader * qrcodeReader = [[QRCodeReader alloc] init];
     [readers addObject:qrcodeReader];
@@ -401,9 +403,10 @@ AuthRecord* ar = nil;
         
     }];
     [widController release];
+    */
     
     /*
-     // testing by image...
+    // testing by image...
     UIImage *image = [UIImage imageNamed:@"qrcode.png"];
     Decoder *decoder = [[Decoder alloc] init];
     decoder.readers = self.qrReader;
