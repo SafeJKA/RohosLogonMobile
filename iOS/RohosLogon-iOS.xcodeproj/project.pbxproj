@@ -7,21 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		175393E524C20A4D00F85CE4 /* MQTTClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 175393DA24C207BB00F85CE4 /* MQTTClient.framework */; };
+		17120D6824C4A1AE00CB46ED /* AuthRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 17120D6624C4A1AE00CB46ED /* AuthRecord.m */; };
 		17DA66261D1A58490031108F /* BluetoothHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DA66251D1A58490031108F /* BluetoothHelper.m */; };
 		17DA66291D1A58A40031108F /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17DA66281D1A58A40031108F /* CoreBluetooth.framework */; };
 		6023CFA216F00CDA009AFE9E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023CFA116F00CDA009AFE9E /* UIKit.framework */; };
 		6023CFA416F00CDA009AFE9E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023CFA316F00CDA009AFE9E /* Foundation.framework */; };
 		6023CFA616F00CDA009AFE9E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023CFA516F00CDA009AFE9E /* CoreGraphics.framework */; };
 		6023CFAC16F00CDA009AFE9E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6023CFAA16F00CDA009AFE9E /* InfoPlist.strings */; };
-		6023CFAE16F00CDA009AFE9E /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6023CFAD16F00CDA009AFE9E /* main.mm */; };
-		6023CFB216F00CDA009AFE9E /* MainAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6023CFB116F00CDA009AFE9E /* MainAppDelegate.mm */; };
+		6023CFAE16F00CDA009AFE9E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6023CFAD16F00CDA009AFE9E /* main.m */; };
+		6023CFB216F00CDA009AFE9E /* MainAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6023CFB116F00CDA009AFE9E /* MainAppDelegate.m */; };
 		6023CFB416F00CDA009AFE9E /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 6023CFB316F00CDA009AFE9E /* Default.png */; };
 		6023CFB616F00CDA009AFE9E /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6023CFB516F00CDA009AFE9E /* Default@2x.png */; };
 		6023CFB816F00CDA009AFE9E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6023CFB716F00CDA009AFE9E /* Default-568h@2x.png */; };
 		6023CFBB16F00CDA009AFE9E /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6023CFB916F00CDA009AFE9E /* MainStoryboard_iPhone.storyboard */; };
 		6023CFBE16F00CDA009AFE9E /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6023CFBC16F00CDA009AFE9E /* MainStoryboard_iPad.storyboard */; };
-		6023CFC116F00CDA009AFE9E /* MainViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6023CFC016F00CDA009AFE9E /* MainViewController.mm */; };
+		6023CFC116F00CDA009AFE9E /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6023CFC016F00CDA009AFE9E /* MainViewController.m */; };
 		6023D1BD16F00EAB009AFE9E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023D1BC16F00EAB009AFE9E /* AVFoundation.framework */; };
 		6023D1BF16F00EAF009AFE9E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023D1BE16F00EAF009AFE9E /* AudioToolbox.framework */; };
 		6023D1C216F00ECC009AFE9E /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023D1C016F00ECC009AFE9E /* CoreMedia.framework */; };
@@ -171,6 +171,7 @@
 		6023D3A816F01C17009AFE9E /* exportList in Resources */ = {isa = PBXBuildFile; fileRef = 6023D30716F01C17009AFE9E /* exportList */; };
 		6023D3B216F01C17009AFE9E /* ZXingTests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6023D31216F01C17009AFE9E /* ZXingTests-Info.plist */; };
 		6023D3BC16F01F55009AFE9E /* beep-beep.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 6023D3BB16F01F55009AFE9E /* beep-beep.aiff */; };
+		A6FD4301F6A39CB8B624B852 /* libPods-Rohos Logon.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4195F85D07726F99392EEA3 /* libPods-Rohos Logon.a */; };
 		FA613E29187D9972005C1F63 /* unlockpc.png in Resources */ = {isa = PBXBuildFile; fileRef = FA613E28187D9972005C1F63 /* unlockpc.png */; };
 		FA613E2C187D9BAF005C1F63 /* icon-57.png in Resources */ = {isa = PBXBuildFile; fileRef = FA613E2B187D9BAF005C1F63 /* icon-57.png */; };
 		FAF0C3BE1882B49500BF7E08 /* icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF0C3BC1882B49500BF7E08 /* icon-120.png */; };
@@ -178,48 +179,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		175393D924C207BB00F85CE4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 175393D024C207BB00F85CE4 /* MQTTClient.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = DE9EF5C51C0628B1009EF667;
-			remoteInfo = MQTTClientiOS;
-		};
-		175393DB24C207BB00F85CE4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 175393D024C207BB00F85CE4 /* MQTTClient.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8404875E1C51212600569C79;
-			remoteInfo = MQTTClientiOSTests;
-		};
-		175393DD24C207BB00F85CE4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 175393D024C207BB00F85CE4 /* MQTTClient.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F6D08FD81E535E9900CD2566;
-			remoteInfo = MQTTClienttvOS;
-		};
-		175393DF24C207BB00F85CE4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 175393D024C207BB00F85CE4 /* MQTTClient.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8425D7011BBE8D3D005AD733;
-			remoteInfo = MQTTClienttvOSTests;
-		};
-		175393E124C207BB00F85CE4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 175393D024C207BB00F85CE4 /* MQTTClient.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F6D08FA41E535B6800CD2566;
-			remoteInfo = MQTTClientmacOS;
-		};
-		175393E324C207BB00F85CE4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 175393D024C207BB00F85CE4 /* MQTTClient.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 840716321BBEF13A00FBB3CB;
-			remoteInfo = MQTTClientmacOSTests;
-		};
 		6023D3B516F01C17009AFE9E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6023D31316F01C17009AFE9E /* ZXingWidget.xcodeproj */;
@@ -244,7 +203,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		175393D024C207BB00F85CE4 /* MQTTClient.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MQTTClient.xcodeproj; path = mqtt/MQTTClient/MQTTClient.xcodeproj; sourceTree = "<group>"; };
+		17120D6624C4A1AE00CB46ED /* AuthRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthRecord.m; sourceTree = "<group>"; };
+		17120D6724C4A1AE00CB46ED /* AuthRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthRecord.h; sourceTree = "<group>"; };
 		17DA66241D1A58490031108F /* BluetoothHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothHelper.h; sourceTree = "<group>"; };
 		17DA66251D1A58490031108F /* BluetoothHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluetoothHelper.m; sourceTree = "<group>"; };
 		17DA66281D1A58A40031108F /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
@@ -254,17 +214,17 @@
 		6023CFA516F00CDA009AFE9E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		6023CFA916F00CDA009AFE9E /* RohosLogon-iOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RohosLogon-iOS-Info.plist"; sourceTree = "<group>"; };
 		6023CFAB16F00CDA009AFE9E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6023CFAD16F00CDA009AFE9E /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		6023CFAD16F00CDA009AFE9E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6023CFAF16F00CDA009AFE9E /* Rohos-Logon-prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Rohos-Logon-prefix.pch"; sourceTree = "<group>"; };
 		6023CFB016F00CDA009AFE9E /* MainAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainAppDelegate.h; sourceTree = "<group>"; };
-		6023CFB116F00CDA009AFE9E /* MainAppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MainAppDelegate.mm; sourceTree = "<group>"; };
+		6023CFB116F00CDA009AFE9E /* MainAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainAppDelegate.m; sourceTree = "<group>"; };
 		6023CFB316F00CDA009AFE9E /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		6023CFB516F00CDA009AFE9E /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		6023CFB716F00CDA009AFE9E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		6023CFBA16F00CDA009AFE9E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		6023CFBD16F00CDA009AFE9E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		6023CFBF16F00CDA009AFE9E /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
-		6023CFC016F00CDA009AFE9E /* MainViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MainViewController.mm; sourceTree = "<group>"; };
+		6023CFC016F00CDA009AFE9E /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		6023D1BC16F00EAB009AFE9E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		6023D1BE16F00EAF009AFE9E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		6023D1C016F00ECC009AFE9E /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -565,6 +525,9 @@
 		6023D31316F01C17009AFE9E /* ZXingWidget.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ZXingWidget.xcodeproj; sourceTree = "<group>"; };
 		6023D31616F01C17009AFE9E /* ZXingWidget_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXingWidget_Prefix.pch; sourceTree = "<group>"; };
 		6023D3BB16F01F55009AFE9E /* beep-beep.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "beep-beep.aiff"; sourceTree = "<group>"; };
+		A4195F85D07726F99392EEA3 /* libPods-Rohos Logon.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Rohos Logon.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E9CC8056D824CA10FDFF9836 /* Pods-Rohos Logon.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Rohos Logon.release.xcconfig"; path = "Target Support Files/Pods-Rohos Logon/Pods-Rohos Logon.release.xcconfig"; sourceTree = "<group>"; };
+		F06EFB34151AA79B24C7EB04 /* Pods-Rohos Logon.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Rohos Logon.debug.xcconfig"; path = "Target Support Files/Pods-Rohos Logon/Pods-Rohos Logon.debug.xcconfig"; sourceTree = "<group>"; };
 		FA613E28187D9972005C1F63 /* unlockpc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unlockpc.png; sourceTree = "<group>"; };
 		FA613E2B187D9BAF005C1F63 /* icon-57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-57.png"; sourceTree = "<group>"; };
 		FAF0C3BC1882B49500BF7E08 /* icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-120.png"; sourceTree = "<group>"; };
@@ -576,7 +539,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				175393E524C20A4D00F85CE4 /* MQTTClient.framework in Frameworks */,
 				17DA66291D1A58A40031108F /* CoreBluetooth.framework in Frameworks */,
 				6023D1C916F00F01009AFE9E /* libiconv.dylib in Frameworks */,
 				6023D1C616F00ED9009AFE9E /* AddressBook.framework in Frameworks */,
@@ -588,42 +550,31 @@
 				6023CFA216F00CDA009AFE9E /* UIKit.framework in Frameworks */,
 				6023CFA416F00CDA009AFE9E /* Foundation.framework in Frameworks */,
 				6023CFA616F00CDA009AFE9E /* CoreGraphics.framework in Frameworks */,
+				A6FD4301F6A39CB8B624B852 /* libPods-Rohos Logon.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		175393CF24C2079F00F85CE4 /* mqtt */ = {
+		0C2DCBC68861E08ED5096755 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				175393D024C207BB00F85CE4 /* MQTTClient.xcodeproj */,
+				F06EFB34151AA79B24C7EB04 /* Pods-Rohos Logon.debug.xcconfig */,
+				E9CC8056D824CA10FDFF9836 /* Pods-Rohos Logon.release.xcconfig */,
 			);
-			name = mqtt;
-			sourceTree = "<group>";
-		};
-		175393D124C207BB00F85CE4 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				175393DA24C207BB00F85CE4 /* MQTTClient.framework */,
-				175393DC24C207BB00F85CE4 /* MQTTClientiOSTests.xctest */,
-				175393DE24C207BB00F85CE4 /* MQTTClient.framework */,
-				175393E024C207BB00F85CE4 /* MQTTClienttvOSTests.xctest */,
-				175393E224C207BB00F85CE4 /* MQTTClient.framework */,
-				175393E424C207BB00F85CE4 /* MQTTClientmacOSTests.xctest */,
-			);
-			name = Products;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		6023CF9516F00CDA009AFE9E = {
 			isa = PBXGroup;
 			children = (
 				FA0A29BB187F49EE00001D2A /* iPad */,
-				175393CF24C2079F00F85CE4 /* mqtt */,
 				6023D1CF16F01C16009AFE9E /* zxing */,
 				6023CFA716F00CDA009AFE9E /* RohosLogon-iOS */,
 				6023CFA016F00CDA009AFE9E /* Frameworks */,
 				6023CF9F16F00CDA009AFE9E /* Products */,
+				0C2DCBC68861E08ED5096755 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -649,6 +600,7 @@
 				6023CFA116F00CDA009AFE9E /* UIKit.framework */,
 				6023CFA316F00CDA009AFE9E /* Foundation.framework */,
 				6023CFA516F00CDA009AFE9E /* CoreGraphics.framework */,
+				A4195F85D07726F99392EEA3 /* libPods-Rohos Logon.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -656,14 +608,16 @@
 		6023CFA716F00CDA009AFE9E /* RohosLogon-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				17120D6724C4A1AE00CB46ED /* AuthRecord.h */,
+				17120D6624C4A1AE00CB46ED /* AuthRecord.m */,
 				17DA66241D1A58490031108F /* BluetoothHelper.h */,
 				17DA66251D1A58490031108F /* BluetoothHelper.m */,
 				6023CFB016F00CDA009AFE9E /* MainAppDelegate.h */,
-				6023CFB116F00CDA009AFE9E /* MainAppDelegate.mm */,
+				6023CFB116F00CDA009AFE9E /* MainAppDelegate.m */,
 				6023CFB916F00CDA009AFE9E /* MainStoryboard_iPhone.storyboard */,
 				6023CFBC16F00CDA009AFE9E /* MainStoryboard_iPad.storyboard */,
 				6023CFBF16F00CDA009AFE9E /* MainViewController.h */,
-				6023CFC016F00CDA009AFE9E /* MainViewController.mm */,
+				6023CFC016F00CDA009AFE9E /* MainViewController.m */,
 				6023CFA816F00CDA009AFE9E /* Supporting Files */,
 			);
 			path = "RohosLogon-iOS";
@@ -678,7 +632,7 @@
 				FA613E28187D9972005C1F63 /* unlockpc.png */,
 				6023CFA916F00CDA009AFE9E /* RohosLogon-iOS-Info.plist */,
 				6023CFAA16F00CDA009AFE9E /* InfoPlist.strings */,
-				6023CFAD16F00CDA009AFE9E /* main.mm */,
+				6023CFAD16F00CDA009AFE9E /* main.m */,
 				6023CFAF16F00CDA009AFE9E /* Rohos-Logon-prefix.pch */,
 				6023CFB316F00CDA009AFE9E /* Default.png */,
 				6023CFB516F00CDA009AFE9E /* Default@2x.png */,
@@ -1226,6 +1180,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6023CFC416F00CDA009AFE9E /* Build configuration list for PBXNativeTarget "Rohos Logon" */;
 			buildPhases = (
+				E525794FB7DE567DB4A24EF2 /* [CP] Check Pods Manifest.lock */,
 				6023CF9A16F00CDA009AFE9E /* Sources */,
 				6023CF9B16F00CDA009AFE9E /* Frameworks */,
 				6023CF9C16F00CDA009AFE9E /* Resources */,
@@ -1263,10 +1218,6 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 175393D124C207BB00F85CE4 /* Products */;
-					ProjectRef = 175393D024C207BB00F85CE4 /* MQTTClient.xcodeproj */;
-				},
-				{
 					ProductGroup = 6023D31416F01C17009AFE9E /* Products */;
 					ProjectRef = 6023D31316F01C17009AFE9E /* ZXingWidget.xcodeproj */;
 				},
@@ -1279,48 +1230,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		175393DA24C207BB00F85CE4 /* MQTTClient.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = MQTTClient.framework;
-			remoteRef = 175393D924C207BB00F85CE4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		175393DC24C207BB00F85CE4 /* MQTTClientiOSTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = MQTTClientiOSTests.xctest;
-			remoteRef = 175393DB24C207BB00F85CE4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		175393DE24C207BB00F85CE4 /* MQTTClient.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = MQTTClient.framework;
-			remoteRef = 175393DD24C207BB00F85CE4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		175393E024C207BB00F85CE4 /* MQTTClienttvOSTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = MQTTClienttvOSTests.xctest;
-			remoteRef = 175393DF24C207BB00F85CE4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		175393E224C207BB00F85CE4 /* MQTTClient.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = MQTTClient.framework;
-			remoteRef = 175393E124C207BB00F85CE4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		175393E424C207BB00F85CE4 /* MQTTClientmacOSTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = MQTTClientmacOSTests.xctest;
-			remoteRef = 175393E324C207BB00F85CE4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		6023D3B616F01C17009AFE9E /* libZXingWidget.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1361,14 +1270,39 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		E525794FB7DE567DB4A24EF2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Rohos Logon-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		6023CF9A16F00CDA009AFE9E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6023CFAE16F00CDA009AFE9E /* main.mm in Sources */,
-				6023CFB216F00CDA009AFE9E /* MainAppDelegate.mm in Sources */,
-				6023CFC116F00CDA009AFE9E /* MainViewController.mm in Sources */,
+				6023CFAE16F00CDA009AFE9E /* main.m in Sources */,
+				6023CFB216F00CDA009AFE9E /* MainAppDelegate.m in Sources */,
+				6023CFC116F00CDA009AFE9E /* MainViewController.m in Sources */,
 				6023D31B16F01C17009AFE9E /* AztecDetectorResult.cpp in Sources */,
 				6023D31C16F01C17009AFE9E /* AztecReader.cpp in Sources */,
 				6023D31D16F01C17009AFE9E /* Decoder.cpp in Sources */,
@@ -1439,6 +1373,7 @@
 				17DA66261D1A58490031108F /* BluetoothHelper.m in Sources */,
 				6023D35E16F01C17009AFE9E /* DataMask.cpp in Sources */,
 				6023D35F16F01C17009AFE9E /* DecodedBitStreamParser.cpp in Sources */,
+				17120D6824C4A1AE00CB46ED /* AuthRecord.m in Sources */,
 				6023D36016F01C17009AFE9E /* Decoder.cpp in Sources */,
 				6023D36116F01C17009AFE9E /* Mode.cpp in Sources */,
 				6023D36216F01C17009AFE9E /* AlignmentPattern.cpp in Sources */,
@@ -1594,7 +1529,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = mqtt/MQTTClient/MQTTClient;
+				HEADER_SEARCH_PATHS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "60eab31f-aa92-449a-ba09-ee560fbf9b7d";
@@ -1641,7 +1576,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = mqtt/MQTTClient/MQTTClient;
+				HEADER_SEARCH_PATHS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "0c7e2611-c356-48c3-a859-3ddff1176439";
@@ -1654,12 +1589,15 @@
 		};
 		6023CFC516F00CDA009AFE9E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F06EFB34151AA79B24C7EB04 /* Pods-Rohos Logon.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Alexander Shilonosov (65TB5BVP37)";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1.2.0;
 				DEVELOPMENT_TEAM = 5BSEC579P8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1669,11 +1607,12 @@
 				GCC_PREFIX_HEADER = "RohosLogon-iOS/Rohos-Logon-prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"./zxing/iphone/ZXingWidget/Classes/**",
+					"./Pods/**",
 					./zxing/cpp/core/src,
-					"mqtt/MQTTClient/**",
 				);
 				INFOPLIST_FILE = "RohosLogon-iOS/RohosLogon-iOS-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tesline.Rohos-logon";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "60eab31f-aa92-449a-ba09-ee560fbf9b7d";
@@ -1686,12 +1625,15 @@
 		};
 		6023CFC616F00CDA009AFE9E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E9CC8056D824CA10FDFF9836 /* Pods-Rohos Logon.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Tesline-Service s.r.l. (5BSEC579P8)";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1.2.0;
 				DEVELOPMENT_TEAM = 5BSEC579P8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1701,11 +1643,12 @@
 				GCC_PREFIX_HEADER = "RohosLogon-iOS/Rohos-Logon-prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"./zxing/iphone/ZXingWidget/Classes/**",
+					"./Pods/**",
 					./zxing/cpp/core/src,
-					"mqtt/MQTTClient/**",
 				);
 				INFOPLIST_FILE = "RohosLogon-iOS/RohosLogon-iOS-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tesline.Rohos-logon";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "0c7e2611-c356-48c3-a859-3ddff1176439";

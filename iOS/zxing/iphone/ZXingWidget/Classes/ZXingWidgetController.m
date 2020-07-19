@@ -302,8 +302,7 @@
 #pragma mark - 
 #pragma mark AVFoundation
 
-#include <sys/types.h>
-#include <sys/sysctl.h>
+
 
 // Gross, I know. But you can't use the device idiom because it's not iPad when running
 // in zoomed iphone mode but the camera still acts like an ipad.

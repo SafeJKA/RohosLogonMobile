@@ -1,0 +1,3 @@
+target 'Rohos Logon' do
+  pod 'MQTTClient'
+end
