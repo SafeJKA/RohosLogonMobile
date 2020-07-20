@@ -199,13 +199,13 @@ AuthRecord* ar = nil;
         if (error == nil)
         {
             // Publish string
-            [mQttSession publishData: [r.authSignalString dataUsingEncoding: NSUTF8StringEncoding]
-                             onTopic: r.hostName
-                              retain: YES
-                                 qos: MQTTQosLevelAtMostOnce
-                      publishHandler: ^(NSError* error) {
-                                        if (error)
-                                            NSLog(@"%@", error);
+            [self->mQttSession publishData: [r.authSignalString dataUsingEncoding: NSUTF8StringEncoding]
+                                   onTopic: r.hostName
+                                    retain: YES
+                                       qos: MQTTQosLevelAtMostOnce
+                            publishHandler: ^(NSError* error) {
+                                                if (error)
+                                                    NSLog(@"%@", error);
             }];
         }
         else
