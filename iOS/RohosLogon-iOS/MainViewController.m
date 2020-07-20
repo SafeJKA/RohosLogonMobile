@@ -382,37 +382,13 @@ AuthRecord* ar = nil;
     return;
     */
     
-    BarcodeScannerViewController* scanner = [[BarcodeScannerViewController alloc] init];
-    // scanner.soundToPlay = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource: @"beep-beep" ofType: @"aiff"] isDirectory: NO];
+    BarcodeScannerViewController* scanner = [[BarcodeScannerViewController alloc] initWithNibName: @"BarcodeScanner" bundle:[NSBundle mainBundle]];
+    scanner.delegate = self;
     
     [self presentViewController: scanner animated: YES completion:^{
         
     }];
-    
     [scanner release];
-    
-    /*ZXingWidgetController *widController = [[ZXingWidgetController alloc] initWithDelegate:(id)self showCancel:YES OneDMode:NO];
-    NSMutableSet *readers = [[NSMutableSet alloc] init];
-    QRCodeReader * qrcodeReader = [[QRCodeReader alloc] init];
-    [readers addObject:qrcodeReader];
-    [qrcodeReader release];
-    widController.readers = readers;
-    [readers release];
-    widController.soundToPlay = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"beep-beep" ofType:@"aiff"] isDirectory:NO];
-    [self presentViewController:widController animated:YES completion:^{
-        
-    }];
-    [widController release];
-    */
-    
-    /*
-    // testing by image...
-    UIImage *image = [UIImage imageNamed:@"qrcode.png"];
-    Decoder *decoder = [[Decoder alloc] init];
-    decoder.readers = self.qrReader;
-    decoder.delegate = (id)self;
-    [decoder decodeImage:image];
-     */
 }
 
 /*
@@ -431,7 +407,6 @@ AuthRecord* ar = nil;
     NSURL *url = [NSURL URLWithString:strUri];
     
     ar.userName = @""; //
-    
     
     NSLog(@"scheme: %@", [url scheme]);
     NSLog(@"host: %@", [url host]);
@@ -466,11 +441,11 @@ AuthRecord* ar = nil;
     ar.secretKey = [params objectForKey:@"KEY"];
     ar.data = [params objectForKey:@"DATA"];
     
-    [resultsView setText:[NSString stringWithFormat:@"Auth data : %@", ar.hostName ]];
+    [resultsView setText: [NSString stringWithFormat:@"Auth data : %@", ar.hostName ]];
     
-    [self saveAuthRecord:&ar];
+    [self saveAuthRecord: ar];
     [self refreshAuthRecordsList];
-    [self sendSignalUpdateUI:&ar];
+    [self sendSignalUpdateUI: ar];
     
     
     return;
@@ -480,49 +455,25 @@ AuthRecord* ar = nil;
 
 // ZXing returns here
 //
-- (void)zxingController:(ZXingWidgetController *)controller didScanResult:(NSString *)result
+- (void)onScanWithResult:(NSString *)data error:(NSError *)error
 {
-    self.resultsToDisplay = result;
-    if (self.isViewLoaded) {
-        [resultsView setText:resultsToDisplay];
-        [resultsView setNeedsDisplay];
-        [self parseUriString:result];
+    if (!error && data)
+    {
+        self.resultsToDisplay = data;
+        if (self.isViewLoaded)
+        {
+            [resultsView setText: resultsToDisplay];
+            [resultsView setNeedsDisplay];
+            [self parseUriString: data];
+        }
     }
-    [self dismissViewControllerAnimated:NO completion:^{
-        
-    }];
-}
-
-
-- (void)zxingControllerDidCancel:(ZXingWidgetController *)controller
-{
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
-}
-
-- (void)decoder:(Decoder *)decoder willDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset
-{
     
-}
-- (void)decoder:(Decoder *)decoder didDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset withResult:(TwoDDecoderResult *)result
-{
-   /* NSLog(@"result = %@", [result text]);
-    [resultsView setText:[result text]];
-    [resultsView setNeedsDisplay];*/
+    // Barcode scanner view controller will be dismissed after return from this method
+    //[self dismissViewControllerAnimated: NO completion:^{
+    //
+    //}];
 }
 
-- (void)decoder:(Decoder *)decoder failedToDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset reason:(NSString *)reason
-{
-    NSLog(@"%@", @"Failed to decode image!");
-    [resultsView setText:[NSString stringWithFormat:@"Failed to decode QR-Code: %@", reason]];
-    
-}
-
-- (void)decoder:(Decoder *)decoder foundPossibleResultPoint:(CGPoint)point
-{
-    
-}
 
 /*
  TableView interface
@@ -556,23 +507,23 @@ AuthRecord* ar = nil;
     
    // UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
     
-    [self sendSignalForRecord: indexPath.row];
+    [self sendSignalForRecord: (int)indexPath.row];
 }
 
 - (void)onCentralManagerInit:(NSError *)error
 {
   if (error)
-    NSLog(@"BT init & discovery error: %@", [error localizedDescription]);
+      NSLog(@"BT init & discovery error: %@", [error localizedDescription]);
   else
   if (mBluetoothSendData)
-    [mBluetooth sendData: mBluetoothSendData];
+      [mBluetooth sendData: mBluetoothSendData];
 }
 
 - (void)onDataSent:(NSError *)error
 {
   // Silence all errors for now. But dump to console.
   if (error)
-    NSLog(@"BT send error: %@", [error localizedDescription]);
+      NSLog(@"BT send error: %@", [error localizedDescription]);
 }
 
 @end

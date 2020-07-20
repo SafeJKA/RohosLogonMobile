@@ -8,59 +8,43 @@
     AVCaptureDeviceInput *_input;
     AVCaptureMetadataOutput *_output;
     AVCaptureVideoPreviewLayer *_prevLayer;
-
-    UIView *_highlightView;
-    UILabel *_label;
+    
+    IBOutlet UIView* mPreview;
 }
 @end
 
 @implementation BarcodeScannerViewController
 
+@synthesize delegate;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    _highlightView = [[UIView alloc] init];
-    _highlightView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleBottomMargin;
-    _highlightView.layer.borderColor = [UIColor greenColor].CGColor;
-    _highlightView.layer.borderWidth = 3;
-    [self.view addSubview:_highlightView];
-
-    _label = [[UILabel alloc] init];
-    _label.frame = CGRectMake(0, self.view.bounds.size.height - 40, self.view.bounds.size.width, 40);
-    _label.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    _label.backgroundColor = [UIColor colorWithWhite:0.15 alpha:0.65];
-    _label.textColor = [UIColor whiteColor];
-    _label.textAlignment = NSTextAlignmentCenter;
-    _label.text = @"(none)";
-    [self.view addSubview:_label];
-
     _session = [[AVCaptureSession alloc] init];
-    _device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    _device = [AVCaptureDevice defaultDeviceWithMediaType: AVMediaTypeVideo];
     NSError *error = nil;
 
-    _input = [AVCaptureDeviceInput deviceInputWithDevice:_device error:&error];
+    _input = [AVCaptureDeviceInput deviceInputWithDevice: _device error: &error];
     if (_input) {
-        [_session addInput:_input];
+        [_session addInput: _input];
     } else {
         NSLog(@"Error: %@", error);
     }
 
     _output = [[AVCaptureMetadataOutput alloc] init];
-    [_output setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
-    [_session addOutput:_output];
+    [_output setMetadataObjectsDelegate: self queue: dispatch_get_main_queue()];
+    [_session addOutput: _output];
 
     _output.metadataObjectTypes = [_output availableMetadataObjectTypes];
 
-    _prevLayer = [AVCaptureVideoPreviewLayer layerWithSession:_session];
-    _prevLayer.frame = self.view.bounds;
+    _prevLayer = [AVCaptureVideoPreviewLayer layerWithSession: _session];
+    _prevLayer.frame = mPreview.bounds;
     _prevLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-    [self.view.layer addSublayer:_prevLayer];
+    [mPreview.layer addSublayer: _prevLayer];
 
     [_session startRunning];
 
-    [self.view bringSubviewToFront: _highlightView];
-    [self.view bringSubviewToFront: _label];
 }
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection
@@ -85,14 +69,29 @@
 
         if (detectionString != nil)
         {
-            _label.text = detectionString;
+            //_label.text = detectionString;
+            // Found !
+            if (self.delegate)
+                [self.delegate onScanWithResult: detectionString error: nil];
+            
+            [self dismissViewControllerAnimated: YES completion:^{
+                ;
+            }];
+            
             break;
         }
-        else
-            _label.text = @"(none)";
+
     }
 
-    _highlightView.frame = highlightViewRect;
 }
 
+- (IBAction)onCancel:(id)sender
+{
+    if (self.delegate)
+        [self.delegate onScanWithResult: nil error: nil];
+    [self dismissViewControllerAnimated: YES
+                             completion:^{
+        
+    }];
+}
 @end
