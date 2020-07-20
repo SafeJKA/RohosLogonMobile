@@ -23,7 +23,7 @@
 - (void)dealloc
 {
   [self stop];
-  [super dealloc];
+  //[super dealloc];
 }
 
 - (void)start
@@ -38,9 +38,9 @@
 - (void)stop
 {
   [self cleanup];
-  [mDiscoveredCharacteristics release]; mDiscoveredCharacteristics = nil;
-  [mDiscoveredPeripheral release]; mDiscoveredPeripheral = nil;
-  [mCentralManager release]; mCentralManager = nil;
+  mDiscoveredCharacteristics = nil;
+  mDiscoveredPeripheral = nil;
+  mCentralManager = nil;
 }
 
 - (void)sendData: (NSData*)data
@@ -89,8 +89,7 @@
   
   if (mDiscoveredPeripheral != peripheral) {
     // Save a local copy of the peripheral, so CoreBluetooth doesn't get rid of it
-    [mDiscoveredPeripheral release];
-    mDiscoveredPeripheral = [peripheral retain];
+    mDiscoveredPeripheral = peripheral;
     
     // And connect
     NSLog(@"Connecting to peripheral %@", peripheral);
@@ -156,8 +155,7 @@
   {
     if ([characteristic.UUID isEqual: [CBUUID UUIDWithString: ROHOS_DATA_CHARACTERISTICS]])
     {
-      [mDiscoveredCharacteristics release];
-      mDiscoveredCharacteristics = [characteristic retain];
+      mDiscoveredCharacteristics = characteristic;
       
       NSLog(@"Found target data characteristics %@", [characteristic.UUID UUIDString]);
       
@@ -196,7 +194,7 @@
     [mCentralManager cancelPeripheralConnection: peripheral];
   }
   
-  [stringFromData release];
+  //[stringFromData release];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
@@ -216,8 +214,8 @@
 
 - (void)centralManager: (CBCentralManager*)central didDisconnectPeripheral: (CBPeripheral*)peripheral error: (NSError*)error
 {
-  [mDiscoveredPeripheral release]; mDiscoveredPeripheral = nil;
-  [mDiscoveredCharacteristics release]; mDiscoveredCharacteristics = nil;
+  mDiscoveredPeripheral = nil;
+  mDiscoveredCharacteristics = nil;
   [self cleanup];
   return;
   
@@ -277,7 +275,7 @@
 - (void)dealloc
 {
   [self stop];
-  [super dealloc];
+  //[super dealloc];
 }
 
 - (void)start
@@ -291,8 +289,8 @@
 
 - (void)stop
 {
-  [mPeripheralManager release]; mPeripheralManager = nil;
-  [mTransferCharacteristic release]; mTransferCharacteristic = nil;
+  mPeripheralManager = nil;
+  mTransferCharacteristic = nil;
 }
 
 - (void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheral

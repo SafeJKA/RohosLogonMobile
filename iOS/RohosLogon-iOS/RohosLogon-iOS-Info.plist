@@ -35,6 +35,8 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Rohos uses bluetooth to send authentication data.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Rohos uses bluetooth to send authentication data.</string>
 	<key>NSCameraUsageDescription</key>

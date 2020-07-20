@@ -9,7 +9,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <ZXingWidgetController.h>
 #import "BluetoothHelper.h"
 #import "BarcodeScanner.h"
 

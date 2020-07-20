@@ -40,8 +40,9 @@ AuthRecord* ar = nil;
 
 @implementation MainViewController
 {
-  BluetoothCentral* mBluetooth;
-  NSData* mBluetoothSendData;
+    BluetoothCentral* mBluetooth;
+    NSData* mBluetoothSendData;
+    MQTTSession* mQttSession;
 }
 
 @synthesize resultsView;
@@ -68,14 +69,12 @@ AuthRecord* ar = nil;
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget: self
                                                                                 action: @selector(learnMoreSingleTapRecognized:)];
     singleTap.numberOfTapsRequired = 1;
-    [resultsView addGestureRecognizer:singleTap];
-    [singleTap release];
+    [resultsView addGestureRecognizer: singleTap];
     
-    singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(learnMoreSingleTapRecognized:)];
+    singleTap = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                        action: @selector(learnMoreSingleTapRecognized:)];
     singleTap.numberOfTapsRequired = 1;
-    [bigLogoView addGestureRecognizer:singleTap];
-    [singleTap release];
-    
+    [bigLogoView addGestureRecognizer: singleTap];
     
     // the mutalbe array of all debts
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
@@ -94,16 +93,18 @@ AuthRecord* ar = nil;
     mBluetooth.delegate = self;
 }
 
+/*
 - (void)dealloc
 {
   [mBluetoothSendData release]; mBluetoothSendData = nil;
   [mBluetooth release]; mBluetooth = nil;
   [super dealloc];
 }
+*/
 
 - (void)learnMoreSingleTapRecognized:(UIGestureRecognizer *)gestureRecognizer
 {
-    [[UIApplication sharedApplication] openURL: [NSURL URLWithString:@"http://rohos.com/mob"] options: @{} completionHandler: nil];
+    [[UIApplication sharedApplication] openURL: [NSURL URLWithString: @"http://rohos.com/mob"] options: @{} completionHandler: nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -184,27 +185,31 @@ AuthRecord* ar = nil;
 
 - (int)sendMQTTPacket: (AuthRecord*)r
 {
-    MQTTCFSocketTransport *transport = [[[MQTTCFSocketTransport alloc] init] autorelease];
+    MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
     transport.host = @"node02.myqtthub.com";
     transport.port = 1883;
     
-    MQTTSession *session = [[[MQTTSession alloc] init] autorelease];
-    session.transport = transport;
-    [session retain];
-    [session connectWithConnectHandler:^(NSError *error) {
+    mQttSession = [[MQTTSession alloc] init];
+    mQttSession.transport = transport;
+    mQttSession.userName = @"rohos";
+    mQttSession.password = @"fZ7Vq93BuWLx";
+    mQttSession.clientId = @"rohos.logon";
+    
+    [mQttSession connectWithConnectHandler:^(NSError *error) {
         if (error == nil)
         {
             // Publish string
-            [session publishData: [r.authSignalString dataUsingEncoding: NSUTF8StringEncoding]
-                         onTopic: @"rohos.logon"
-                          retain: YES
-                             qos: MQTTQosLevelAtMostOnce
-                  publishHandler: ^(NSError* error) {
-                                    if (error)
-                                        NSLog(@"%@", error);
-                                    [session release];
+            [mQttSession publishData: [r.authSignalString dataUsingEncoding: NSUTF8StringEncoding]
+                             onTopic: r.hostName
+                              retain: YES
+                                 qos: MQTTQosLevelAtMostOnce
+                      publishHandler: ^(NSError* error) {
+                                        if (error)
+                                            NSLog(@"%@", error);
             }];
         }
+        else
+            NSLog(@"MQTT connection error: %@", error);
     }];
     
     r.serverReplyStr = @"Authentication signal has been sent!";
@@ -342,8 +347,8 @@ AuthRecord* ar = nil;
         [mBluetooth sendData: [ar.serverReplyStr dataUsingEncoding: NSUTF8StringEncoding]];
     else
     {
-        [mBluetoothSendData release];
-        mBluetoothSendData = [[ar.serverReplyStr dataUsingEncoding: NSUTF8StringEncoding] retain];
+        // [mBluetoothSendData release];
+        mBluetoothSendData = [ar.serverReplyStr dataUsingEncoding: NSUTF8StringEncoding];
         [mBluetooth start];
         // Logic continues in onCentralManagerInit handler
     }
@@ -388,7 +393,7 @@ AuthRecord* ar = nil;
     [self presentViewController: scanner animated: YES completion:^{
         
     }];
-    [scanner release];
+    
 }
 
 /*
@@ -423,8 +428,8 @@ AuthRecord* ar = nil;
     }
     
     ar.hostPort = [[url port] intValue];
-    ar.hostName = [[NSString stringWithString:[[url path] substringFromIndex:1]] retain];
-    ar.hostIP = [[NSString stringWithString:[url host]] retain];
+    ar.hostName = [NSString stringWithString: [[url path] substringFromIndex:1]];
+    ar.hostIP = [NSString stringWithString: [url host]];
     
     NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
     for (NSString *param in [[url query] componentsSeparatedByString:@"&"])
