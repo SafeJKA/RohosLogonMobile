@@ -424,7 +424,7 @@ AuthRecord* ar = nil;
     strUri = [strUri stringByReplacingOccurrencesOfString: @" " withString: @"%20"];
     NSURL *url = [NSURL URLWithString:strUri];
     
-    ar.userName = @""; //
+    ar.userName = @"";
     
     NSLog(@"scheme: %@", [url scheme]);
     NSLog(@"host: %@", [url host]);
