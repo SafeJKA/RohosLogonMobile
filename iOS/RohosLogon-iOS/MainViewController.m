@@ -49,9 +49,9 @@ AuthRecord* ar = nil;
 @synthesize tableView;
 @synthesize recordsView;
 @synthesize bigLogoView;
-
 @synthesize resultsToDisplay;
-
+@synthesize errorLabel;
+@synthesize loadingView;
 
 - (void)viewDidLoad
 {
@@ -185,6 +185,11 @@ AuthRecord* ar = nil;
 
 - (int)sendMQTTPacket: (AuthRecord*)r
 {
+    // Show loading indicator
+    //self.loadingView.hidden = NO;
+    self.errorLabel.hidden = YES;
+    
+    // Configure location
     MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
     transport.host = @"node02.myqtthub.com";
     transport.port = 1883;
@@ -201,15 +206,24 @@ AuthRecord* ar = nil;
             // Publish string
             [self->mQttSession publishData: [r.authSignalString dataUsingEncoding: NSUTF8StringEncoding]
                                    onTopic: r.hostName
-                                    retain: YES
+                                    retain: NO
                                        qos: MQTTQosLevelAtMostOnce
                             publishHandler: ^(NSError* error) {
                                                 if (error)
-                                                    NSLog(@"%@", error);
+                                                {
+                                                    self.errorLabel.text = error.description;
+                                                }
+                                                //self.loadingView.hidden = YES;
             }];
         }
         else
+        {
+            self.errorLabel.text = error.description;
+            self.errorLabel.hidden = NO;
+            //self.loadingView.hidden = YES;
+            
             NSLog(@"MQTT connection error: %@", error);
+        }
     }];
     
     r.serverReplyStr = @"Authentication signal has been sent!";
@@ -402,8 +416,9 @@ AuthRecord* ar = nil;
  URL example: rohos1://192.168.2.106:1205/insp?USER=Jane(KEY=0be5a4cc7508b9e9edd99cedd04a7e6d15b87faf(DATA=74bf9bfe531a52da3615255185aa2e9268bca0fda5498908e49e02ccbc63aee30de1a9cbc3d0ac739b715a1a4cfb63b4db1832384718c5e3ae3abbe77b6daf18
  
 */
-- (void)parseUriString:(NSString*)strUri
+- (void)parseUriString: (NSString*)strUri
 {
+    NSLog(@"URI string: %@", strUri);
     // replace all '(' with '&' - thats a trick for android.
     strUri = [strUri stringByReplacingOccurrencesOfString:@"(" withString:@"&"];
   
