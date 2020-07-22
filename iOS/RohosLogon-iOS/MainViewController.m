@@ -51,7 +51,7 @@ AuthRecord* ar = nil;
 @synthesize bigLogoView;
 @synthesize resultsToDisplay;
 @synthesize errorLabel;
-@synthesize loadingView;
+
 
 - (void)viewDidLoad
 {
@@ -186,8 +186,8 @@ AuthRecord* ar = nil;
 - (int)sendMQTTPacket: (AuthRecord*)r
 {
     // Show loading indicator
-    //self.loadingView.hidden = NO;
     self.errorLabel.hidden = YES;
+    self.errorLabel.text = @"";
     
     // Configure location
     MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
@@ -197,7 +197,7 @@ AuthRecord* ar = nil;
     mQttSession = [[MQTTSession alloc] init];
     mQttSession.transport = transport;
     mQttSession.userName = @"rohos";
-    mQttSession.password = @"fZ7Vq93BuWLx";
+    mQttSession.password = @"PASSWORD SHOULD BE HERE";
     mQttSession.clientId = @"rohos.logon";
     
     [mQttSession connectWithConnectHandler:^(NSError *error) {
@@ -213,14 +213,12 @@ AuthRecord* ar = nil;
                                                 {
                                                     self.errorLabel.text = error.description;
                                                 }
-                                                //self.loadingView.hidden = YES;
             }];
         }
         else
         {
             self.errorLabel.text = error.description;
             self.errorLabel.hidden = NO;
-            //self.loadingView.hidden = YES;
             
             NSLog(@"MQTT connection error: %@", error);
         }
@@ -443,7 +441,7 @@ AuthRecord* ar = nil;
     }
     
     ar.hostPort = [[url port] intValue];
-    ar.hostName = [NSString stringWithString: [[url path] substringFromIndex:1]];
+    ar.hostName = [NSString stringWithFormat: @"/%@", [[url path] substringFromIndex:1]];
     ar.hostIP = [NSString stringWithString: [url host]];
     
     NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
@@ -457,9 +455,9 @@ AuthRecord* ar = nil;
       [params setObject: value  forKey: elts[0]];
     }
     
-    ar.userName = [params objectForKey:@"USER"];
-    ar.secretKey = [params objectForKey:@"KEY"];
-    ar.data = [params objectForKey:@"DATA"];
+    ar.userName = params[@"USER"];
+    ar.secretKey = params[@"KEY"];
+    ar.data = params[@"DATA"];
     
     [resultsView setText: [NSString stringWithFormat:@"Auth data : %@", ar.hostName ]];
     

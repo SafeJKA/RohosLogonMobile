@@ -106,10 +106,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="hpZ-bm-heX">
-                                <rect key="frame" x="28" y="142" width="318" height="3"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </progressView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -130,7 +126,6 @@
                     <connections>
                         <outlet property="bigLogoView" destination="n3x-Vy-iaG" id="oPa-od-6kW"/>
                         <outlet property="errorLabel" destination="dbr-Jy-7Av" id="QVH-pJ-v1O"/>
-                        <outlet property="loadingView" destination="hpZ-bm-heX" id="vcb-UY-WP9"/>
                         <outlet property="recordsView" destination="Zvq-wA-IZa" id="76g-JT-ajd"/>
                         <outlet property="resultsView" destination="agg-ih-oYm" id="RaW-dw-7tS"/>
                         <outlet property="tableView" destination="Gto-P7-HOH" id="x4u-QZ-mZ5"/>

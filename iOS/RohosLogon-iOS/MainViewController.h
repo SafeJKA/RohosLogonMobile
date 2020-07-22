@@ -33,7 +33,6 @@
 @property (retain, nonatomic) IBOutlet UITableView *tableView;
 @property (retain, nonatomic) IBOutlet UIImageView *bigLogoView;
 @property (retain, nonatomic) IBOutlet UILabel* errorLabel;
-@property (retain, nonatomic) IBOutlet UIProgressView* loadingView;
 
 @property (nonatomic, copy) NSString *resultsToDisplay;
 
