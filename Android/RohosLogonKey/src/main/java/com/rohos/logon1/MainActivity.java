@@ -34,10 +34,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 
@@ -96,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.scan_barcode).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                scanBarcode();
+                scanBarcode2();
             }
         });
 
@@ -279,7 +283,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void scanBarcode() {
-
         Intent intentScan = new Intent("com.google.zxing.client.android.SCAN");
         intentScan.putExtra("SCAN_MODE", "QR_CODE_MODE");
         intentScan.putExtra("SAVE_HISTORY", false);
@@ -289,6 +292,12 @@ public class MainActivity extends AppCompatActivity {
             // Log.e(TAG, Log.getStackTraceString(e));
             showDialog(0);
         }
+    }
+
+    private void scanBarcode2() {
+        new IntentIntegrator(this)
+                .setOrientationLocked(false)
+                .initiateScan();
     }
 
     private void fillAboutTextView() {
@@ -317,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (ACTION_SCAN_BARCODE.equals(action)) {
-            scanBarcode();
+            scanBarcode2();
         } else if (intent.getData() != null) {
             interpretScanResult(intent.getData(), true);
         }
@@ -327,14 +336,35 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         //Log.i(getString(R.string.app_name), LOCAL_TAG + ": onActivityResult");
-        if (requestCode == SCAN_REQUEST && resultCode == Activity.RESULT_OK) {
+        /* if (requestCode == SCAN_REQUEST && resultCode == Activity.RESULT_OK) {
             // Grab the scan results and convert it into a URI
             String scanResult = (intent != null) ? intent.getStringExtra("SCAN_RESULT") : null;
             Uri uri = (scanResult != null) ? Uri.parse(scanResult) : null;
             if (uri != null) {
                 interpretScanResult(uri, false);
             }
+        }*/
+
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                try {
+                    Uri uri = Uri.parse(result.getContents());
+                    if (uri != null) {
+                        interpretScanResult(uri, false);
+                    }
+                }
+                catch(Exception e) {
+
+                }
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, intent);
         }
+
     }
 
     @Override

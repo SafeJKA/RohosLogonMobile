@@ -27,8 +27,8 @@ public class ScreenStateReceiver extends BroadcastReceiver {
 		}else if(action.equals(Intent.ACTION_SCREEN_ON)){
 			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
             if(sp.getBoolean("unlock_on_table", true)){
-
-                context.startService(new Intent(context, DetectMovementService.class));
+				// This does not work in latest Android versions
+                // context.startService(new Intent(context, DetectMovementService.class));
             }
 			//Log.d(TAG, "SCRENN ON");
 		}else if(action.equals(Intent.ACTION_USER_PRESENT)){
