@@ -39,7 +39,7 @@
     MainViewController* mainController = (MainViewController*)  self.window.rootViewController;
     
     // as user opened app - send auth signal automatically to unlock PC
-    [mainController sendSignalForRecord:0];
+    [mainController sendSignalForRecord: 0];
     
 }
 

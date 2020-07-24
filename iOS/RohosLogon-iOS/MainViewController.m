@@ -26,12 +26,12 @@ AuthRecord* ar = nil;
 
 #define AUTHREC_LIST_KEY @"listOfAuthRecords"
 
-#define USER_NAME_KEY @"userName"
-#define HOST_NAME_KEY @"hostName"
-#define SECRET_NAME_KEY @"secret"
-#define DATA_NAME_KEY @"data"
-#define PORT_NAME_KEY @"port"
-#define IP_NAME_KEY @"ip"
+#define USER_NAME_KEY       @"userName"
+#define HOST_NAME_KEY       @"hostName"
+#define SECRET_NAME_KEY     @"secret"
+#define DATA_NAME_KEY       @"data"
+#define PORT_NAME_KEY       @"port"
+#define IP_NAME_KEY         @"ip"
 
 
 @interface MainViewController ()
@@ -92,15 +92,6 @@ AuthRecord* ar = nil;
     mBluetooth = [[BluetoothCentral alloc] init];
     mBluetooth.delegate = self;
 }
-
-/*
-- (void)dealloc
-{
-  [mBluetoothSendData release]; mBluetoothSendData = nil;
-  [mBluetooth release]; mBluetooth = nil;
-  [super dealloc];
-}
-*/
 
 - (void)learnMoreSingleTapRecognized:(UIGestureRecognizer *)gestureRecognizer
 {
@@ -173,9 +164,6 @@ AuthRecord* ar = nil;
 {
     bigLogoView.hidden = YES;
     recordsView.hidden = NO;
-    
-   // [self.tableView beginUpdates];
-    //[self.tableView endUpdates];
 
     [self.tableView reloadData];
 
@@ -228,78 +216,6 @@ AuthRecord* ar = nil;
     
     return YES;
 }
-
-/*
-- (int)sendBroadcastPacket:( AuthRecord *) r
-{
-    // Open a socket
-    int sd = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
-    if (sd <= 0) {
-        NSLog(@"Error: Could not open socket");
-        return -1;
-    }
-    
-    // Set socket options
-    // Enable broadcast
-    int optionVal = 1;
-    int ret = setsockopt(sd, SOL_SOCKET, SO_BROADCAST, &optionVal, sizeof(optionVal));
-    if (ret) {
-        NSLog(@"Error: Could not open set socket to broadcast mode");
-        close(sd);
-        return ret;
-    }
-    
-    struct timeval tv;
-    tv.tv_sec = 3;
-    tv.tv_usec =0;
-    //optionVal = 10;
-    ret=setsockopt(sd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(timeval));
-    
-    if (ret == -1)
-    {
-        optionVal = 10;
-        ret=setsockopt(sd, SOL_SOCKET, SO_RCVTIMEO, &optionVal, sizeof(int));
-        
-    }
-    
-    // Since we don't call bind() here, the system decides on the port for us, which is what we want.
-    
-    // Configure the port and ip we want to send to
-    struct sockaddr_in broadcastAddr; // Make an endpoint
-    memset(&broadcastAddr, 0, sizeof broadcastAddr);
-    broadcastAddr.sin_family = AF_INET;
-    inet_pton(AF_INET, "255.255.255.255", &broadcastAddr.sin_addr); // Set the broadcast IP address
-    broadcastAddr.sin_port = htons(r->hostPort); // Set port 1900
-    
-    // Send the broadcast request, ie "Any upnp devices out there?"
-    const char *request = [r->authSignalString cStringUsingEncoding:NSUTF8StringEncoding];
-    ret = sendto(sd, request, strlen(request), 0, (struct sockaddr*)&broadcastAddr, sizeof broadcastAddr);
-    if (ret<0) {
-        NSLog(@"Error: Could not open send broadcast");
-        close(sd);
-        return ret;
-    }
-    
-    // Get responses here using recvfrom if you want...
-    /*char replyBuff[290]={0};
-    struct sockaddr_in remoteAddr; // Make an endpoint
-    
-    socklen_t addrLen = sizeof(remoteAddr);
-    ret = recvfrom(sd, replyBuff, 250, 0, (struct sockaddr *) &remoteAddr, &addrLen );
-   
-    
-    if (ret>0)
-    {
-        r->serverReplyStr = [NSString stringWithUTF8String:replyBuff];
-    }*/
-    
-/*
-    r->serverReplyStr = @"Authentication signal has been sent!";
-    
-     close(sd);
-    return ret;
-}
-*/
  
 //
 // send Authentication Signal of default record
@@ -323,9 +239,6 @@ AuthRecord* ar = nil;
     r.userName = record[USER_NAME_KEY];
     
     [self sendSignalUpdateUI: r];
-    
-    return;
-
 }
 
 //
@@ -343,8 +256,7 @@ AuthRecord* ar = nil;
     
     NSLog(@"%@", strEncrypted);
     
-    
-    // lets send multicast over WiFi...
+    // lets send MQTT over WiFi...
     
     if ([self sendMQTTPacket: ar] >0 )
     {
@@ -385,8 +297,6 @@ AuthRecord* ar = nil;
     bigLogoView.hidden = NO;
     
     [resultsView setText: @"Install Rohos Logon Key on your desktop to enable authentication by phone. rohos.com/mob"]; //NSLocalizedString(@"Intro", @"How to start")];
-    
-    
 }
 
 - (IBAction)scanPressed:(id)sender
@@ -403,9 +313,8 @@ AuthRecord* ar = nil;
     scanner.delegate = self;
     
     [self presentViewController: scanner animated: YES completion:^{
-        
+       // Nothing here
     }];
-    
 }
 
 /*
@@ -464,11 +373,6 @@ AuthRecord* ar = nil;
     [self saveAuthRecord: ar];
     [self refreshAuthRecordsList];
     [self sendSignalUpdateUI: ar];
-    
-    
-    return;
-    
-    
 }
 
 // ZXing returns here
@@ -487,9 +391,6 @@ AuthRecord* ar = nil;
     }
     
     // Barcode scanner view controller will be dismissed after return from this method
-    //[self dismissViewControllerAnimated: NO completion:^{
-    //
-    //}];
 }
 
 
