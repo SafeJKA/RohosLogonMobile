@@ -9,11 +9,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <ZXingWidgetController.h>
 #import "BluetoothHelper.h"
+#import "BarcodeScanner.h"
 
 @interface MainViewController : UIViewController
-                                <ZXingDelegate, UITableViewDelegate, UITableViewDataSource, BluetoothCentralDelegate>
+                                <BarcodeScannerDelegate, UITableViewDelegate, UITableViewDataSource, BluetoothCentralDelegate>
 {
     UITextView *resultsView;
     UIView *recordsView;
@@ -21,7 +21,7 @@
     UITableView *tableView;
     UIImageView *bigLogoView;
     
-    NSMutableSet *qrReader;
+    // NSMutableSet *qrReader;
     
     // array of dictionaries username=XX hostname=YY
     NSMutableArray * mRecords;
@@ -32,10 +32,10 @@
 @property (retain, nonatomic) IBOutlet UIView *recordsView;
 @property (retain, nonatomic) IBOutlet UITableView *tableView;
 @property (retain, nonatomic) IBOutlet UIImageView *bigLogoView;
+@property (retain, nonatomic) IBOutlet UILabel* errorLabel;
 
 @property (nonatomic, copy) NSString *resultsToDisplay;
 
-@property(retain, nonatomic) NSMutableSet *qrReader;
 
 - (IBAction)scanPressed:(id)sender;
 - (IBAction)sendSignalPressed:(id)sender;

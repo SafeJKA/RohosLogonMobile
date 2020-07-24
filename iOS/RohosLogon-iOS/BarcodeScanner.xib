@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BarcodeScannerViewController">
+            <connections>
+                <outlet property="mPreview" destination="XVi-H5-d2K" id="uDo-oe-Jhy"/>
+                <outlet property="view" destination="iN0-l3-epB" id="PTS-aC-MEE"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="LaH-Y8-2bG">
+                    <rect key="frame" x="8" y="52" width="398" height="802"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XVi-H5-d2K">
+                            <rect key="frame" x="0.0" y="0.0" width="398" height="735"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bEZ-y4-fXU">
+                            <rect key="frame" x="0.0" y="735" width="398" height="67"/>
+                            <state key="normal" title="Cancel"/>
+                            <connections>
+                                <action selector="onCancel:" destination="-1" eventType="touchUpInside" id="qRw-dj-9wS"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="LaH-Y8-2bG" secondAttribute="bottom" constant="8" id="6Z6-w1-LSV"/>
+                <constraint firstItem="LaH-Y8-2bG" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="8" id="EYh-f2-qGi"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="LaH-Y8-2bG" secondAttribute="trailing" constant="8" id="KiZ-X7-6rV"/>
+                <constraint firstItem="LaH-Y8-2bG" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="8" id="Kqg-w6-GMR"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="-68.115942028985515" y="82.366071428571431"/>
+        </view>
+    </objects>
+</document>
