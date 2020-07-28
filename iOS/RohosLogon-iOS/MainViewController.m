@@ -228,7 +228,7 @@ AuthRecord* ar = nil;
         return;
     }
     
-    NSDictionary * record =[mRecords objectAtIndex:recordIndex];
+    NSDictionary * record = [mRecords objectAtIndex: recordIndex];
     
     AuthRecord* r = [[AuthRecord alloc] init];
     
@@ -245,7 +245,7 @@ AuthRecord* ar = nil;
 // send Authentication Signal by using the record ar
 //
 //
-- (int)sendSignalUpdateUI:( AuthRecord *) ar
+- (int)sendSignalUpdateUI: (AuthRecord *) ar
 {
     if ([ar isEmpty])
         return 0;
@@ -280,7 +280,7 @@ AuthRecord* ar = nil;
 }
 
 // delete lis button..
-- (IBAction)sendSignalPressed:(id)sender
+- (IBAction)sendSignalPressed: (id)sender
 {
     [mRecords removeAllObjects];
  
@@ -407,18 +407,27 @@ AuthRecord* ar = nil;
 {
     static NSString *simpleTableIdentifier = @"SimpleTableItem";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: simpleTableIdentifier];
     
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
     NSDictionary * record = [mRecords objectAtIndex:indexPath.row];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ [%@]",
-                           [record objectForKey:USER_NAME_KEY],
-                            [record objectForKey:HOST_NAME_KEY]
-                           ];
+    NSArray<NSString*>* parts = [record[HOST_NAME_KEY] componentsSeparatedByString: @"."];
+    
+    if (parts.count)
+    {
+        cell.textLabel.text = [NSString stringWithFormat: @"%@ %@", record[USER_NAME_KEY], parts[0]];
+        cell.textLabel.numberOfLines = 0;
+        //cell.textLabel.lineBreakMode = NSLineBreakByClipping;
+    }
+    else
+        cell.textLabel.text = [NSString stringWithFormat: @"%@ [%@]", record[USER_NAME_KEY], record[HOST_NAME_KEY]];
+    
+    // Image
     cell.imageView.image = [UIImage imageNamed:@"unlockpc.png"];
+    
     return cell;
 }
 
