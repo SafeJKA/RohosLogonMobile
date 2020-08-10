@@ -12,6 +12,7 @@
 		177F323624C4E1DC00B4C26E /* BarcodeScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 177F323324C4E1DC00B4C26E /* BarcodeScanner.m */; };
 		17DA66261D1A58490031108F /* BluetoothHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DA66251D1A58490031108F /* BluetoothHelper.m */; };
 		17DA66291D1A58A40031108F /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17DA66281D1A58A40031108F /* CoreBluetooth.framework */; };
+		17FDD50A24E1A018003155DF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 17FDD50924E1A018003155DF /* Images.xcassets */; };
 		6023CFA216F00CDA009AFE9E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023CFA116F00CDA009AFE9E /* UIKit.framework */; };
 		6023CFA416F00CDA009AFE9E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023CFA316F00CDA009AFE9E /* Foundation.framework */; };
 		6023CFA616F00CDA009AFE9E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023CFA516F00CDA009AFE9E /* CoreGraphics.framework */; };
@@ -48,6 +49,7 @@
 		17DA66241D1A58490031108F /* BluetoothHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothHelper.h; sourceTree = "<group>"; };
 		17DA66251D1A58490031108F /* BluetoothHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluetoothHelper.m; sourceTree = "<group>"; };
 		17DA66281D1A58A40031108F /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		17FDD50924E1A018003155DF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "Rohos Logon/Images.xcassets"; sourceTree = "<group>"; };
 		6023CF9E16F00CDA009AFE9E /* Rohos Logon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Rohos Logon.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6023CFA116F00CDA009AFE9E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6023CFA316F00CDA009AFE9E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -117,6 +119,7 @@
 		6023CF9516F00CDA009AFE9E = {
 			isa = PBXGroup;
 			children = (
+				17FDD50924E1A018003155DF /* Images.xcassets */,
 				FA0A29BB187F49EE00001D2A /* iPad */,
 				6023CFA716F00CDA009AFE9E /* RohosLogon-iOS */,
 				6023CFA016F00CDA009AFE9E /* Frameworks */,
@@ -256,6 +259,7 @@
 				FA613E29187D9972005C1F63 /* unlockpc.png in Resources */,
 				6023CFAC16F00CDA009AFE9E /* InfoPlist.strings in Resources */,
 				6023CFB416F00CDA009AFE9E /* Default.png in Resources */,
+				17FDD50A24E1A018003155DF /* Images.xcassets in Resources */,
 				6023CFB616F00CDA009AFE9E /* Default@2x.png in Resources */,
 				FA613E2C187D9BAF005C1F63 /* icon-57.png in Resources */,
 				FAF0C3BF1882B49500BF7E08 /* icon-72.png in Resources */,
@@ -447,13 +451,14 @@
 			baseConfigurationReference = F06EFB34151AA79B24C7EB04 /* Pods-Rohos Logon.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Alexander Shilonosov (65TB5BVP37)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.2.0;
+				CURRENT_PROJECT_VERSION = 1.2.1;
 				DEVELOPMENT_TEAM = 5BSEC579P8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -484,13 +489,14 @@
 			baseConfigurationReference = E9CC8056D824CA10FDFF9836 /* Pods-Rohos Logon.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Tesline-Service s.r.l. (5BSEC579P8)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.2.0;
+				CURRENT_PROJECT_VERSION = 1.2.1;
 				DEVELOPMENT_TEAM = 5BSEC579P8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
