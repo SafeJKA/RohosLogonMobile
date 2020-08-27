@@ -458,7 +458,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Alexander Shilonosov (65TB5BVP37)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.2.1;
+				CURRENT_PROJECT_VERSION = 1.4.0;
 				DEVELOPMENT_TEAM = 5BSEC579P8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -473,7 +473,7 @@
 				);
 				INFOPLIST_FILE = "RohosLogon-iOS/RohosLogon-iOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tesline.Rohos-logon";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "60eab31f-aa92-449a-ba09-ee560fbf9b7d";
@@ -496,7 +496,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Tesline-Service s.r.l. (5BSEC579P8)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.2.1;
+				CURRENT_PROJECT_VERSION = 1.4.0;
 				DEVELOPMENT_TEAM = 5BSEC579P8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -511,7 +511,7 @@
 				);
 				INFOPLIST_FILE = "RohosLogon-iOS/RohosLogon-iOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tesline.Rohos-logon";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "0c7e2611-c356-48c3-a859-3ddff1176439";
