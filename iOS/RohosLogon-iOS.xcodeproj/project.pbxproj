@@ -22,8 +22,7 @@
 		6023CFB416F00CDA009AFE9E /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 6023CFB316F00CDA009AFE9E /* Default.png */; };
 		6023CFB616F00CDA009AFE9E /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6023CFB516F00CDA009AFE9E /* Default@2x.png */; };
 		6023CFB816F00CDA009AFE9E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6023CFB716F00CDA009AFE9E /* Default-568h@2x.png */; };
-		6023CFBB16F00CDA009AFE9E /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6023CFB916F00CDA009AFE9E /* MainStoryboard_iPhone.storyboard */; };
-		6023CFBE16F00CDA009AFE9E /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6023CFBC16F00CDA009AFE9E /* MainStoryboard_iPad.storyboard */; };
+		6023CFBB16F00CDA009AFE9E /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6023CFB916F00CDA009AFE9E /* MainStoryboard.storyboard */; };
 		6023CFC116F00CDA009AFE9E /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6023CFC016F00CDA009AFE9E /* MainViewController.m */; };
 		6023D1BD16F00EAB009AFE9E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023D1BC16F00EAB009AFE9E /* AVFoundation.framework */; };
 		6023D1BF16F00EAF009AFE9E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023D1BE16F00EAF009AFE9E /* AudioToolbox.framework */; };
@@ -63,8 +62,7 @@
 		6023CFB316F00CDA009AFE9E /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		6023CFB516F00CDA009AFE9E /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		6023CFB716F00CDA009AFE9E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		6023CFBA16F00CDA009AFE9E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
-		6023CFBD16F00CDA009AFE9E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
+		6023CFBA16F00CDA009AFE9E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		6023CFBF16F00CDA009AFE9E /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		6023CFC016F00CDA009AFE9E /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		6023D1BC16F00EAB009AFE9E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -166,8 +164,7 @@
 				17DA66251D1A58490031108F /* BluetoothHelper.m */,
 				6023CFB016F00CDA009AFE9E /* MainAppDelegate.h */,
 				6023CFB116F00CDA009AFE9E /* MainAppDelegate.m */,
-				6023CFB916F00CDA009AFE9E /* MainStoryboard_iPhone.storyboard */,
-				6023CFBC16F00CDA009AFE9E /* MainStoryboard_iPad.storyboard */,
+				6023CFB916F00CDA009AFE9E /* MainStoryboard.storyboard */,
 				6023CFBF16F00CDA009AFE9E /* MainViewController.h */,
 				6023CFC016F00CDA009AFE9E /* MainViewController.m */,
 				6023CFA816F00CDA009AFE9E /* Supporting Files */,
@@ -264,8 +261,7 @@
 				FA613E2C187D9BAF005C1F63 /* icon-57.png in Resources */,
 				FAF0C3BF1882B49500BF7E08 /* icon-72.png in Resources */,
 				6023CFB816F00CDA009AFE9E /* Default-568h@2x.png in Resources */,
-				6023CFBB16F00CDA009AFE9E /* MainStoryboard_iPhone.storyboard in Resources */,
-				6023CFBE16F00CDA009AFE9E /* MainStoryboard_iPad.storyboard in Resources */,
+				6023CFBB16F00CDA009AFE9E /* MainStoryboard.storyboard in Resources */,
 				173B644624C5CE6700A746D0 /* BarcodeScanner.xib in Resources */,
 				FAF0C3BE1882B49500BF7E08 /* icon-120.png in Resources */,
 				6023D3BC16F01F55009AFE9E /* beep-beep.aiff in Resources */,
@@ -324,20 +320,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		6023CFB916F00CDA009AFE9E /* MainStoryboard_iPhone.storyboard */ = {
+		6023CFB916F00CDA009AFE9E /* MainStoryboard.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				6023CFBA16F00CDA009AFE9E /* en */,
 			);
-			name = MainStoryboard_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		6023CFBC16F00CDA009AFE9E /* MainStoryboard_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6023CFBD16F00CDA009AFE9E /* en */,
-			);
-			name = MainStoryboard_iPad.storyboard;
+			name = MainStoryboard.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -458,7 +446,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Alexander Shilonosov (65TB5BVP37)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.4.0;
+				CURRENT_PROJECT_VERSION = 1.5.0;
 				DEVELOPMENT_TEAM = 5BSEC579P8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -473,7 +461,7 @@
 				);
 				INFOPLIST_FILE = "RohosLogon-iOS/RohosLogon-iOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tesline.Rohos-logon";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "60eab31f-aa92-449a-ba09-ee560fbf9b7d";
@@ -496,7 +484,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Tesline-Service s.r.l. (5BSEC579P8)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.4.0;
+				CURRENT_PROJECT_VERSION = 1.5.0;
 				DEVELOPMENT_TEAM = 5BSEC579P8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -511,7 +499,7 @@
 				);
 				INFOPLIST_FILE = "RohosLogon-iOS/RohosLogon-iOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tesline.Rohos-logon";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "0c7e2611-c356-48c3-a859-3ddff1176439";

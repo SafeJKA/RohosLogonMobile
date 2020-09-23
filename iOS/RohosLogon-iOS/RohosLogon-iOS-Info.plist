@@ -35,9 +35,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Rohos uses camera to scan configuration data from QR image.</string>
 	<key>UILaunchStoryboardName</key>
-	<string>MainStoryboard_iPhone</string>
+	<string>MainStoryboard</string>
 	<key>UIMainStoryboardFile</key>
-	<string>MainStoryboard_iPhone</string>
+	<string>MainStoryboard</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

@@ -41,6 +41,7 @@ AuthRecord* ar = nil;
 @implementation MainViewController
 {
     BluetoothCentral* mBluetooth;
+    CBCentralManager* mCentralManager;
     NSData* mBluetoothSendData;
     MQTTSession* mQttSession;
 }
@@ -57,6 +58,8 @@ AuthRecord* ar = nil;
 {
     [super viewDidLoad];
 	
+    mCentralManager = [[CBCentralManager alloc] initWithDelegate: self queue: nil];
+    
     ar = [[AuthRecord alloc] init];
     
     // Do any additional setup after loading the view, typically from a nib.
@@ -93,6 +96,32 @@ AuthRecord* ar = nil;
     mBluetooth.delegate = self;
 }
 
+- (void)centralManagerDidUpdateState:(CBCentralManager *)central
+{
+    switch (central.state)
+    {
+        case CBManagerStateUnauthorized:
+            {
+                if (@available(iOS 13.1, *))
+                {
+                    switch (central.authorization)
+                    {
+                        case CBManagerAuthorizationAllowedAlways:
+                        case CBManagerAuthorizationRestricted:
+                        case CBManagerAuthorizationDenied:
+                        case CBManagerAuthorizationNotDetermined:
+                            break;;
+                    }
+                }
+            }
+            break;
+        case CBManagerStatePoweredOn:
+            break;
+        default:
+            break;
+    }
+}
+
 - (void)learnMoreSingleTapRecognized:(UIGestureRecognizer *)gestureRecognizer
 {
     [[UIApplication sharedApplication] openURL: [NSURL URLWithString: @"http://rohos.com/mob"] options: @{} completionHandler: nil];
@@ -104,6 +133,19 @@ AuthRecord* ar = nil;
     // Dispose of any resources that can be recreated.
 }
 
+- (BOOL)isBluetoothAuthorized
+{
+    if (@available(iOS 13.1, *))
+    {
+        return CBCentralManager.authorization == CBManagerAuthorizationRestricted ||
+          CBCentralManager.authorization == CBManagerAuthorizationAllowedAlways;
+    }
+    else
+    {
+        return [CBPeripheralManager authorizationStatus] == CBPeripheralManagerAuthorizationStatusAuthorized ||
+          [CBPeripheralManager authorizationStatus] == CBPeripheralManagerAuthorizationStatusRestricted;
+    }
+}
 
 - (int)saveAuthRecord:( AuthRecord *) r
 {
@@ -284,11 +326,9 @@ AuthRecord* ar = nil;
 {
     [mRecords removeAllObjects];
  
-    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
-    
-    [defaults setObject: mRecords forKey: AUTHREC_LIST_KEY];
-    
     // do not forget to save changes
+    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject: mRecords forKey: AUTHREC_LIST_KEY];
     [defaults synchronize];
     
     [self refreshAuthRecordsList];
@@ -432,9 +472,6 @@ AuthRecord* ar = nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-   // UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
-    
     [self sendSignalForRecord: (int)indexPath.row];
 }
 

@@ -71,7 +71,7 @@
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central
 {
   // Need working bluetooth
-  if (central.state != CBCentralManagerStatePoweredOn)
+   if (central.state != CBCentralManagerStatePoweredOn)
     return;
   
   if (central.state == CBCentralManagerStatePoweredOn) {

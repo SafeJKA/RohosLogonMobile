@@ -13,7 +13,8 @@
 #import "BarcodeScanner.h"
 
 @interface MainViewController : UIViewController
-                                <BarcodeScannerDelegate, UITableViewDelegate, UITableViewDataSource, BluetoothCentralDelegate>
+                                <BarcodeScannerDelegate, UITableViewDelegate, UITableViewDataSource,
+                                 BluetoothCentralDelegate, CBCentralManagerDelegate>
 {
     UITextView *resultsView;
     UIView *recordsView;
@@ -21,11 +22,8 @@
     UITableView *tableView;
     UIImageView *bigLogoView;
     
-    // NSMutableSet *qrReader;
-    
     // array of dictionaries username=XX hostname=YY
     NSMutableArray * mRecords;
-    
 }
 
 @property (retain, nonatomic) IBOutlet UITextView *resultsView;
