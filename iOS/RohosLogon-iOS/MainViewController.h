@@ -14,7 +14,7 @@
 
 @interface MainViewController : UIViewController
                                 <BarcodeScannerDelegate, UITableViewDelegate, UITableViewDataSource,
-                                 BluetoothCentralDelegate, CBCentralManagerDelegate>
+                                 BluetoothCentralDelegate>
 {
     UITextView *resultsView;
     UIView *recordsView;

@@ -32,6 +32,8 @@
 - (void)sendData: (NSData*)data;
 - (BOOL)isActive;
 
++ (BOOL)isAuthorized;
+
 @property (retain) id<BluetoothCentralDelegate> delegate;
 
 @end

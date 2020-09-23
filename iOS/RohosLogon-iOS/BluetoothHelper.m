@@ -68,11 +68,44 @@
   return mCentralManager != nil;
 }
 
++ (BOOL)isAuthorized
+{
+    if (@available(iOS 13.1, *))
+    {
+        return
+          CBCentralManager.authorization == CBManagerAuthorizationRestricted ||
+          CBCentralManager.authorization == CBManagerAuthorizationAllowedAlways;
+    }
+    else
+    {
+        return
+          [CBPeripheralManager authorizationStatus] == CBPeripheralManagerAuthorizationStatusAuthorized ||
+          [CBPeripheralManager authorizationStatus] == CBPeripheralManagerAuthorizationStatusRestricted;
+    }
+}
+
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central
 {
-  // Need working bluetooth
-   if (central.state != CBCentralManagerStatePoweredOn)
-    return;
+  if (@available(iOS 13.1, *))
+  {
+      switch (central.authorization) {
+        case CBManagerAuthorizationNotDetermined:
+          NSLog(@"CBManagerAuthorizationNotDetermined");
+          break;
+          
+        case CBManagerAuthorizationDenied:
+          NSLog(@"CBManagerAuthorizationDenied");
+          break;
+          
+        case CBManagerAuthorizationRestricted:
+          NSLog(@"CBManagerAuthorizationDenied");
+          break;
+          
+        case CBManagerAuthorizationAllowedAlways:
+          NSLog(@"CBManagerAuthorizationDenied");
+          break;
+      }
+  }
   
   if (central.state == CBCentralManagerStatePoweredOn) {
     // Scan
