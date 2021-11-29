@@ -17,9 +17,10 @@ public class AuthRecord {
     Save/restore this fields in DB !
      */
     public String qr_user;         // user name or rohos disk name
+    public String qr_host_name;
+
     String qr_secret_key;   // encryption key
     String qr_data;
-    String qr_host_name;
     String qr_host_ip;
     int qr_host_port;
     String displayName;

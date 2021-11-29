@@ -141,7 +141,7 @@ public class UnlockPcService extends Service {
 							String name = recordNames.get(i).substring(0, recordNames.get(i).indexOf("|"));
 							String hostName = recordNames.get(i).substring(recordNames.get(i).indexOf("|")+1);
 							AuthRecord ar = authRecordDb.getAuthRecord(name, hostName);
-							MQTTSender sender = new MQTTSender(ctx, Looper.getMainLooper());
+							MQTTSender sender = new MQTTSender(ctx);
 							sender.execute(ar);
 							Thread.sleep(400L);
 						}

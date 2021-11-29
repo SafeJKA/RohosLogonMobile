@@ -8,4 +8,8 @@
         android:orderInCategory="100"
         app:showAsAction="never" />
     <item android:id="@+id/action_check_updates" android:title="@string/action_check_updates"></item>
+    <item
+        android:id="@+id/get_token"
+        android:orderInCategory="101"
+        android:title="Copy FCM token to clipboard" />
 </menu>

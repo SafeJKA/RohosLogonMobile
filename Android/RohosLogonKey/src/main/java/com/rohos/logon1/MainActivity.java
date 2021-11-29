@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,10 +36,20 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.rohos.logon1.interfaces.IBooleanChanged;
+import com.rohos.logon1.ui.ErrorDialog;
+import com.rohos.logon1.ui.RemoveAccountDialog;
+import com.rohos.logon1.utils.AppLog;
 
 import java.util.ArrayList;
 
@@ -45,7 +57,7 @@ import java.util.ArrayList;
 /* Main Activity
  * @author AlexShilon alex@rohos.com
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements IBooleanChanged {
 
     /**
      * Intent action to that tells this Activity to initiate the scanning of barcode to add an
@@ -62,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
     // @VisibleForTesting
     private static final int SCAN_REQUEST = 31337;
 
-    public static final int DOWNLOAD_DIALOG = 0;
-    public static final int INVALID_QR_CODE = 1;
+    //public static final int DOWNLOAD_DIALOG = 0;
+    //public static final int INVALID_QR_CODE = 1;
 
     private static final String LOCAL_TAG = "RohosActivity";
     private static final String PREFS_NAME = "RohosPrefs1";
@@ -115,8 +127,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button unlocPC = findViewById(R.id.unlock_pc);
-        unlocPC.setOnClickListener(new View.OnClickListener() {
+        Button unlockPCbtn = findViewById(R.id.unlock_pc);
+        unlockPCbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 unlockPC();
@@ -148,19 +160,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
 
-        System.err.println("Received onResume() event");
+        //System.err.println("Received onResume() event");
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        System.err.println("Received onPause() event");
+        //System.err.println("Received onPause() event");
         super.onPause();
     }
 
     @Override
     public void onStop() {
-        System.err.println("Received stop event");
+        //System.err.println("Received stop event");
         super.onStop();
     }
 
@@ -213,6 +225,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_check_updates:
                 checkUpdates();
                 return true;
+            case R.id.get_token:
+                copyFCMtokenToClipboard();
+                //getFMStoken();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -221,8 +237,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
 
-        System.err.println("Received onDestroy() event");
+        //System.err.println("Received onDestroy() event");
         super.onDestroy();
+    }
+
+    // method of .interfaces.IBooleanChanged interface
+    @Override
+    public void onBooleanChanged(boolean newValue) {
+        if(newValue){
+            refreshRecordsList(true);
+        }
     }
 
     /**
@@ -267,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
             mSender = null;
         }
 
-        mSender = new MQTTSender(this.getApplicationContext(), Looper.getMainLooper());
+        mSender = new MQTTSender(this.getApplicationContext());
         mSender.execute(ar);
     }
 
@@ -326,6 +350,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
         //Log.i(getString(R.string.app_name), LOCAL_TAG + ": onActivityResult");
         if (requestCode == SCAN_REQUEST && resultCode == Activity.RESULT_OK) {
             // Grab the scan results and convert it into a URI
@@ -338,8 +363,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId() == R.id.listView) {
             super.onCreateContextMenu(menu, v, menuInfo);
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
@@ -350,29 +374,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        final String recordName = mAuthRecords[info.position].qr_user; // final so listener can see value
-        final String recordHostName = mAuthRecords[info.position].qr_host_name; // final so listener can see value
         switch (item.getItemId()) {
             case REMOVE_ID:
-                new AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.remove_account_title, recordName))
-                        .setMessage(getString(R.string.remove_account_info, recordHostName))
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton(R.string.remove,
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        mRecordsDb.delete(recordHostName, recordName);
-                                        refreshRecordsList(true);
-                                    }
-                                }
-                        )
-                        .setNegativeButton(R.string.cancel, null)
-                        .show();
+                RemoveAccountDialog dialog = new RemoveAccountDialog(mAuthRecords, mRecordsDb, info.position);
+                dialog.show(getSupportFragmentManager(), "remove_account");
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -383,14 +391,12 @@ public class MainActivity extends AppCompatActivity {
      * This method is deprecated in SDK level 8, but we have to use it because the
      * new method, which replaces this one, does not exist before SDK level 8
      */
-    @Override
+    /*@Override
     protected Dialog onCreateDialog(final int id) {
         Dialog dialog = null;
         switch (id) {
-            /**
-             * Prompt to download ZXing from Market. If Market app is not installed,
-             * such as on a development phone, open the HTTPS URI for the ZXing apk.
-             */
+            //Prompt to download ZXing from Market. If Market app is not installed,
+            //such as on a development phone, open the HTTPS URI for the ZXing apk.
             case DOWNLOAD_DIALOG:
                 AlertDialog.Builder dlBuilder = new AlertDialog.Builder(this);
                 dlBuilder.setTitle(R.string.install_dialog_title);
@@ -428,7 +434,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return dialog;
-    }
+    }*/
 
     private void unlockPC() {
         try {
@@ -453,7 +459,7 @@ public class MainActivity extends AppCompatActivity {
                             String name = recordNames.get(i).substring(0, recordNames.get(i).indexOf("|"));
                             String hostName = recordNames.get(i).substring(recordNames.get(i).indexOf("|")+1);
                             AuthRecord ar = authRecordDb.getAuthRecord(name, hostName);
-                            MQTTSender sender = new MQTTSender(ctx, Looper.getMainLooper());
+                            MQTTSender sender = new MQTTSender(ctx);
                             sender.execute(ar);
                             Thread.sleep(400L);
                         }
@@ -572,10 +578,12 @@ public class MainActivity extends AppCompatActivity {
             mSaveKeyIntentConfirmationInProgress = true;
         }
 
+        ErrorDialog dialog = new ErrorDialog();
         // Sanity check
         if (scanResult == null) {
             // Log.e(TAG, "Scan result is null");
-            showDialog(INVALID_QR_CODE);
+            dialog.show(getSupportFragmentManager(), "error");
+            //showDialog(INVALID_QR_CODE);
             return;
         }
 
@@ -584,7 +592,8 @@ public class MainActivity extends AppCompatActivity {
             parseSecret(scanResult, confirmBeforeSave);
         } else {
             // Log.e(TAG, "getScheme " + scanResult.getScheme() + " getAuthority " + scanResult.getAuthority());
-            showDialog(INVALID_QR_CODE);
+            dialog.show(getSupportFragmentManager(), "error");
+            //showDialog(INVALID_QR_CODE);
         }
     }
 
@@ -649,12 +658,62 @@ public class MainActivity extends AppCompatActivity {
         } catch (java.lang.NumberFormatException err2) {
             ((TextView) findViewById(R.id.textQRcode)).setText(String.format(" %s", err2.toString()));
             // Log.e(TAG, Log.getStackTraceString(err2));
-            showDialog(INVALID_QR_CODE);
+            ErrorDialog dialog = new ErrorDialog();
+            dialog.show(getSupportFragmentManager(), "error");
+            //showDialog(INVALID_QR_CODE);
         } catch (NullPointerException error) {
             ((TextView) findViewById(R.id.textQRcode)).setText(String.format(" %s", error.toString()));
             // Log.e(TAG, Log.getStackTraceString(error));
-            showDialog(INVALID_QR_CODE);
+            ErrorDialog dialog = new ErrorDialog();
+            dialog.show(getSupportFragmentManager(), "error");
+            //showDialog(INVALID_QR_CODE);
         }
+    }
+
+    private void copyFCMtokenToClipboard(){
+        try{
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+            String token = sp.getString("fcm_token", null);
+            if(token == null){
+                AppLog.log("Couldn't get token from preferences");
+                Toast.makeText(getApplicationContext(), "Couldn't get token, try later", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("https://fcm.googleapis.com/fcm/send?key=AAAAM4Hs8K8:APA91bHsXcvArVjS3awAepIGzw-rFcR3YFKhOpwOrVpCoL5Q7oUyRgCRnZkfSLMfg19HKM0aQuyKV_e7qIdFCA_pI48cSSJaA8MpfO5CqNZJQyG2eEXHJXTorhczk7EakOSClIpQi_d3&to=");
+            sb.append(token);
+            sb.append("&body=2FA bypass on PC.");
+
+
+            ClipboardManager clipboardManager = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clipData = ClipData.newPlainText("token", sb.toString());
+            clipboardManager.setPrimaryClip(clipData);
+
+            Toast.makeText(getApplicationContext(), "Token is copied to Clipboard", Toast.LENGTH_SHORT).show();
+        }catch(Exception e){
+            AppLog.log(Log.getStackTraceString(e));
+        }
+    }
+
+    private void getFMStoken(){
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                    return;
+                }
+
+                // Get new FCM registration token
+                String token = task.getResult();
+
+                // Log and toast
+                String msg = "Token:" + token;
+                Log.d(TAG, msg);
+                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
 

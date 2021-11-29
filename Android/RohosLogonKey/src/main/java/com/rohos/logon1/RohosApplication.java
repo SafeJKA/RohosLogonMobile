@@ -15,6 +15,7 @@ import android.os.PowerManager.WakeLock;
 import androidx.preference.PreferenceManager;
 
 import com.rohos.logon1.services.KnockService;
+import com.rohos.logon1.utils.AppLog;
 
 
 public class RohosApplication extends Application {
@@ -41,9 +42,9 @@ public class RohosApplication extends Application {
 	public boolean mTestKnockMod = false;
 		
 	private WakeLock mWakeLock = null;
-	private ApiLog apiLog;
+	//private ApiLog apiLog;
 	
-	private ScreenStateReceiver mScreenState = null;
+	//private ScreenStateReceiver mScreenState = null;
 	private long mStopRecognizingDelay = 60000L * 5L; // delay 5 min
 	
 	private static RohosApplication mApp = null;
@@ -56,18 +57,20 @@ public class RohosApplication extends Application {
 		super.onCreate();		
 		try{
 			mApp = this;
+
+			AppLog.initAppLog(getApplicationContext());
 			
 			mNativeKnockRecog = new NativeKnockRecognizer(RohosApplication.this);
 			//mNativeKnockRecog.initRecognizing();
 			
-			apiLog = new ApiLog();
+			//apiLog = new ApiLog();
 			
-			IntentFilter intentFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+			//IntentFilter intentFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
 	        //intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
 	        //intentFilter.addAction(Intent.ACTION_USER_PRESENT);
 	        
-	        mScreenState = new ScreenStateReceiver();
-	        registerReceiver(mScreenState, intentFilter);
+	        //mScreenState = new ScreenStateReceiver();
+	        //registerReceiver(mScreenState, intentFilter);
 	        
 	        mHandler = new Handler(Looper.getMainLooper()){
 	        	@Override
@@ -150,12 +153,13 @@ public class RohosApplication extends Application {
 	}
 	
 	public void logError(final String message){
+		AppLog.log(message);
 		//final File path = getFilesDir();
-		new Thread(new Runnable(){
+		/*new Thread(new Runnable(){
 			public void run(){
 				apiLog.writeLog(message);
 			}
-		}).start();
+		}).start();*/
 	}
 	
 	private boolean isRecognizingSet(){
