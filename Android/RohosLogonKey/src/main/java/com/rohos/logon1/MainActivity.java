@@ -1,15 +1,10 @@
 package com.rohos.logon1;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -18,12 +13,10 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.SystemClock;
 import android.os.Vibrator;
 
 import android.os.Bundle;
 
-//import android.util.Log;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -41,12 +34,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.rohos.logon1.interfaces.IBooleanChanged;
+import com.rohos.logon1.services.RoWorker;
 import com.rohos.logon1.ui.ErrorDialog;
 import com.rohos.logon1.ui.RemoveAccountDialog;
 import com.rohos.logon1.utils.AppLog;
@@ -148,7 +147,8 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
 
                 String accName = ((TextView) row.findViewById(R.id.recordName)).getText().toString();
                 String accHost = ((TextView) row.findViewById(R.id.hostName)).getText().toString();
-                sendMqttLoginRequest(accName, accHost);
+                //sendMqttLoginRequest(accName, accHost);
+                sendTokenToPCs(accName, accHost);
             }
         });
 
@@ -228,6 +228,9 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
             case R.id.get_token:
                 copyFCMtokenToClipboard();
                 //getFMStoken();
+                return true;
+            case R.id.send_token:
+                //sendTokenToPCs();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -676,7 +679,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
             String token = sp.getString("fcm_token", null);
             if(token == null){
                 AppLog.log("Couldn't get token from preferences");
-                Toast.makeText(getApplicationContext(), "Couldn't get token, try later", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Couldn't get token, try later", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -694,6 +697,34 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
         }catch(Exception e){
             AppLog.log(Log.getStackTraceString(e));
         }
+    }
+
+    private void sendTokenToPCs(String accountName, String hostName){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        String token = sp.getString("fcm_token", null);
+        if(token == null)
+            return;
+
+        Data.Builder builder = new Data.Builder();
+        builder.putString("token", token);
+        builder.putString("acc_name", accountName);
+        builder.putString("host_name", hostName);
+        Data data = builder.build();
+
+        OneTimeWorkRequest.Builder requestBuilder = new OneTimeWorkRequest.Builder(RoWorker.class);
+        requestBuilder.setInputData(data);
+        OneTimeWorkRequest workRequest = requestBuilder.build();
+
+        WorkManager workManager = WorkManager.getInstance(getApplicationContext());
+        workManager.beginWith(workRequest).enqueue();
+        workManager.getWorkInfoByIdLiveData(workRequest.getId()).observe(this, new Observer<WorkInfo>() {
+            @Override
+            public void onChanged(WorkInfo workInfo) {
+                if(workInfo != null){
+                    Log.d(TAG, "Is worker finished: " + workInfo.getState().isFinished());
+                }
+            }
+        });
     }
 
     private void getFMStoken(){

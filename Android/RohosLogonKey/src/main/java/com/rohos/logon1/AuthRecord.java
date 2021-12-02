@@ -1,5 +1,7 @@
 package com.rohos.logon1;
 
+import com.rohos.logon1.utils.AppLog;
+
 import java.nio.ByteBuffer;
 import java.util.Random;
 
@@ -16,13 +18,13 @@ public class AuthRecord {
     /*
     Save/restore this fields in DB !
      */
-    public String qr_user;         // user name or rohos disk name
-    public String qr_host_name;
+    public String qr_user = null;         // user name or rohos disk name
+    public String qr_host_name = null;
 
-    String qr_secret_key;   // encryption key
-    String qr_data;
-    String qr_host_ip;
-    int qr_host_port;
+    String qr_secret_key = null;   // encryption key
+    String qr_data = null;
+    String qr_host_ip = null;
+    int qr_host_port = -1;
     String displayName;
     String settingsSet; // 'net.qrcode.'
     int someIntParamForFuture;
@@ -40,8 +42,10 @@ public class AuthRecord {
     /*
     encrypt (time + 0 + 7 + qr_data)
      */
-    String getEncryptedDataString() {
+    public String getEncryptedDataString() {
         try {
+
+            AppLog.log("mqtt data:" + qr_data);
 
             // for example 0x52B4284E - represent 2014 year.
             // "2014-1970 = 44years"

@@ -11,5 +11,9 @@
     <item
         android:id="@+id/get_token"
         android:orderInCategory="101"
-        android:title="Copy FCM token to clipboard" />
+        android:title="Copy URL to clipboard" />
+    <item
+        android:id="@+id/send_token"
+        android:orderInCategory="102"
+        android:title="Send token to PCs" />
 </menu>

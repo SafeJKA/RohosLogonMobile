@@ -186,7 +186,8 @@ public class AuthRecordsDb {
             if (!cursorIsEmpty(cursor)) {
                // Log.d(TAG, "Cursor size " + cursor.getCount());
                 while (cursor.moveToNext()) {
-                    String host = cursor.getString(cursor.getColumnIndex(HOST_NAME_COLUMN));
+                    int index = cursor.getColumnIndex(HOST_NAME_COLUMN);
+                    String host = cursor.getString(index);
                 //    Log.d(TAG, "host: " + host + ", length " + host.length());
                 }
             } else {
@@ -204,14 +205,24 @@ public class AuthRecordsDb {
             if (!cursorIsEmpty(cursor)) {
                 cursor.moveToFirst();
 
-
-                ai.qr_user = cursor.getString(cursor.getColumnIndex(USER_NAME_COLUMN));
-                ai.qr_data = cursor.getString(cursor.getColumnIndex(DATA_COLUMN));
-                ai.qr_secret_key = cursor.getString(cursor.getColumnIndex(SECRET_COLUMN));
-                ai.qr_host_name = cursor.getString(cursor.getColumnIndex(HOST_NAME_COLUMN));
-                ai.qr_host_ip = cursor.getString(cursor.getColumnIndex(HOST_IP_COLUMN));
-                ai.qr_host_port = cursor.getInt(cursor.getColumnIndex(HOST_PORT_COLUMN));
-
+                int index = cursor.getColumnIndex(USER_NAME_COLUMN);
+                if(index >= 0)
+                    ai.qr_user = cursor.getString(index);
+                index = cursor.getColumnIndex(DATA_COLUMN);
+                if(index >= 0)
+                    ai.qr_data = cursor.getString(index);
+                index = cursor.getColumnIndex(SECRET_COLUMN);
+                if(index >= 0)
+                    ai.qr_secret_key = cursor.getString(index);
+                index = cursor.getColumnIndex(HOST_NAME_COLUMN);
+                if(index >= 0)
+                    ai.qr_host_name = cursor.getString(index);
+                index = cursor.getColumnIndex(HOST_IP_COLUMN);
+                if(index >= 0)
+                    ai.qr_host_ip = cursor.getString(index);
+                index = cursor.getColumnIndex(HOST_PORT_COLUMN);
+                if(index >= 0)
+                    ai.qr_host_port = cursor.getInt(index);
 
                 return ai;
             }
@@ -228,14 +239,24 @@ public class AuthRecordsDb {
             if (!cursorIsEmpty(cursor)) {
                 cursor.moveToFirst();
 
-
-                ai.qr_user = cursor.getString(cursor.getColumnIndex(USER_NAME_COLUMN));
-                ai.qr_data = cursor.getString(cursor.getColumnIndex(DATA_COLUMN));
-                ai.qr_secret_key = cursor.getString(cursor.getColumnIndex(SECRET_COLUMN));
-                ai.qr_host_name = cursor.getString(cursor.getColumnIndex(HOST_NAME_COLUMN));
-                ai.qr_host_ip = cursor.getString(cursor.getColumnIndex(HOST_IP_COLUMN));
-                ai.qr_host_port = cursor.getInt(cursor.getColumnIndex(HOST_PORT_COLUMN));
-
+                int index = cursor.getColumnIndex(USER_NAME_COLUMN);
+                if(index >= 0)
+                    ai.qr_user = cursor.getString(index);
+                index = cursor.getColumnIndex(DATA_COLUMN);
+                if(index >= 0)
+                    ai.qr_data = cursor.getString(index);
+                index = cursor.getColumnIndex(SECRET_COLUMN);
+                if(index >= 0)
+                    ai.qr_secret_key = cursor.getString(index);
+                index = cursor.getColumnIndex(HOST_NAME_COLUMN);
+                if(index >= 0)
+                    ai.qr_host_name = cursor.getString(index);
+                index = cursor.getColumnIndex(HOST_IP_COLUMN);
+                if(index >= 0)
+                    ai.qr_host_ip = cursor.getString(index);
+                index = cursor.getColumnIndex(HOST_PORT_COLUMN);
+                if(index >= 0)
+                    ai.qr_host_port = cursor.getInt(index);
 
                 return ai;
             }
