@@ -35,10 +35,10 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
     private String userURI;
     private static final String serverUriPattern = "(tcp://)(?:(\\S+):(\\S+)@)?(\\S+):(\\d+)(?:@(\\S+))?";
 
-    private static final String defaultUserName = "rohos";
-    private static final String defaultPassword = "fZ7Vq93BuWLx";
-    private static final String defaultBrokerURI = "tcp://node02.myqtthub.com:1883";
-    private static final String defaultClientID = "rohos.logon";
+    private static final String defaultUserName = "****";
+    private static final String defaultPassword = "******";
+    private static final String defaultBrokerURI = "*******";
+    private static final String defaultClientID = "********";
 
     private Handler mHandler = null;
 
