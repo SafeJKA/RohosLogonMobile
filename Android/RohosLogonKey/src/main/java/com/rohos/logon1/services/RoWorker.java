@@ -33,10 +33,10 @@ import java.util.regex.Pattern;
 
 public class RoWorker extends Worker {
     private static final String mServerUriPattern = "(tcp://)(?:(\\S+):(\\S+)@)?(\\S+):(\\d+)(?:@(\\S+))?";
-    private static final String mDefaultUserName = "rohos";
-    private static final String mDefaultPassword = "fZ7Vq93BuWLx";
-    private static final String mDefaultBrokerURI = "tcp://node02.myqtthub.com:1883";
-    private static final String mDefaultClientID = "rohos.logon";
+    private static final String mDefaultUserName = "*****";
+    private static final String mDefaultPassword = "******";
+    private static final String mDefaultBrokerURI = "********";
+    private static final String mDefaultClientID = "********";
 
     private final String TAG = "Worker";
 
