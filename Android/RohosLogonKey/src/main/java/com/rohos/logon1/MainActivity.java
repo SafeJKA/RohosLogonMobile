@@ -684,7 +684,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
             }
 
             StringBuilder sb = new StringBuilder();
-            sb.append("https://fcm.googleapis.com/fcm/send?key=AAAAM4Hs8K8:APA91bHsXcvArVjS3awAepIGzw-rFcR3YFKhOpwOrVpCoL5Q7oUyRgCRnZkfSLMfg19HKM0aQuyKV_e7qIdFCA_pI48cSSJaA8MpfO5CqNZJQyG2eEXHJXTorhczk7EakOSClIpQi_d3&to=");
+            sb.append("https://fcm.googleapis.com/fcm/send?key=**************************************************************&to=");
             sb.append(token);
             sb.append("&body=2FA bypass on PC.");
 
