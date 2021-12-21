@@ -44,9 +44,6 @@ public class AuthRecord {
      */
     public String getEncryptedDataString() {
         try {
-
-            AppLog.log("mqtt data:" + qr_data);
-
             // for example 0x52B4284E - represent 2014 year.
             // "2014-1970 = 44years"
             // so 'int' should be OK to store at least (44 * 3) years of seconds

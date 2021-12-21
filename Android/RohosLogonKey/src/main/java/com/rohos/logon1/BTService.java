@@ -15,6 +15,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rohos.logon1.utils.AppLog;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -156,15 +158,13 @@ public class BTService extends Service {
 
         } catch (IOException e) {
             mExecutor.submit(new Runnable() {
-
                 @Override
                 public void run() {
                     disconnectFromServer();
                 }
             });
-           // Log.d(TAG, "Error writing to output stream !!!");
-            RohosApplication app = (RohosApplication) getApplication();
-            if (app != null) app.logError(TAG + e.toString());
+            AppLog.log(Log.getStackTraceString(e));
+
             BTService.this.stopSelf();
         }
     }

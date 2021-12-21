@@ -2,19 +2,24 @@ package com.rohos.logon1.services;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.UserManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.rohos.logon1.AuthRecord;
 import com.rohos.logon1.AuthRecordsDb;
+import com.rohos.logon1.HexEncoding;
 import com.rohos.logon1.utils.AppLog;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -27,16 +32,24 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Random;
 import java.util.concurrent.Semaphore;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+
 public class RoWorker extends Worker {
     private static final String mServerUriPattern = "(tcp://)(?:(\\S+):(\\S+)@)?(\\S+):(\\d+)(?:@(\\S+))?";
-    private static final String mDefaultUserName = "*****";
-    private static final String mDefaultPassword = "******";
-    private static final String mDefaultBrokerURI = "********";
-    private static final String mDefaultClientID = "********";
+
+    private static final String mDefaultUserName = "";
+    private static final String mDefaultPassword = "";
+    private static final String mDefaultBrokerURI = "tcp://node02.myqtthub.com:1883";
+    private static final String mDefaultClientID = "";
 
     private final String TAG = "Worker";
 
@@ -46,6 +59,8 @@ public class RoWorker extends Worker {
     private Context mCtx = null;
     private Handler mHandler = null;
     private Semaphore mSemaphore;
+    private String mHostToSendToken = null;
+    private long mSendingSession = 0L;
 
     public RoWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -68,20 +83,72 @@ public class RoWorker extends Worker {
         // TODO(developer): add long running task here.
         Data data = getInputData();
         String token = data.getString("token");
+        if(token == null){
+            AppLog.log(TAG + "; couldn't get token from data");
+            return Result.failure();
+        }
 
-        String accountName = data.getString("acc_name");
-        String hostName = data.getString("host_name");
+        ArrayList<String[]> hostList = new AuthRecordsDb(mCtx).getHostList();
 
-        AuthRecordsDb recordsDb = new AuthRecordsDb(mCtx);
-        AuthRecord ar = recordsDb.getAuthRecord(accountName, hostName);
+        if (hostList != null) {
+            //UserManager um = (UserManager)mCtx.getSystemService(Context.USER_SERVICE);
+            //String uName = um.getUserName();
 
-        connect(mMqttClient, mMqttConnOptions);
-        String msgToSend = ar.getEncryptedDataString();
-        String str_data = String.format("%s.%s.%s", ar.qr_user, ar.qr_host_name, msgToSend);
-        String topicToSend = ar.qr_host_name;
+            String imei = null;
+            TelephonyManager tm = (TelephonyManager)mCtx.getSystemService(Context.TELEPHONY_SERVICE);
+            imei = android.provider.Settings.Secure.getString(mCtx.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
 
-        sendMqttMessage(str_data, topicToSend);
-        disconnect();
+
+            String phoneId = "";
+            if(imei != null){
+                phoneId = imei.substring(0, 8).toUpperCase();
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("token=");
+            sb.append(token);
+            sb.append(" devid=");
+            //sb.append(uName.concat(" "));
+            sb.append(Build.MANUFACTURER.toUpperCase().concat(" "));
+            sb.append(Build.MODEL.toUpperCase().concat(" "));
+            sb.append(phoneId);
+
+            AppLog.log(sb.toString());
+
+            int userName = 0;
+            int secretKey = 1;
+            int hostName = 2;
+            mSendingSession = System.currentTimeMillis();
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mCtx);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putLong("sending_session", mSendingSession);
+            editor.commit();
+
+            connect(mMqttClient, mMqttConnOptions);
+
+            for(String[] host : hostList){
+                AppLog.log("user name:" + host[userName] + ", key:" + host[secretKey] + ", host:" + host[hostName]);
+                String encToken = getEncryptedString(sb.toString(), host[secretKey]);
+                if(encToken == null){
+                    AppLog.log("RoWorker; Couldn't encrypt token");
+                    break;
+                }
+
+                mHostToSendToken = host[hostName];
+                StringBuilder mesToSend = new StringBuilder();
+                mesToSend.append(host[userName].concat("."));
+                mesToSend.append(mHostToSendToken);
+                mesToSend.append("-PUSHUPDATE".concat("."));
+                mesToSend.append(encToken);
+
+                sendMqttMessage(mesToSend.toString(), mHostToSendToken.concat("-PUSHUPDATE"));
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception unused) {}
+            }
+
+            disconnect();
+        }
 
         //Log.d(TAG, "Token received from data: " + token);
         return Result.success();
@@ -95,7 +162,8 @@ public class RoWorker extends Worker {
                 //Toast.makeText(this, "Unable to send message.Client disconnected", Toast.LENGTH_SHORT).show();
                 return;
             }
-            AppLog.log("RoWorker; Client connected. Sending message...");
+            AppLog.log("RoWorker; Sending message to: " + publishTopic);
+
             MqttMessage message = new MqttMessage();
             message.setQos(0);
             message.setPayload(publishMessage.getBytes());
@@ -223,10 +291,10 @@ public class RoWorker extends Worker {
 
                     @Override
                     public void deliveryComplete(IMqttDeliveryToken token) {
+                        AppLog.log("Message delivered to: " + mHostToSendToken);
                         if (mCtx != null) {
                             toastMessage("Message delivered");
                         }
-                        AppLog.log("RoWorker; Message delivery complete");
                     }
                 });
             }
@@ -285,5 +353,50 @@ public class RoWorker extends Worker {
             }
         };
         mHandler.post(r);
+    }
+
+    public String getEncryptedString(String strToEnc, String secKey) {
+        try {
+            // for example 0x52B4284E - represent 2014 year.
+            // "2014-1970 = 44years"
+            // so 'int' should be OK to store at least (44 * 3) years of seconds
+            int intSec = (int) (System.currentTimeMillis() / 1000);
+
+            Random r = new Random();
+            int randomInt = r.nextInt();
+            //char loByteRand = (char)((randomInt << 28) >> 28);
+
+            byte[] dataToEnc = strToEnc.getBytes();
+
+            // 14 = int + int + char + char + datalen
+            // '01' means - protocol version
+            //
+            byte[] byteData = ByteBuffer.allocate(14 + dataToEnc.length)
+                    .putInt(randomInt) // Random, adding entropy to first 16 bytes of data block
+                    .putInt(intSec) // OTP parameter
+                    .putChar('0')  // protocol signature '01'
+                    .putChar('1')
+                    .putChar((char)dataToEnc.length) // data len
+                    .put(dataToEnc) // data itself
+                    .array();
+
+            // create key - 16 bytes only for AES128
+            String keyStr = secKey.substring(0, 32);
+
+            if (keyStr.length() > 32) // AES128 encryption key should be 16 bytes only.
+                keyStr = secKey.substring(0, 32);
+
+            SecretKeySpec secretKey = new SecretKeySpec(HexEncoding.decode(keyStr), "AES");
+
+            // AES128 encryption
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            byte[] encryptedByteData = cipher.doFinal(byteData);
+
+            return HexEncoding.encode(encryptedByteData);
+        } catch (Exception e) {
+            AppLog.log(Log.getStackTraceString(e));
+        }
+        return null;
     }
 }

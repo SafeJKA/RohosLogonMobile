@@ -23,6 +23,7 @@ import com.rohos.logon1.BTService;
 import com.rohos.logon1.NetworkSender;
 import com.rohos.logon1.R;
 import com.rohos.logon1.RohosApplication;
+import com.rohos.logon1.utils.AppLog;
 
 import java.util.ArrayList;
 
@@ -141,9 +142,7 @@ public class DetectMovementService extends Service implements SensorEventListene
 
                     //Log.d(TAG, "pitch " + pitch + ", roll " + roll);
                 }else{
-                    //Log.d(TAG, "Couldn't get orientation");
-                    RohosApplication app = (RohosApplication)getApplication();
-                    app.logError(TAG + ", couldn't get orientation");
+                    AppLog.log(TAG + ", couldn't get orientation");
                 }
             }
         }catch(Exception e){
@@ -152,9 +151,7 @@ public class DetectMovementService extends Service implements SensorEventListene
     }
 
     private void sendPackage(){
-        RohosApplication app = null;
         try{
-            app = (RohosApplication)getApplication();
             AuthRecordsDb authRecordsDb = new AuthRecordsDb(getApplicationContext());
 
             // Send unlock package via WiFi
@@ -176,12 +173,9 @@ public class DetectMovementService extends Service implements SensorEventListene
                 startService(new Intent(DetectMovementService.this, BTService.class));
             }
 
-            //Log.d(TAG, "Package is sent");
-
-            app.logError(TAG + ", Unlocking PC package is sent");
+            AppLog.log(TAG + ", Unlocking PC package is sent");
         }catch(Exception e){
-            if(app != null) app.logError(TAG + ", " + e.toString());
-            //Log.e(TAG, e.toString());
+            AppLog.log(Log.getStackTraceString(e));
         }finally{
             DetectMovementService.this.stopSelf();
         }

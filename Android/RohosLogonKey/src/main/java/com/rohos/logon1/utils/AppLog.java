@@ -1,6 +1,8 @@
 package com.rohos.logon1.utils;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -26,6 +28,10 @@ public class AppLog{
 
     private String mLogFile = "rohoslogon.log";
     private String mPath = null;
+
+    public static AppLog getInstance(){
+        return mLog;
+    }
 
     public AppLog(Context context){
         try{
@@ -59,6 +65,35 @@ public class AppLog{
         }catch(Exception e){
             Log.e("AppLog", Log.getStackTraceString(e));
         }
+    }
+
+    public synchronized void  readLogLineByLine(final Message msg){
+        Runnable r = new Runnable(){
+            @Override
+            public void run() {
+                File file = new File(new String(mPath), new String(mLogFile));
+                if(!file.exists())
+                    return;
+
+                Handler handler = msg.getTarget();
+                Message message = null;
+                FileReader fr;
+                try {
+                    fr = new FileReader(file);
+                    BufferedReader br = new BufferedReader(fr);
+                    String line;
+                    while((line = br.readLine()) != null){
+                        message = Message.obtain(handler, 2, line);
+                        handler.sendMessage(message);
+                    }
+                    fr.close();
+                } catch (IOException e) {
+                    if(mLog != null)
+                        mLog.log(Log.getStackTraceString(e));
+                }
+            }
+        };
+        new Thread(r).start();
     }
 
     /*public static void getLog(){

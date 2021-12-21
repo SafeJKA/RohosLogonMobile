@@ -93,8 +93,6 @@ public class ShowApiLog extends AppCompatActivity {
                                 "android.permission.READ_EXTERNAL_STORAGE"
                         }, PERM_REQUEST_CODE
                 );
-
-                copyLogToCard();
                 break;
         }
         return false;

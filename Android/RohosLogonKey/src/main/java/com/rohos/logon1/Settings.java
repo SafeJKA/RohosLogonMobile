@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
@@ -22,12 +24,29 @@ import androidx.preference.PreferenceManager;
 
 import com.rohos.logon1.services.KnockService;
 import com.rohos.logon1.services.LockPCService;
+import com.rohos.logon1.utils.AppLog;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Settings extends AppCompatActivity {
     private final String TAG = "Settings";
+
+    public static String getApiVersion(Context context){
+        PackageInfo pi = null;
+        try{
+            pi = context.getPackageManager().getPackageInfo(
+                    context.getPackageName(), 0);
+        }catch(PackageManager.NameNotFoundException e){
+            AppLog.log(Log.getStackTraceString(e));
+        }
+
+        String apiVersion = "";
+        if(pi != null)
+            apiVersion = pi.versionName;
+
+        return apiVersion;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

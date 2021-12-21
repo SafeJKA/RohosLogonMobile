@@ -121,8 +121,6 @@ public class RohosApplication extends Application {
 	        
 	        // Start KnockService to calculate buffer size
 	        //startService(new Intent(RohosApplication.this, KnockService.class));
-	        
-	        logError("RohosApplication.onCreate launched");
 		}catch(Exception e){
 			//Log.e(TAG, e.toString());
 		}        
@@ -151,7 +149,7 @@ public class RohosApplication extends Application {
 			//Log.e(TAG, e.toString());
 		}
 	}
-	
+
 	public void logError(final String message){
 		AppLog.log(message);
 		//final File path = getFilesDir();

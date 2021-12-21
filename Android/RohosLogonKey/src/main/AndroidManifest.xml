@@ -94,6 +94,7 @@
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <activity android:name=".ControlActivity" />
+        <activity android:name=".ShowApiLog" />
 
         <service android:name="org.eclipse.paho.android.service.MqttService" />
         <service android:name=".widget.UnlockPcService" />

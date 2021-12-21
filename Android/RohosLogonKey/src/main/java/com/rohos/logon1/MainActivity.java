@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Handler;
@@ -33,6 +34,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
@@ -147,8 +149,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
 
                 String accName = ((TextView) row.findViewById(R.id.recordName)).getText().toString();
                 String accHost = ((TextView) row.findViewById(R.id.hostName)).getText().toString();
-                //sendMqttLoginRequest(accName, accHost);
-                sendTokenToPCs(accName, accHost);
+                sendMqttLoginRequest(accName, accHost);
             }
         });
 
@@ -205,6 +206,8 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
                 }
             }
         };
+
+        checkPermissions();
     }
 
     @Override
@@ -225,12 +228,15 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
             case R.id.action_check_updates:
                 checkUpdates();
                 return true;
+            case R.id.show_api_log:
+                startActivity(new Intent(this, ShowApiLog.class));
+                return true;
             case R.id.get_token:
                 copyFCMtokenToClipboard();
                 //getFMStoken();
                 return true;
             case R.id.send_token:
-                //sendTokenToPCs();
+                sendTokenToPCs();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -684,7 +690,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
             }
 
             StringBuilder sb = new StringBuilder();
-            sb.append("https://fcm.googleapis.com/fcm/send?key=**************************************************************&to=");
+            sb.append("https://fcm.googleapis.com/fcm/send?key=&to=");
             sb.append(token);
             sb.append("&body=2FA bypass on PC.");
 
@@ -699,7 +705,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
         }
     }
 
-    private void sendTokenToPCs(String accountName, String hostName){
+    private void sendTokenToPCs(){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         String token = sp.getString("fcm_token", null);
         if(token == null)
@@ -707,8 +713,6 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
 
         Data.Builder builder = new Data.Builder();
         builder.putString("token", token);
-        builder.putString("acc_name", accountName);
-        builder.putString("host_name", hostName);
         Data data = builder.build();
 
         OneTimeWorkRequest.Builder requestBuilder = new OneTimeWorkRequest.Builder(RoWorker.class);
@@ -725,6 +729,32 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
                 }
             }
         });
+    }
+
+    private void checkPermissions(){
+        String[] permissions = new String[]{"android.permission.READ_PHONE_STATE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_COARSE_LOCATION"};
+
+        if(!hasPermissions(permissions)){
+            ActivityCompat.requestPermissions(this, permissions, 10);
+        }
+    }
+
+    private boolean hasPermissions(String[] permissions){
+        boolean hasPerm = false;
+        try{
+            for(String permission : permissions){
+                if(ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED){
+                    return false;
+                }else{
+                    hasPerm = true;
+                }
+            }
+        }catch(Exception e){
+            AppLog.log(Log.getStackTraceString(e));
+        }
+        return hasPerm;
     }
 
     private void getFMStoken(){
@@ -747,5 +777,3 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
         });
     }
 }
-
-

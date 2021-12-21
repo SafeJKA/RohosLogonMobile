@@ -13,9 +13,11 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -104,7 +106,8 @@ public class RoFirebaseMessagingService extends FirebaseMessagingService {
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // FCM registration token to your app server.
-        sendRegistrationToServer(token);
+        //sendRegistrationToServer(token);
+        sendTokenToPCs(token);
     }
     // [END on_new_token]
 
@@ -146,6 +149,20 @@ public class RoFirebaseMessagingService extends FirebaseMessagingService {
 
         // TODO: Implement this method to send token to your app server.
         AppLog.log(TAG + ", FMS token:" + token);
+    }
+
+    private void sendTokenToPCs(String token){
+
+        Data.Builder builder = new Data.Builder();
+        builder.putString("token", token);
+        Data data = builder.build();
+
+        OneTimeWorkRequest.Builder requestBuilder = new OneTimeWorkRequest.Builder(RoWorker.class);
+        requestBuilder.setInputData(data);
+        OneTimeWorkRequest workRequest = requestBuilder.build();
+
+        WorkManager workManager = WorkManager.getInstance(getApplicationContext());
+        workManager.beginWith(workRequest).enqueue();
     }
 
     /**
