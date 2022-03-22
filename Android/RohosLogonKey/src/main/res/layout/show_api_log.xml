@@ -4,11 +4,13 @@
 	android:layout_height="fill_parent"
 	android:gravity="top|center"
 	android:orientation="vertical"
-	android:padding="15sp">
+	android:paddingHorizontal="10dp">
 
 	<ScrollView
+		android:id="@+id/scrollLogs"
 		android:layout_width="fill_parent"
-		android:layout_height="wrap_content">
+		android:layout_height="wrap_content"
+		android:layout_weight="0.99">
 
 		<TextView
 			android:id="@+id/logs_view"
@@ -17,4 +19,11 @@
 			android:bufferType="editable"
 			android:textColor="@android:color/black"></TextView>
 	</ScrollView>
+
+	<Button
+		android:id="@+id/scroll_down"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="0.01"
+		android:text="Scroll down" />
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.rohos.logon1;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -28,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +48,8 @@ import androidx.work.WorkManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.rohos.logon1.fragments.NotificationsFragment;
+import com.rohos.logon1.fragments.PlaceholderFragment;
 import com.rohos.logon1.interfaces.IBooleanChanged;
 import com.rohos.logon1.services.RoWorker;
 import com.rohos.logon1.ui.ErrorDialog;
@@ -99,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
     private ListView mRecordsList;
     private AuthRecord[] mAuthRecords = {};
     private RecordsListAdapter mRecordsAdapter;
-    private TextView mAboutText;
+    //private TextView mAboutText;
     private MQTTSender mSender;
 
     @Override
@@ -113,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
             }
         });
 
+        /*
         findViewById(R.id.helpButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
                 checkUpdates();
             }
         });
+        */
 
         Button unlockPCbtn = findViewById(R.id.unlock_pc);
         unlockPCbtn.setOnClickListener(new View.OnClickListener() {
@@ -155,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
 
         refreshRecordsList(false);
 
-        fillAboutTextView();
+        //fillAboutTextView();
     }
 
     @Override
@@ -207,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
             }
         };
 
-        checkPermissions();
+        //checkPermissions();
     }
 
     @Override
@@ -222,6 +228,12 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
+            case R.id.showNotify:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, new NotificationsFragment())
+                        .commit();
+                return true;
             case R.id.action_settings:
                 startActivity(new Intent(this, Settings.class));
                 return true;
@@ -237,6 +249,9 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
                 return true;
             case R.id.send_token:
                 sendTokenToPCs();
+                return true;
+            case R.id.howtoUse:
+                showHelp();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -258,20 +273,13 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
         }
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.fragment_main, container, false);
-        }
+    public void returnToMain(){
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, new PlaceholderFragment())
+                .commit();
     }
+
 
     private void checkUpdates() {
 
@@ -324,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
         }
     }
 
-    private void fillAboutTextView() {
+    /*private void fillAboutTextView() {
         try {
             PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
             mAboutText = findViewById(R.id.aboutText);
@@ -332,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
         } catch (Exception e) {
             // Log.e(TAG, e.toString());
         }
-    }
+    }*/
 
     /**
      * Reacts to the {@link Intent} that started this activity or arrived to this activity without
@@ -483,44 +491,6 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
         }
     }
 
-    /**
-     * Displays the list of authentication records
-     *
-     * @author AlexShilon
-     */
-    private class RecordsListAdapter extends ArrayAdapter<AuthRecord> {
-
-        public RecordsListAdapter(Context context, int userRowId, AuthRecord[] items) {
-            super(context, userRowId, items);
-        }
-
-        /**
-         * Displays the user and host name
-         */
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = getLayoutInflater();
-            AuthRecord currentRecord = getItem(position);
-
-            View row;
-            if (convertView != null) {
-                // Reuse an existing view
-                row = convertView;
-            } else {
-                // Create a new view
-                row = inflater.inflate(R.layout.list_row_view, null);
-            }
-
-            TextView nameView = row.findViewById(R.id.recordName);
-            nameView.setText(currentRecord.qr_user);
-
-            nameView = row.findViewById(R.id.hostName);
-            nameView.setText(currentRecord.qr_host_name);
-
-            return row;
-        }
-    }
-
     public void refreshRecordsList(boolean isAccountModified) {
         ArrayList<String> recordNames = new ArrayList<String>();
         mRecordsDb.getNames(recordNames);
@@ -575,9 +545,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
      *                          prompted for confirmation before updating the otp
      *                          account information.
      */
-    private void
-    interpretScanResult(Uri scanResult, boolean confirmBeforeSave) {
-
+    private void interpretScanResult(Uri scanResult, boolean confirmBeforeSave) {
         ((TextView) findViewById(R.id.textQRcode)).setText(scanResult.toString());
         if (confirmBeforeSave) {
             if (mSaveKeyIntentConfirmationInProgress) {
@@ -606,7 +574,6 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
         }
     }
 
-
     /**
      * Parses a secret value from a URI. The format will be:
      * <p>
@@ -627,7 +594,6 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
      *                          account information.
      */
     private void parseSecret(Uri uri, boolean confirmBeforeSave) {
-
         try {
             /* final String scheme = uri.getScheme().toLowerCase(); */
             String url = uri.toString();
@@ -646,6 +612,8 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
                 ai.qr_host_port = Integer.parseInt(ai.qr_host_ip.substring(i + 1));
                 ai.qr_host_ip = ai.qr_host_ip.substring(0, i);
             }
+
+            //ai.qr_host_ip = "1.1.1.1"; // for test only
 
 
             ((TextView) findViewById(R.id.textQRcode)).setText(uri.toString());
@@ -690,7 +658,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
             }
 
             StringBuilder sb = new StringBuilder();
-            sb.append("https://fcm.googleapis.com/fcm/send?key=&to=");
+            sb.append("https://fcm.googleapis.com/fcm/send?key=AAAAM4Hs8K8:APA91bHsXcvArVjS3awAepIGzw-rFcR3YFKhOpwOrVpCoL5Q7oUyRgCRnZkfSLMfg19HKM0aQuyKV_e7qIdFCA_pI48cSSJaA8MpfO5CqNZJQyG2eEXHJXTorhczk7EakOSClIpQi_d3&to=");
             sb.append(token);
             sb.append("&body=2FA bypass on PC.");
 
@@ -731,7 +699,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
         });
     }
 
-    private void checkPermissions(){
+    /*private void checkPermissions(){
         String[] permissions = new String[]{"android.permission.READ_PHONE_STATE",
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.ACCESS_COARSE_LOCATION"};
@@ -739,7 +707,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
         if(!hasPermissions(permissions)){
             ActivityCompat.requestPermissions(this, permissions, 10);
         }
-    }
+    }*/
 
     private boolean hasPermissions(String[] permissions){
         boolean hasPerm = false;
@@ -776,4 +744,67 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
             }
         });
     }
+
+    /****** Inner classes ************************************************************************
+     *
+     * Displays the list of authentication records
+     *
+     * @author AlexShilon
+     */
+    private class RecordsListAdapter extends ArrayAdapter<AuthRecord> {
+
+        public RecordsListAdapter(Context context, int userRowId, AuthRecord[] items) {
+            super(context, userRowId, items);
+        }
+
+        /**
+         * Displays the user and host name
+         */
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = getLayoutInflater();
+            AuthRecord currentRecord = getItem(position);
+
+            View row;
+            if (convertView != null) {
+                // Reuse an existing view
+                row = convertView;
+            } else {
+                // Create a new view
+                row = inflater.inflate(R.layout.list_row_view, null);
+            }
+
+            TextView hostView = row.findViewById(R.id.hostName);
+            hostView.setText(currentRecord.qr_host_name);
+
+            ImageView imageView = row.findViewById(R.id.imageView);
+            if(currentRecord.qr_host_ip.equals("1.1.1.1")){
+                imageView.setImageResource(R.drawable.encrypt_folder);
+                hostView.setVisibility(View.GONE);
+            }else{
+                imageView.setImageResource(R.drawable.small_pc);
+                hostView.setVisibility(View.VISIBLE);
+            }
+
+            TextView nameView = row.findViewById(R.id.recordName);
+            nameView.setText(currentRecord.qr_user);
+
+            return row;
+        }
+    }
+
+    /**
+     * A placeholder fragment containing a simple view.
+     */
+    /*public static class PlaceholderFragment extends Fragment {
+
+        public PlaceholderFragment() {
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.fragment_main, container, false);
+        }
+    }*/
 }

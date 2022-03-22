@@ -46,10 +46,10 @@ import javax.crypto.spec.SecretKeySpec;
 public class RoWorker extends Worker {
     private static final String mServerUriPattern = "(tcp://)(?:(\\S+):(\\S+)@)?(\\S+):(\\d+)(?:@(\\S+))?";
 
-    private static final String mDefaultUserName = "";
-    private static final String mDefaultPassword = "";
+    private static final String mDefaultUserName = "rohos";
+    private static final String mDefaultPassword = "fZ7Vq93BuWLx";
     private static final String mDefaultBrokerURI = "tcp://node02.myqtthub.com:1883";
-    private static final String mDefaultClientID = "";
+    private static final String mDefaultClientID = "rohos.logon";
 
     private final String TAG = "Worker";
 
@@ -94,9 +94,8 @@ public class RoWorker extends Worker {
             //UserManager um = (UserManager)mCtx.getSystemService(Context.USER_SERVICE);
             //String uName = um.getUserName();
 
-            String imei = null;
             TelephonyManager tm = (TelephonyManager)mCtx.getSystemService(Context.TELEPHONY_SERVICE);
-            imei = android.provider.Settings.Secure.getString(mCtx.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+            String imei = android.provider.Settings.Secure.getString(mCtx.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
 
 
             String phoneId = "";

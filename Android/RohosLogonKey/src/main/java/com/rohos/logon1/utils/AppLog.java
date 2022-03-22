@@ -35,7 +35,8 @@ public class AppLog{
 
     public AppLog(Context context){
         try{
-            mPath = context.getExternalFilesDir(null).getPath();
+            mPath = context.getFilesDir().getPath();
+            //mPath = context.getExternalFilesDir(null).getPath();
 
             File dir = new File(mPath);
             if(!dir.exists()) {

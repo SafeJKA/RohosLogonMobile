@@ -79,4 +79,7 @@
 
     </PreferenceCategory>
     -->
+
+    <PreferenceScreen
+        android:key="api_version" />
 </PreferenceScreen>

@@ -13,6 +13,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +45,15 @@ public class ShowApiLog extends AppCompatActivity {
 
         setContentView(R.layout.show_api_log);
         mOutput = (TextView)findViewById(R.id.logs_view);
+
+        Button scrollDown = findViewById(R.id.scroll_down);
+        scrollDown.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                ScrollView sv = findViewById(R.id.scrollLogs);
+                sv.smoothScrollTo(0, mOutput.getBottom());
+            }
+        });
 
         mHandler = new Handler(Looper.getMainLooper()){
             @Override
@@ -86,14 +98,14 @@ public class ShowApiLog extends AppCompatActivity {
             case R.id.send_logs:
                 sendEmail();
                 break;
-            case R.id.copy_log_sdcard:
+            /*case R.id.copy_log_sdcard:
                 ActivityCompat.requestPermissions( this,
                         new String[]{
                                 "android.permission.WRITE_EXTERNAL_STORAGE",
                                 "android.permission.READ_EXTERNAL_STORAGE"
                         }, PERM_REQUEST_CODE
                 );
-                break;
+                break;*/
         }
         return false;
     }

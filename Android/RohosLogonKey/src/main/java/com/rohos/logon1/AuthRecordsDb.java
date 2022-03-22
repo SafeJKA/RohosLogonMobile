@@ -63,10 +63,19 @@ public class AuthRecordsDb {
     private static final String HOST_PORT = "host_port";
     private static final String SEND_TOKEN_SESSION = "send_token_session"; //int
 
+    // Fields of notify table
+    private static final String PN_USER = "user";
+    private static final String PN_PCN = "pc_name";
+    private static final String PN_TYPE = "type";
+    private static final String PN_TITLE = "title";
+    private static final String PN_TEXT = "text";
+    private static final String PN_TS = "time_sent";
+    private static final String PN_ATTR = "attr";
 
     // @VisibleForTesting
     static final String TABLE_USERS = "users";
     static final String TABLE_HOSTS = "hosts";
+    static final String TABLE_PN = "notify";
     // @VisibleForTesting
     static final String PATH = "databases";
 
@@ -166,6 +175,37 @@ public class AuthRecordsDb {
     }
      */
 
+    public ArrayList<String[]> getNotifications(){
+        ArrayList<String[]> notifyList = new ArrayList<>();
+        try{
+            String query = "SELECT user, pc_name, text FROM notify ORDER BY time_sent DESC";
+            Cursor cr = mDatabase.rawQuery(query, null, null);
+            if(cr == null || !cr.moveToFirst()){
+                AppLog.log(TAG + "; couldn't get notifications");
+                return notifyList;
+            }
+
+            int userName = cr.getColumnIndex("user");
+            int pcName = cr.getColumnIndex("pc_name");
+            int nText = cr.getColumnIndex("text");
+
+            do{
+                notifyList.add(new String[]{cr.getString(userName), cr.getString(pcName), cr.getString(nText)});
+            }while(cr.moveToNext());
+        }catch(Exception e){
+            AppLog.log(Log.getStackTraceString(e));
+        }
+        return notifyList;
+    }
+
+    public void deleteAllNotifications(){
+        try{
+            mDatabase.delete(TABLE_PN, null, null);
+        }catch(Exception e){
+            AppLog.log(Log.getStackTraceString(e));
+        }
+    }
+
     public boolean hostExists(String host) {
         Cursor cursor = null;
         try {
@@ -174,6 +214,7 @@ public class AuthRecordsDb {
 
             return !cursorIsEmpty(cursor);
         } catch (Exception e) {
+            AppLog.log(Log.getStackTraceString(e));
            // Log.e(TAG, "ERROR " + e.toString());
         } finally {
             if (cursor != null)
@@ -193,11 +234,11 @@ public class AuthRecordsDb {
                 return null;
             }
 
-            arrayList = new ArrayList<>();
             int userName = cursor.getColumnIndex(USER_NAME);
             int secret = cursor.getColumnIndex(SECRET_KEY);
             int hostName = cursor.getColumnIndex(HOST_NAME);
 
+            arrayList = new ArrayList<>();
             arrayList.add(new String[]{cursor.getString(userName), cursor.getString(secret), cursor.getString(hostName)});
 
             while (cursor.moveToNext()) {
@@ -315,6 +356,18 @@ public class AuthRecordsDb {
         return USER_NAME + " = " + DatabaseUtils.sqlEscapeString(name);
     }
 
+    public void insertNotify(NotifyRecord nr){
+        ContentValues cv = new ContentValues();
+        cv.put(PN_USER, nr.getUserName());
+        cv.put(PN_PCN, nr.getComputerName());
+        cv.put(PN_TYPE, nr.getType());
+        cv.put(PN_TITLE, nr.getTitle());
+        cv.put(PN_TEXT, nr.getText());
+        cv.put(PN_TS, nr.getTimeSent());
+
+        mDatabase.insert(TABLE_PN, null, cv);
+    }
+
     public void delete(String computer_name, String record_name) {
         try{
             int hostID = getHostId(computer_name);
@@ -343,7 +396,7 @@ public class AuthRecordsDb {
         if(hostID < 0){
             long id = mDatabase.insert(TABLE_HOSTS, null, val);
             hostID = (int)id;
-            AppLog.log("Inserted id:" + hostID);
+            AppLog.log("Inserted host id:" + hostID);
         }else{
             mDatabase.update(TABLE_HOSTS, val, HOST_NAME + "= ?", new String[]{ai.qr_host_name});
         }
@@ -445,8 +498,8 @@ public class AuthRecordsDb {
     }
 
     private void checkTables(Context context){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         try {
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
             int dbVersion = sp.getInt("db_version", 0);
 
             if (dbVersion == DB_VERSION) {
@@ -482,10 +535,29 @@ public class AuthRecordsDb {
 
             mDatabase.execSQL(sb.toString());
 
+            // Create table notify
+            sb.delete(0, sb.length());
+            sb.append("CREATE TABLE IF NOT EXISTS ".concat(TABLE_PN));
+            sb.append(" (");
+            sb.append(PN_USER.concat(" TEXT NOT NULL, "));
+            sb.append(PN_PCN.concat(" TEXT NOT NULL, ")); // computer name
+            sb.append(PN_TYPE.concat(" TEXT, "));
+            sb.append(PN_TITLE.concat(" TEXT, "));
+            sb.append(PN_TEXT.concat(" TEXT, "));
+            sb.append(PN_TS.concat(" INTEGER DEFAULT 0, ")); // time sent
+            sb.append(PN_ATTR.concat(" TEXT)"));
+
+            mDatabase.execSQL(sb.toString());
+        }catch(SQLiteException se){
+            AppLog.log("Error: " + se.getMessage());
+        }catch(Exception e){
+            AppLog.log(Log.getStackTraceString(e));
+        }
+
+        try{
             // Copy data from table accounts if the one exists
             Cursor cursor = mDatabase.query("accounts", null, null, null, null, null, null);
             if (!cursor.moveToFirst()) {
-                AppLog.log("Table accounts doesn't exist");
                 return;
             }
 
@@ -528,11 +600,6 @@ public class AuthRecordsDb {
             SharedPreferences.Editor e = sp.edit();
             e.putInt("db_version", DB_VERSION);
             e.commit();
-        }catch(SQLiteException se){
-            AppLog.log("Error: " + se.getMessage());
-        }catch(Exception e){
-            AppLog.log(Log.getStackTraceString(e));
-        }
+        }catch(Exception e){}
     }
-
 }

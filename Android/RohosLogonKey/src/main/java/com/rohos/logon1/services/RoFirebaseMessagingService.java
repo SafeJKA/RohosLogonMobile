@@ -25,6 +25,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.rohos.logon1.MainActivity;
 import com.rohos.logon1.R;
 import com.rohos.logon1.utils.AppLog;
+import com.rohos.logon1.utils.SaveNotification;
 
 public class RoFirebaseMessagingService extends FirebaseMessagingService {
     private final String TAG = "FMS";
@@ -58,24 +59,35 @@ public class RoFirebaseMessagingService extends FirebaseMessagingService {
 
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        AppLog.log(TAG + ", From: " + remoteMessage.getFrom());
+        //AppLog.log(TAG + ", From: " + remoteMessage.getFrom());
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             AppLog.log(TAG + ", Message data payload: " + remoteMessage.getData());
 
-            if (/* Check if data needs to be processed by long running job */ true) {
+            //if (/* Check if data needs to be processed by long running job */ true) {
                 // For long-running tasks (10 seconds or more) use WorkManager.
-                scheduleJob();
-            } else {
+                //scheduleJob();
+            //} else {
                 // Handle message within 10 seconds
-                handleNow();
-            }
+                //handleNow();
+            //}
         }
 
         // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            AppLog.log(TAG + ", Message Notification Body: " + remoteMessage.getNotification().getBody());
+        RemoteMessage.Notification notify = remoteMessage.getNotification();
+        if (notify != null) {
+            Long timeSent = notify.getEventTime();
+
+            SaveNotification r = new SaveNotification(getApplicationContext());
+            r.setBody(notify.getBody());
+            r.setTitle(notify.getTitle());
+            r.setTimeSent(timeSent == null ? System.currentTimeMillis() : timeSent.longValue());
+            new Thread(r).start();
+
+            sendNotification(notify.getTitle(), notify.getBody());
+            AppLog.log("From FMS ts: " + System.currentTimeMillis());
+            //AppLog.log(TAG + ", Message Notification Body: " + notify.getBody() + ", Title: " + notify.getTitle() + ", ts: " + notify.getEventTime());
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
@@ -114,12 +126,12 @@ public class RoFirebaseMessagingService extends FirebaseMessagingService {
     /**
      * Schedule async work using WorkManager.
      */
-    private void scheduleJob() {
+    /*private void scheduleJob() {
         // [START dispatch_job]
         OneTimeWorkRequest work = new OneTimeWorkRequest.Builder(RoWorker.class).build();
         WorkManager.getInstance(this).beginWith(work).enqueue();
         // [END dispatch_job]
-    }
+    }*/
 
     /**
      * Handle time allotted to BroadcastReceivers.
@@ -136,7 +148,7 @@ public class RoFirebaseMessagingService extends FirebaseMessagingService {
      *
      * @param token The new token.
      */
-    private void sendRegistrationToServer(String token) {
+    /*private void sendRegistrationToServer(String token) {
         Data.Builder builder = new Data.Builder();
         builder.putString("token", token);
         Data data = builder.build();
@@ -149,7 +161,7 @@ public class RoFirebaseMessagingService extends FirebaseMessagingService {
 
         // TODO: Implement this method to send token to your app server.
         AppLog.log(TAG + ", FMS token:" + token);
-    }
+    }*/
 
     private void sendTokenToPCs(String token){
 
@@ -170,7 +182,7 @@ public class RoFirebaseMessagingService extends FirebaseMessagingService {
      *
      * @param messageBody FCM message body received.
      */
-    private void sendNotification(String messageBody) {
+    private void sendNotification(String title, String messageBody) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -181,7 +193,7 @@ public class RoFirebaseMessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.ic_notification)
-                        .setContentTitle(getString(R.string.fcm_message))
+                        .setContentTitle(title)
                         .setContentText(messageBody)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)

@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
@@ -77,7 +78,7 @@ public class RohosApplication extends Application {
 	        	public void handleMessage(Message msg){
 	        		switch(msg.what){
 	        		case START_DETECTING_UPD:
-	        			startDetectingUPD();
+	        			//startDetectingUPD();
 	        			break;
 	        		case STOP_DETECTING_UPD:
 	        			break;
@@ -185,10 +186,10 @@ public class RohosApplication extends Application {
 			//}
 
             // This code is used for test only
-			Message msg = mHandler.obtainMessage(START_RECOGNIZING_SERVICE);
-			mHandler.sendMessage(msg);
+			//Message msg = mHandler.obtainMessage(START_RECOGNIZING_SERVICE);
+			//mHandler.sendMessage(msg);
 		}catch(Exception e){
-			//Log.e(TAG, e.toString());
+			AppLog.log(Log.getStackTraceString(e));
 		}
 	}
 	

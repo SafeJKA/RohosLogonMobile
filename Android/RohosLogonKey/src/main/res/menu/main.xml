@@ -13,6 +13,9 @@
         android:title="Troubleshooting" />
     <item android:id="@+id/action_check_updates" android:title="@string/action_check_updates"></item>
     <item
+        android:id="@+id/showNotify"
+        android:title="Show Notifications" />
+    <item
         android:id="@+id/get_token"
         android:orderInCategory="102"
         android:title="Copy URL to clipboard" />
@@ -20,4 +23,8 @@
         android:id="@+id/send_token"
         android:orderInCategory="103"
         android:title="Send token to PCs" />
+    <item
+        android:id="@+id/howtoUse"
+        android:orderInCategory="104"
+        android:title="How to use" />
 </menu>

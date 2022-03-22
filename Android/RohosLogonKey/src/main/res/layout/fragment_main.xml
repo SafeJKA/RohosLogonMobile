@@ -36,7 +36,7 @@
         android:layout_marginBottom="5dp"
         android:singleLine="false" />
 
-    <TextView
+    <!-- <TextView
         android:id="@+id/aboutText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,20 +46,19 @@
         android:clickable="true"
         android:phoneNumber="false"
         android:text="@string/about_text"
-        android:textSize="18sp" />
+        android:textSize="18sp" /> -->
 
     <ListView
         android:id="@+id/listView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/aboutText"
         android:layout_below="@+id/textQRcode"
         android:layout_alignParentEnd="false"
         android:layout_alignParentRight="true"
         android:longClickable="false"
         android:visibility="visible" />
 
-    <Button
+    <!-- <Button
         android:id="@+id/helpButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -68,7 +67,7 @@
         android:layout_alignParentBottom="true"
         android:onClick="showHelp"
         android:singleLine="false"
-        android:text="@string/helpButton" />
+        android:text="@string/helpButton" /> -->
 
     <Button
         android:id="@+id/unlock_pc"

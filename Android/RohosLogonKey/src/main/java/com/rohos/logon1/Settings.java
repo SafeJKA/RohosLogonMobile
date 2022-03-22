@@ -35,17 +35,11 @@ public class Settings extends AppCompatActivity {
     public static String getApiVersion(Context context){
         PackageInfo pi = null;
         try{
-            pi = context.getPackageManager().getPackageInfo(
-                    context.getPackageName(), 0);
+            pi = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
         }catch(PackageManager.NameNotFoundException e){
             AppLog.log(Log.getStackTraceString(e));
         }
-
-        String apiVersion = "";
-        if(pi != null)
-            apiVersion = pi.versionName;
-
-        return apiVersion;
+        return (pi == null ? " " : pi.versionName);
     }
 
     @Override
@@ -164,6 +158,9 @@ public class Settings extends AppCompatActivity {
 
                 CheckBoxPreference showIcon = (CheckBoxPreference) findPreference("show_icon");
                 showIcon.setOnPreferenceChangeListener(this);
+
+                Preference apiVersion = findPreference("api_version");
+                apiVersion.setTitle(getString(R.string.about_text, getApiVersion(activity)));
 
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 sp.registerOnSharedPreferenceChangeListener(mListener);
