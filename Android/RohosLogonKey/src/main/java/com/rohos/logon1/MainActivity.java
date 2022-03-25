@@ -1,5 +1,6 @@
 package com.rohos.logon1;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.ActivityNotFoundException;
@@ -34,6 +35,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -90,10 +95,10 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
     public static final int REMOVE_ID = 2;
 
     // Links
-    public static final String ZXING_MARKET =
-            "market://search?q=pname:com.google.zxing.client.android";
-    public static final String ZXING_DIRECT =
-            "https://zxing.googlecode.com/files/BarcodeScanner3.1.apk";
+    //public static final String ZXING_MARKET =
+    //        "market://search?q=pname:com.google.zxing.client.android";
+    //public static final String ZXING_DIRECT =
+    //        "https://zxing.googlecode.com/files/BarcodeScanner3.1.apk";
 
     private final String TAG = "MainActivity";
 
@@ -106,11 +111,28 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
     //private TextView mAboutText;
     private MQTTSender mSender;
 
+    // Callback for activity QRcodeScannerActivity to get QR code.
+    private ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent intent = result.getData();
+                        Uri uri = intent.getData();
+                        interpretScanResult(uri, false);
+
+                        AppLog.log("QR received: " + uri.toString());
+                        // Handle the Intent
+                    }
+                }
+            });
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        findViewById(R.id.scan_barcode).setOnClickListener(new View.OnClickListener() {
+        Button scanCode = findViewById(R.id.scan_barcode);
+        scanCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 scanBarcode();
@@ -213,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
             }
         };
 
-        //checkPermissions();
+        checkPermissions();
     }
 
     @Override
@@ -320,8 +342,9 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
     }
 
     private void scanBarcode() {
+        mStartForResult.launch(new Intent(getApplicationContext(), QRcodeScannerActivity.class));
 
-        Intent intentScan = new Intent("com.google.zxing.client.android.SCAN");
+        /*Intent intentScan = new Intent("com.google.zxing.client.android.SCAN");
         intentScan.putExtra("SCAN_MODE", "QR_CODE_MODE");
         intentScan.putExtra("SAVE_HISTORY", false);
         try {
@@ -329,7 +352,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
         } catch (ActivityNotFoundException e) {
             // Log.e(TAG, Log.getStackTraceString(e));
             showDialog(0);
-        }
+        }*/
     }
 
     /*private void fillAboutTextView() {
@@ -699,16 +722,6 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
         });
     }
 
-    /*private void checkPermissions(){
-        String[] permissions = new String[]{"android.permission.READ_PHONE_STATE",
-        "android.permission.WRITE_EXTERNAL_STORAGE",
-        "android.permission.ACCESS_COARSE_LOCATION"};
-
-        if(!hasPermissions(permissions)){
-            ActivityCompat.requestPermissions(this, permissions, 10);
-        }
-    }*/
-
     private boolean hasPermissions(String[] permissions){
         boolean hasPerm = false;
         try{
@@ -743,6 +756,16 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
                 Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void checkPermissions(){
+        String[] permissions = new String[]{
+                android.Manifest.permission.CAMERA
+        };
+
+        if(!hasPermissions(permissions)){
+            ActivityCompat.requestPermissions(this, permissions, permissions.length);
+        }
     }
 
     /****** Inner classes ************************************************************************

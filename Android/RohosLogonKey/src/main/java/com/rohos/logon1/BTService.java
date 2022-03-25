@@ -9,11 +9,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
 
 import com.rohos.logon1.utils.AppLog;
 
@@ -64,8 +67,18 @@ public class BTService extends Service {
                 // Get the BluetoothDevice object from the Intent
                 BluetoothDevice device = intent
                         .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-               // Log.d(TAG, "Device name-" + device.getName());
-               // Log.d(TAG, "Device state-" + device.getBondState());
+                // Log.d(TAG, "Device name-" + device.getName());
+                // Log.d(TAG, "Device state-" + device.getBondState());
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
                 if (device.getBondState() == BluetoothDevice.BOND_BONDED) {
                     AuthRecord ar = mRecordsDb.getAuthRecordByHostName("/" + device.getName());
                     if (ar != null && ar.qr_host_name != null && ar.qr_host_name.length() > 0) {
@@ -77,7 +90,7 @@ public class BTService extends Service {
                                     ar.qr_host_name, encryptedAuthString);
 
                             if (!isNetConnected()) connectToServer(device.getAddress());
-                           // Log.d(TAG, "Data to send: " + str_data);
+                            // Log.d(TAG, "Data to send: " + str_data);
                             mExecutor.submit(new SendRunnable(str_data + "\n"));
 
                             mSendingData = true;
@@ -85,7 +98,7 @@ public class BTService extends Service {
                                     Toast.LENGTH_LONG).show();
                         }
                     }
-                  //  Log.d(TAG, "Bonded device-" + device.getName());
+                    //  Log.d(TAG, "Bonded device-" + device.getName());
                 }
             } else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
                 if (!mSendingData) BTService.this.stopSelf();
@@ -117,7 +130,7 @@ public class BTService extends Service {
 
         super.onDestroy();
 
-       // Log.d(TAG, "onDestroy");
+        // Log.d(TAG, "onDestroy");
     }
 
     @Override
@@ -138,12 +151,12 @@ public class BTService extends Service {
         try {
             if (mFoundDevices.size() > 0) {
                 for (String s : mFoundDevices) {
-                  //  Log.d(TAG, "Device name-" + s);
+                    //  Log.d(TAG, "Device name-" + s);
                 }
             }
 
         } catch (Exception e) {
-          //  Log.d(TAG, "unlockPC");
+            //  Log.d(TAG, "unlockPC");
         }
     }
 
@@ -152,8 +165,8 @@ public class BTService extends Service {
             synchronized (sendLock) {
                 mServerOutputStream.write(array, 0, len);
                 mServerOutputStream.flush();
-             //   Log.d(TAG, "Bluetooth data sent...");
-              //  Log.d(TAG, array.toString());
+                //   Log.d(TAG, "Bluetooth data sent...");
+                //  Log.d(TAG, array.toString());
             }
 
         } catch (IOException e) {
@@ -171,6 +184,16 @@ public class BTService extends Service {
 
     private void connectToServer(String serverBTAddress) {
         try {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             mBtAdapter.cancelDiscovery();
             // Get the BluetoothDevice object
             BluetoothDevice device = mBtAdapter

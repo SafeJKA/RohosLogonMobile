@@ -83,6 +83,7 @@ public class AuthRecordsDb {
     SQLiteDatabase mDatabase;
 
     private final String TAG = "RecordsDb";
+    /*** This is used only for copy data from old DB!!!!!!!! ***/
     private final int DB_VERSION = 1;
 
 
@@ -179,7 +180,7 @@ public class AuthRecordsDb {
         ArrayList<String[]> notifyList = new ArrayList<>();
         try{
             String query = "SELECT user, pc_name, text FROM notify ORDER BY time_sent DESC";
-            Cursor cr = mDatabase.rawQuery(query, null, null);
+            Cursor cr = mDatabase.rawQuery(query, null);
             if(cr == null || !cr.moveToFirst()){
                 AppLog.log(TAG + "; couldn't get notifications");
                 return notifyList;
@@ -365,7 +366,10 @@ public class AuthRecordsDb {
         cv.put(PN_TEXT, nr.getText());
         cv.put(PN_TS, nr.getTimeSent());
 
-        mDatabase.insert(TABLE_PN, null, cv);
+        long result = mDatabase.insert(TABLE_PN, null, cv);
+        if(result < 0L){
+            AppLog.log("An error occurred while inserting PN to DB");
+        }
     }
 
     public void delete(String computer_name, String record_name) {
@@ -500,12 +504,6 @@ public class AuthRecordsDb {
     private void checkTables(Context context){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         try {
-            int dbVersion = sp.getInt("db_version", 0);
-
-            if (dbVersion == DB_VERSION) {
-                return;
-            }
-
             // Create table users
             StringBuilder sb = new StringBuilder();
             sb.append("CREATE TABLE IF NOT EXISTS ".concat(TABLE_USERS));
@@ -555,6 +553,11 @@ public class AuthRecordsDb {
         }
 
         try{
+            int dbVersion = sp.getInt("db_version", 0);
+            if (dbVersion == DB_VERSION) {
+                return;
+            }
+
             // Copy data from table accounts if the one exists
             Cursor cursor = mDatabase.query("accounts", null, null, null, null, null, null);
             if (!cursor.moveToFirst()) {

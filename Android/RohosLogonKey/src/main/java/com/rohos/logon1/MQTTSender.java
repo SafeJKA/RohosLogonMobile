@@ -25,6 +25,8 @@ import android.widget.Toast;
 
 import androidx.preference.PreferenceManager;
 
+import com.rohos.logon1.utils.AppLog;
+
 public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
 
     private Context context;
@@ -96,7 +98,8 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
                         if (context != null) {
                             Toast.makeText(context, "Connection failure", Toast.LENGTH_SHORT).show();
                         }
-                        exception.printStackTrace();
+                        AppLog.log("MQTTSender; Connection failure");
+                        //exception.printStackTrace();
                         s.release();
                     }
                 });
@@ -113,7 +116,8 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
 
                     @Override
                     public void connectionLost(Throwable cause) {
-                        System.err.println("Connection to the server lost");
+                        //System.err.println("Connection to the server lost");
+                        AppLog.log("MQTTSender; Connection to the server lost");
                         // cause.printStackTrace();
                     }
 
@@ -128,19 +132,20 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
                         if (context != null) {
                             Toast.makeText(context, "Message delivered", Toast.LENGTH_SHORT).show();
                         }
-                        System.err.println("Message delivery complete");
+                        AppLog.log("MQTTSender; Message delivery complete");
+                        //System.err.println("Message delivery complete");
                     }
                 });
             }
         } catch (MqttException e) {
             //handle e
-            e.printStackTrace();
+            //e.printStackTrace();
             s.release();
         }
         try {
             s.acquire();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -151,7 +156,8 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
                     //we are now successfully disconnected
-                    System.err.println("Disconnection success");
+                    //System.err.println("Disconnection success");
+                    AppLog.log("MQTTSender; Disconnection success");
                     s.release();
                 }
 
@@ -159,19 +165,21 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
                 public void onFailure(IMqttToken asyncActionToken,
                                       Throwable exception) {
                     //something went wrong, but probably we are disconnected anyway
-                    System.err.println("Disconnection failure");
+                    //System.err.println("Disconnection failure");
+                    AppLog.log("MQTTSender; Disconnection failure");
                     s.release();
                 }
             });
         } catch (MqttException e) {
-            System.err.println("Disconnection exception");
-            e.printStackTrace();
+            //System.err.println("Disconnection exception");
+            AppLog.log("MQTTSender; Disconnection exception");
+            //e.printStackTrace();
             s.release();
         }
         try {
             s.acquire();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         mqttClient.close();
         mqttConnOptions = null;
@@ -194,8 +202,9 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
 
             mqttClient.publish(publishTopic, message);
         } catch (MqttException e) {
-            System.err.println("Error Publishing: " + e.getMessage());
-            e.printStackTrace();
+            //System.err.println("Error Publishing: " + e.getMessage());
+            AppLog.log("MQTTSender; Error Publishing: " + e.getMessage());
+            //e.printStackTrace();
         }
     }
 

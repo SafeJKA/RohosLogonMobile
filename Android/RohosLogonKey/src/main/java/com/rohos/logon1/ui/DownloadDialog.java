@@ -28,7 +28,7 @@ public class DownloadDialog extends DialogFragment {
         dlBuilder.setPositiveButton(R.string.install_button, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW,
+                        /*Intent intent = new Intent(Intent.ACTION_VIEW,
                                 Uri.parse(MainActivity.ZXING_MARKET));
                         try {
                             startActivity(intent);
@@ -36,7 +36,7 @@ public class DownloadDialog extends DialogFragment {
                             intent = new Intent(Intent.ACTION_VIEW,
                                     Uri.parse(MainActivity.ZXING_DIRECT));
                             startActivity(intent);
-                        }
+                        }*/
                     }
                 }
         );
