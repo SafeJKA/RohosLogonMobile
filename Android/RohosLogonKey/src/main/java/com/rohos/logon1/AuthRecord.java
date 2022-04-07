@@ -21,10 +21,11 @@ public class AuthRecord {
     public String qr_user = null;         // user name or rohos disk name
     public String qr_host_name = null;
 
-    String qr_secret_key = null;   // encryption key
-    String qr_data = null;
-    String qr_host_ip = null;
-    int qr_host_port = -1;
+    public String qr_secret_key = null;   // encryption key
+    public String qr_data = null;
+    public String qr_host_ip = null;
+    public int qr_host_port = -1;
+
     String displayName;
     String settingsSet; // 'net.qrcode.'
     int someIntParamForFuture;

@@ -12,9 +12,9 @@
         android:orderInCategory="101"
         android:title="Troubleshooting" />
     <item android:id="@+id/action_check_updates" android:title="@string/action_check_updates"></item>
-    <item
+    <!-- <item
         android:id="@+id/showNotify"
-        android:title="Show Notifications" />
+        android:title="Show Notifications" /> -->
     <item
         android:id="@+id/get_token"
         android:orderInCategory="102"

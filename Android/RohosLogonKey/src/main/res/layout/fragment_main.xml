@@ -76,7 +76,7 @@
         android:layout_below="@+id/scan_barcode"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:text="Unlock PC"
+        android:text="@string/unlock_pc"
         android:visibility="visible" />
 
 

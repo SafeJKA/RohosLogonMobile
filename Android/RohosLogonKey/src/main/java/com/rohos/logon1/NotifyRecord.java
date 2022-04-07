@@ -1,6 +1,10 @@
 package com.rohos.logon1;
 
+import com.rohos.logon1.utils.AppLog;
+
 public class NotifyRecord {
+
+    private final String UNDEFINED = "undefined";
 
     private String mUserName = null;
     private String mComputerName = null;
@@ -8,15 +12,13 @@ public class NotifyRecord {
     private String mTitle = null;
     private String mText = null;
     private String mAttr = null;
+    private String mBody = null;
 
     private long mTimeSent = 0L;
 
     public NotifyRecord (String notifyBody){
-        String[] data = notifyBody.split(",");
-        mType = data[0];
-        mUserName = data[1];
-        mComputerName = data[2];
-        mText = data[3];
+        mBody = notifyBody;
+        parseNotifyBody();
     }
 
     public String getType(){
@@ -65,5 +67,41 @@ public class NotifyRecord {
 
     public String getAttr(){
         return mAttr;
+    }
+
+    private void parseNotifyBody(){
+        if(mBody == null){
+            AppLog.log("NotifyRecord; Notification body is null");
+            return;
+        }
+
+        String[] data = mBody.split(",");
+        int length = data.length;
+        switch(length){
+            case 1:
+                mType = data[0];
+                mUserName = UNDEFINED;
+                mComputerName = UNDEFINED;
+                mText = UNDEFINED;
+                break;
+            case 2:
+                mType = data[0];
+                mUserName = data[1];
+                mComputerName = UNDEFINED;
+                mText = UNDEFINED;
+                break;
+            case 3:
+                mType = data[0];
+                mUserName = data[1];
+                mComputerName = data[2];
+                mText = UNDEFINED;
+                break;
+            case 4:
+            default:
+                mType = data[0];
+                mUserName = data[1];
+                mComputerName = data[2];
+                mText = data[3];
+        }
     }
 }

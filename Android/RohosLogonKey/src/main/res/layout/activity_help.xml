@@ -57,12 +57,12 @@
                 android:paddingLeft="9dp"
                 android:paddingTop="15dp" />
 
-            <ImageView
+            <!-- <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/imageView3"
                 android:src="@drawable/help_use_widget"
-                android:padding="9dp" />
+                android:padding="9dp" /> -->
 
             <Button
                 android:layout_width="match_parent"

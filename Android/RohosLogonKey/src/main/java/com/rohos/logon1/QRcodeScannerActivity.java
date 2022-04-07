@@ -15,7 +15,7 @@ import com.rohos.logon1.utils.AppLog;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
-public class QRcodeScannerActivity extends AppCompatActivity implements ZBarScannerView.ResultHandler{
+public class QRcodeScannerActivity extends AppCompatActivity implements ZBarScannerView.ResultHandler {
 
     private ZBarScannerView mScannerView;
 

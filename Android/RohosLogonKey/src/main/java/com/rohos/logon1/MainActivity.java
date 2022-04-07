@@ -1,15 +1,11 @@
 package com.rohos.logon1;
 
-import android.Manifest;
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -43,6 +39,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 import androidx.work.Data;
@@ -62,6 +60,7 @@ import com.rohos.logon1.ui.RemoveAccountDialog;
 import com.rohos.logon1.utils.AppLog;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /* Main Activity
@@ -160,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
         unlockPCbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                unlockPC();
+                startActivity(new Intent(getApplicationContext(), NotificationsActivity.class));
             }
         });
 
@@ -250,12 +249,6 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.showNotify:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container, new NotificationsFragment())
-                        .commit();
-                return true;
             case R.id.action_settings:
                 startActivity(new Intent(this, Settings.class));
                 return true;
@@ -426,6 +419,27 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
                 return super.onContextItemSelected(item);
         }
     }
+
+    /*
+    @Override
+    public void onBackPressed() {
+        FragmentManager manager = getSupportFragmentManager();
+        List<Fragment> fragmentList = manager.getFragments();
+        if (fragmentList != null) {
+            for (int i = 0; i < fragmentList.size(); i++) {
+                Fragment f = fragmentList.get(i);
+                if (f != null && f.isVisible()) {
+                    String className = f.getClass().getSimpleName();
+                    if(className.equals("NotificationsFragment")){
+                        manager.popBackStack();
+                    }else{
+                        super.onBackPressed();
+                    }
+                    //AppLog.log("Fragment: " + f.getClass().getSimpleName() + ", " + f.isVisible());
+                }
+            }
+        }
+    }*/
 
     /**
      * This method is deprecated in SDK level 8, but we have to use it because the
@@ -683,7 +697,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
             StringBuilder sb = new StringBuilder();
             sb.append("https://fcm.googleapis.com/fcm/send?key=AAAAM4Hs8K8:APA91bHsXcvArVjS3awAepIGzw-rFcR3YFKhOpwOrVpCoL5Q7oUyRgCRnZkfSLMfg19HKM0aQuyKV_e7qIdFCA_pI48cSSJaA8MpfO5CqNZJQyG2eEXHJXTorhczk7EakOSClIpQi_d3&to=");
             sb.append(token);
-            sb.append("&body=2FA bypass on PC.");
+            //sb.append("&body=2FA bypass on PC.");
 
 
             ClipboardManager clipboardManager = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);

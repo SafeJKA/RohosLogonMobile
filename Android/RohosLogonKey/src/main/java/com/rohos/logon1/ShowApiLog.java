@@ -1,5 +1,6 @@
 package com.rohos.logon1;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -38,16 +39,16 @@ public class ShowApiLog extends AppCompatActivity {
     private Handler mHandler = null;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mAppLog = AppLog.getInstance();
 
         setContentView(R.layout.show_api_log);
-        mOutput = (TextView)findViewById(R.id.logs_view);
+        mOutput = (TextView) findViewById(R.id.logs_view);
 
         Button scrollDown = findViewById(R.id.scroll_down);
-        scrollDown.setOnClickListener(new View.OnClickListener(){
+        scrollDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ScrollView sv = findViewById(R.id.scrollLogs);
@@ -55,11 +56,11 @@ public class ShowApiLog extends AppCompatActivity {
             }
         });
 
-        mHandler = new Handler(Looper.getMainLooper()){
+        mHandler = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(@NonNull Message msg) {
                 // Messages are sent from AppLog.readLogLineByLine
-                String line = (String)msg.obj;
+                String line = (String) msg.obj;
                 mOutput.append(line);
                 mOutput.append("\n");
             }
@@ -70,7 +71,7 @@ public class ShowApiLog extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        if(mAppLog != null){
+        if (mAppLog != null) {
             mOutput.setText("");
             Message msg = Message.obtain(mHandler);
             mAppLog.readLogLineByLine(msg);
@@ -78,14 +79,14 @@ public class ShowApiLog extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy(){
-        if(mHandler != null)
+    protected void onDestroy() {
+        if (mHandler != null)
             mHandler = null;
         super.onDestroy();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_show_apilog, menu);
@@ -93,12 +94,15 @@ public class ShowApiLog extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch(item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.send_logs:
                 sendEmail();
                 break;
-            /*case R.id.copy_log_sdcard:
+            /*case R.id.scan_bt:
+                scanBluetooth();
+                break;
+            case R.id.copy_log_sdcard:
                 ActivityCompat.requestPermissions( this,
                         new String[]{
                                 "android.permission.WRITE_EXTERNAL_STORAGE",
@@ -114,18 +118,18 @@ public class ShowApiLog extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if(requestCode == PERM_REQUEST_CODE){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                copyLogToCard();
-            }else{
+        if (requestCode == PERM_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //copyLogToCard();
+            } else {
                 Toast.makeText(getApplicationContext(), "Application requires  permission to write on SD card",
                         Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    private void sendEmail(){
-        try{
+    private void sendEmail() {
+        try {
             CharSequence cs = mOutput.getText();
 
             String emailAddr = "rockm.devt@gmail.com";
@@ -151,12 +155,31 @@ public class ShowApiLog extends AppCompatActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             Context ctx = getApplicationContext();
             ctx.startActivity(intent);
-        }catch(Exception e){
+        } catch (Exception e) {
             AppLog.log(Log.getStackTraceString(e));
         }
     }
 
-    private void copyLogToCard(){
+    private void scanBluetooth() {
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter == null) {
+            AppLog.log(TAG + "; Device doesn't support Bluetooth");
+        }
+
+        if (!bluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                AppLog.log(TAG + "; BLUETOOTH_CONNECT doesn't granted");
+                //return;
+            }
+            //startActivityForResult(enableBtIntent, 123);
+            startActivity(enableBtIntent);
+        }
+
+
+    }
+
+    /*private void copyLogToCard(){
         new Thread(new Runnable(){
             public void run(){
                 StringBuilder sb = new StringBuilder();
@@ -192,6 +215,5 @@ public class ShowApiLog extends AppCompatActivity {
                 }
             }
         }).start();
-    }
-
+    }*/
 }

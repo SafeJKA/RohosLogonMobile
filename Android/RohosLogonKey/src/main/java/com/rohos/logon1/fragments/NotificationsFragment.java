@@ -11,17 +11,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.rohos.logon1.AuthRecordsDb;
-import com.rohos.logon1.MainActivity;
+import com.rohos.logon1.NotificationsActivity;
 import com.rohos.logon1.R;
 import com.rohos.logon1.ui.RemoveNotifyDialog;
-import com.rohos.logon1.utils.AppLog;
 
 import java.util.ArrayList;
 
@@ -30,7 +28,7 @@ public class NotificationsFragment extends Fragment {
     ArrayList<String[]> mNotifyList = null;
     AuthRecordsDb mDb = null;
     NotificationsAdapter mNotifyAdapter = null;
-    MainActivity mActivity = null;
+    NotificationsActivity mActivity = null;
     LayoutInflater mInflater = null;
     ListView mListView = null;
     Handler mHandler = null;
@@ -41,7 +39,7 @@ public class NotificationsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         //AppLog.log("onCreate: " + System.currentTimeMillis());
 
-        mActivity = (MainActivity)getActivity();
+        mActivity = (NotificationsActivity)getActivity();
         mInflater = mActivity.getLayoutInflater();
         mDb = new AuthRecordsDb(getActivity().getApplicationContext());
         mNotifyList = mDb.getNotifications();
@@ -67,14 +65,6 @@ public class NotificationsFragment extends Fragment {
                 Message msg = Message.obtain(mHandler);
                 RemoveNotifyDialog dialog = new RemoveNotifyDialog(msg);
                 dialog.show(mActivity.getSupportFragmentManager(), "remove_notify");
-            }
-        });
-
-        Button backBtn = view.findViewById(R.id.back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                mActivity.returnToMain();
             }
         });
 

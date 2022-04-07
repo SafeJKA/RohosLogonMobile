@@ -29,7 +29,8 @@
     <CheckBoxPreference
         android:defaultValue="@bool/use_bluetooth_d"
         android:key="use_bluetooth_unlock"
-        android:title="@string/use_bluetooth_unlock_title" />
+        android:title="@string/use_bluetooth_unlock_title"
+        android:enabled="false" />
 
     <CheckBoxPreference
         android:defaultValue="@bool/unlock_on_table_d"

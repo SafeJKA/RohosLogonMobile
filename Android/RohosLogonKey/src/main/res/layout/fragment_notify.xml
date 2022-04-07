@@ -18,17 +18,16 @@
 
         <Button
             android:id="@+id/remove_all"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
             android:text="Remove all" />
 
-        <Button
+        <!-- <Button
             android:id="@+id/back_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="Close" />
+            android:text="Close" /> -->
     </LinearLayout>
 
 </LinearLayout>
