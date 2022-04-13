@@ -28,7 +28,7 @@
     <string name="error_qr">Cannot interpret QR code.</string>
 
     <string name="scan_qrcode">Scan Rohos QR code</string>
-    <string name="unlock_pc">2FA events</string>
+    <string name="unlock_pc">Unlock PC</string>
     <string name="click_to_unlock">Touch the record to authenticate:</string>
 
     <string name="helpButton">How to use</string>

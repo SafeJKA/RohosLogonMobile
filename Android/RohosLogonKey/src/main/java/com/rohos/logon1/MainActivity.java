@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
         unlockPCbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), NotificationsActivity.class));
+                unlockPC();
             }
         });
 
@@ -247,8 +247,10 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
+            case R.id.showNotify:
+                startActivity(new Intent(getApplicationContext(), NotificationsActivity.class));
+                return true;
             case R.id.action_settings:
                 startActivity(new Intent(this, Settings.class));
                 return true;
