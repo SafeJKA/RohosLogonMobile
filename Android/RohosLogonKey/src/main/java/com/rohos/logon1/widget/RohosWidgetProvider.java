@@ -7,6 +7,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -58,7 +59,12 @@ public class RohosWidgetProvider extends AppWidgetProvider {
         PendingIntent clickIntent;
     	
         final Intent intent = new Intent(context, UnlockPcService.class);
-        clickIntent = PendingIntent.getService(context, 0, intent, 0);
+        if(Build.VERSION.SDK_INT >= 31){
+            clickIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        }else{
+            clickIntent = PendingIntent.getService(context, 0, intent, 0);
+        }
+
         remoteViews.setOnClickPendingIntent(R.id.unlock_pc, clickIntent);
         
     	AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, remoteViews);

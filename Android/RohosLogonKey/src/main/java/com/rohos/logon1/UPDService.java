@@ -82,9 +82,14 @@ public class UPDService extends Service {
                     .setContentText(res.getString(R.string.notifi_title))
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setAutoCancel(false);
-            PendingIntent pi = PendingIntent
-                    .getService(this, 0, new Intent(this, UnlockPcService.class), 0);
-
+            PendingIntent pi = null;
+            if(Build.VERSION.SDK_INT >= 31){
+                pi = PendingIntent.getService(this, 0,
+                        new Intent(this, UnlockPcService.class), PendingIntent.FLAG_IMMUTABLE);
+            }else{
+                pi = PendingIntent.getService(this, 0,
+                        new Intent(this, UnlockPcService.class), 0);
+            }
             ncBuilder.setContentIntent(pi);
 
             NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

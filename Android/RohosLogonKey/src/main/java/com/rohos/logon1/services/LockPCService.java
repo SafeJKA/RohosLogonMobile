@@ -141,8 +141,14 @@ public class LockPCService extends Service {
     private void showNotification(){
         try{
             CharSequence text = getText(R.string.service_started);
-            PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                    new Intent(this, MainActivity.class), 0);
+            PendingIntent contentIntent = null;
+            if(Build.VERSION.SDK_INT >= 31){
+                contentIntent = PendingIntent.getActivity(this, 0, new Intent(this,
+                                MainActivity.class), PendingIntent.FLAG_IMMUTABLE);
+            }else{
+                contentIntent = PendingIntent.getActivity(this, 0,
+                        new Intent(this, MainActivity.class), 0);
+            }
             Notification.Builder builder = new Notification.Builder(this)
                     .setSmallIcon(R.drawable.ic_notification)
                     .setTicker(text)

@@ -4,10 +4,14 @@ import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 import android.app.PendingIntent;
 import androidx.core.app.NotificationCompat;
+
+import com.rohos.logon1.utils.AppLog;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -107,7 +111,12 @@ public class MQTTService extends Service {
             switch (intent.getAction()) {
                 case MqttConstants.ACTION.START_ACTION: {
                     //  Log.d(TAG, "Received user starts foreground intent");
-                    startForeground(MqttConstants.NOTIFICATION_ID_FOREGROUND_SERVICE, prepareNotification());
+                    try{
+                        startForeground(MqttConstants.NOTIFICATION_ID_FOREGROUND_SERVICE, prepareNotification());
+                    }catch(java.lang.Throwable e){
+                        AppLog.log(Log.getStackTraceString(e));
+                    }
+
                     this.connect(mqttClient, mqttConnOptions);
                     break;
                 }
@@ -128,14 +137,20 @@ public class MQTTService extends Service {
     private Notification prepareNotification() {
         Intent notificationIntent = new Intent(this, MainActivity.class);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                notificationIntent, 0);
+        PendingIntent pendingIntent = null;
+        if(Build.VERSION.SDK_INT >= 31){
+            pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent,
+                    PendingIntent.FLAG_IMMUTABLE);
+        }else{
+            pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        }
 
         return new NotificationCompat.Builder(this, "65854225")
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle("MQTT Service")
                 .setContentText("Performing required operations...")
-                .setContentIntent(pendingIntent).build();
+                .setContentIntent(pendingIntent)
+                .build();
     }
 
     private MqttConnectOptions createMqttConnectOptions() {

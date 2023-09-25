@@ -159,7 +159,11 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
         unlockPCbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                unlockPC();
+                try{
+                    unlockPC();
+                }catch(java.lang.Throwable e){
+                    AppLog.log(Log.getStackTraceString(e));
+                }
             }
         });
 
@@ -519,8 +523,8 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
                             sender.execute(ar);
                             Thread.sleep(400L);
                         }
-                    }catch(Exception e){
-                        Log.e(TAG, Log.getStackTraceString(e));
+                    }catch(java.lang.Throwable e){
+                        AppLog.log(Log.getStackTraceString(e));
                     }
                 }
             };
@@ -776,7 +780,8 @@ public class MainActivity extends AppCompatActivity implements IBooleanChanged {
 
     private void checkPermissions(){
         String[] permissions = new String[]{
-                android.Manifest.permission.CAMERA
+                android.Manifest.permission.CAMERA,
+                android.Manifest.permission.POST_NOTIFICATIONS
         };
 
         if(!hasPermissions(permissions)){

@@ -21,6 +21,7 @@ import java.util.concurrent.Semaphore;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.preference.PreferenceManager;
@@ -37,10 +38,10 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
     private String userURI;
     private static final String serverUriPattern = "(tcp://)(?:(\\S+):(\\S+)@)?(\\S+):(\\d+)(?:@(\\S+))?";
 
-    private static final String defaultUserName = "*";
-    private static final String defaultPassword = "*";
-    private static final String defaultBrokerURI = "*";
-    private static final String defaultClientID = "*";
+    private static final String defaultUserName = "rohos";
+    private static final String defaultPassword = "fZ7Vq93BuWLx";
+    private static final String defaultBrokerURI = "tcp://node02.myqtthub.com:1883";
+    private static final String defaultClientID = "rohos.logon";
 
     private Handler mHandler = null;
 
@@ -138,8 +139,10 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
                 });
             }
         } catch (MqttException e) {
-            //handle e
-            //e.printStackTrace();
+            AppLog.log(Log.getStackTraceString(e));
+            s.release();
+        } catch(java.lang.Throwable je){
+            AppLog.log(Log.getStackTraceString(je));
             s.release();
         }
         try {
@@ -205,6 +208,8 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
             //System.err.println("Error Publishing: " + e.getMessage());
             AppLog.log("MQTTSender; Error Publishing: " + e.getMessage());
             //e.printStackTrace();
+        } catch (java.lang.Throwable e){
+            AppLog.log(Log.getStackTraceString(e));
         }
     }
 
@@ -233,8 +238,14 @@ public class MQTTSender extends AsyncTask<AuthRecord, Void, Long> {
     }
 
     private MqttAndroidClient generateDefaultClientId() {
+        MqttAndroidClient client = null;
+        try{
+            client = new MqttAndroidClient(context, defaultBrokerURI, defaultClientID);
+        }catch(Exception e){
+            AppLog.log(Log.getStackTraceString(e));
+        }
 
-        return new MqttAndroidClient(context, defaultBrokerURI, defaultClientID);
+        return client;
     }
 
     private MqttAndroidClient createMqttAndroidClient() {
